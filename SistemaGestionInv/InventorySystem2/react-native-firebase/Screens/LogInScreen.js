@@ -55,6 +55,10 @@ class LogInScreen extends Component
       this.HandleLogIn=this.HandleLogIn.bind(this);
       this.HandleNextScreenIfValid=this.HandleNextScreenIfValid.bind(this);
   }
+  componentDidMount()
+  {
+    this.props.navigation.setOptions({headerShown: false});
+  }
   HandleTextChange (name,value)
   {
     this.setState({...this.state,[name]:value})

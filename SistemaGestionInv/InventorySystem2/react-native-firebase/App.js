@@ -1,6 +1,6 @@
 
  import React,{useState} from 'react';
- import { StyleSheet,Text,View,Button, ImageBackgroundBase } from 'react-native';
+ import { StyleSheet,Text,View,Button, ImageBackgroundBase,Image } from 'react-native';
  //import firebase from './DataBase/FireBase'
  import { NavigationContainer } from '@react-navigation/native';
  import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -10,11 +10,14 @@
  import ProductDetailScreen from './Screens/ProductDetailScreen';
  import AddContainerScreen from './Screens/AddContainerScreen';
  import PutProductsIntoContainerScreen from './Screens/PutProductsIntoContainerScreen';
+ import ViewContainersScreen from './Screens/ViewContainersScreen';
  import ScannerScreen from './Screens/ScannerScreen';
+ import ContainerDetailScreen from './Screens/ContainerDetailScreen'
  import ShowProductsContained from './Screens/ShowProductsContained';
  import * as Font from 'expo-font';
  import AppLoading from 'expo-app-loading';
  import { Header} from 'react-native-elements';
+import { func } from 'prop-types';
 
  const fetchFont=()=>
  {
@@ -28,22 +31,43 @@
  //screenOptions={{headerShown:false}}
  //
  const Stack = createNativeStackNavigator();
+ function LogoTitle()
+ {
+   return(
+    <Image source={require('./assets/logo-fin.png')} style={styles.ImageContainer}>
+
+    </Image>
+   );
+ }
  function MyStack()
  {
    return(
      <Stack.Navigator
-      screenOptions={{headerShown:false}}>
-       
-       
+     screenOptions={{
+      headerShown: false,
+      headerStyle: {
+        backgroundColor: '#c0c0c0',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}>      
+    <Stack.Screen name="HomeScreen" component={HomeScreen}/>
+
+    <Stack.Screen name="LogInScreen" component={LogInScreen}/>
+
+
+       <Stack.Screen name="ViewProductsScreen" component={ViewProductsScreen}/>
+       <Stack.Screen name="ContainerDetailScreen" component={ContainerDetailScreen}/>
+
+      
+      <Stack.Screen name="ViewContainersScreen" component={ViewContainersScreen}/>
+       <Stack.Screen name="AddContainerScreen" component={AddContainerScreen}/>
        <Stack.Screen name="ScannerScreen" component={ScannerScreen}/>
        <Stack.Screen name="ShowProductsContained" component={ShowProductsContained}/>
-       <Stack.Screen name="AddContainerScreen" component={AddContainerScreen}/>
        <Stack.Screen name="PutProductsIntoContainerScreen" component={PutProductsIntoContainerScreen}/>
-       <Stack.Screen name="ViewProductsScreen" component={ViewProductsScreen}/>
        <Stack.Screen name="ProductDetailScreen" component={ProductDetailScreen}/>
-       <Stack.Screen name="LogInScreen" component={LogInScreen}/>
-       <Stack.Screen name="HomeScreen" component={HomeScreen}/>
-       
      </Stack.Navigator>
    );
  }

@@ -3,13 +3,11 @@ import { Button } from 'react-native-elements';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { View,StyleSheet,Text } from 'react-native';
 
-
-const ScannerScreen=()=>
+const ScannerScreen=(props)=>
 {
     const [hasPermission,setHasPermission]=useState(null);
     const [scanned,setScanned]=useState(false);
-    const [text,setText]=useState('Not yet scanned');
-
+    const [info,setInfo]=useState('Not yet scanned');
 
     const askForCameraPermission=()=>
     {
@@ -44,11 +42,13 @@ const ScannerScreen=()=>
     }
     const handleBarCodeScanned=({type,data})=>
         {
+            let auxData={};
             setScanned(true);
-            setText(data);
-            console.log('Type'+type+"\nData: "+data);
+            setInfo(data);
+            auxData=JSON.parse(data);
+            props.navigation.navigate('ShowProductsContained',{DocId: auxData.Id});
+            
         }
-
     return(
         <View style={styles.container}>
             <View style={styles.barcodebox}>
@@ -58,7 +58,7 @@ const ScannerScreen=()=>
                 />
             </View>
             <Text style={styles.maintext}>
-                {text}
+                {info}
             </Text>
             {scanned && <Button title="scan again" onPress={()=>{setScanned(false)}}/>}
         </View>

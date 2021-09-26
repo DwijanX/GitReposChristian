@@ -11,44 +11,46 @@ class ProductDetailScreen extends Component
   {
       super(props);
       this.state={
-        BackUpProduct:{},
-        Product:{},
+        BackUpContainer:{},
+        Container:{},
         DocId:"",
       }
-      this.HandleProductUpdate=this.HandleProductUpdate.bind(this);
-      this.getProductInfo=this.getProductInfo.bind(this);
+      this.HandleContainerUpdate=this.HandleContainerUpdate.bind(this);
+      this.getContainerInfo=this.getContainerInfo.bind(this);
       this.HandleSave=this.HandleSave.bind(this);
   }
-    getProductInfo= async (DocId)=>
+    getContainerInfo= async (DocId)=>
     {
-        const dbRef=firebase.db.collection('Productos').doc(DocId)
+        const dbRef=firebase.db.collection('Contenedores').doc(DocId)
         const doc= await dbRef.get();
-        const ProductData=doc.data();
-        let ProductDataAux={};
-        Object.entries(ProductData).forEach((Prop)=>{
-            ProductDataAux={...ProductDataAux,[Prop[0]]:Prop[1]};
+        const ContainerData=doc.data();
+        let ContainerDataAux={};
+        Object.entries(ContainerData).forEach((Prop)=>{
+            ContainerDataAux={...ContainerDataAux,[Prop[0]]:Prop[1]};
         });
-        this.setState({Product:ProductDataAux});
-        this.setState({BackUpProduct:ProductDataAux});
+        this.setState({Container:ContainerDataAux});
+        this.setState({BackUpContainer:ContainerDataAux});
+        console.log(ContainerDataAux)
     }
     componentDidMount()
     {
+        console.log(this.props.route.params.DocId);
         this.setState({DocId:this.props.route.params.DocId});
-        this.getProductInfo(this.props.route.params.DocId);
+        this.getContainerInfo(this.props.route.params.DocId);
     }
-    HandleProductUpdate=(ProductAux)=>
+    HandleContainerUpdate=(ContainerAux)=>
     {
-        this.setState({Product:ProductAux})
+        this.setState({Container:ContainerAux})
     }
     HandleSave= async()=>
     {
         const ProductInfo=this.state.Product;
-        firebase.db.collection('Productos').doc(this.state.DocId).set(ProductInfo);
-        Object.entries(this.state.BackUpProduct).forEach((att)=>
+        firebase.db.collection('Contenedores').doc(this.state.DocId).set(ProductInfo);
+        Object.entries(this.state.BackUpContainer) .forEach((att)=>
         {
-            const {BackUpProduct:BUP}=this.state;
-            const {Product:Pr}=this.state;
-            this.setState({BackUpProduct:{...BUP ,[att[0]]:Pr[att[0]]}});
+            const {BackUpContainer:BUC}=this.state;
+            const {Container:Ct}=this.state;
+            this.setState({BackUpContainer:{...BUC ,[att[0]]:Ct[att[0]]}});
         })
 
     }
@@ -56,12 +58,12 @@ class ProductDetailScreen extends Component
         return(
             <View style={styles.MainViewContainer}>
                 <DetailScreen
-                setObject={this.HandleProductUpdate}
-                Object={this.state.Product}
-                BackUpObject={this.state.BackUpProduct}
+                setObject={this.HandleContainerUpdate}
+                Object={this.state.Container}
+                BackUpObject={this.state.BackUpContainer}
                 HandleSave={this.HandleSave}
-                TitleText={this.state.BackUpProduct['Nombre']}
-                SubTitleText={this.state.BackUpProduct['Tipo']}
+                TitleText={this.state.BackUpContainer['Nombre']}
+                SubTitleText={this.state.BackUpContainer['Tipo']}
                 />
                 <Button title={"Set Products to containers"} 
                  onPress={()=>{

@@ -3,13 +3,13 @@ import { View,StyleSheet,Button,TextInput, ScrollView,Text} from 'react-native';
 import firebase from '../DataBase/Firebase';
 import { ListItem ,SearchBar,Header,CheckBox} from 'react-native-elements';
 import { setStatusBarBackgroundColor } from 'expo-status-bar';
+import SearchList from  '../CustomComponents/SearchList'
 
 //class ViewProductsScreen extends Component
 
 const ViewProductsScreen = (props) => {
     const [Products, setProducts] = useState([]);
-    const [SearchState,SetSearchState]=useState("");
-    const [FilteredArray,setFilteredArray]=useState([]);
+    const [FilteredProducts,SetFilteredProducts]=useState([]);
 
     useEffect(()=>
     {
@@ -18,56 +18,35 @@ const ViewProductsScreen = (props) => {
           const Products=[];
         querySnapshot.docs.forEach((doc)=>
         {
+            let DocData=doc.data();
             let Data=
             {
-                DocId:doc.id, Name:doc.data().Nombre,Type:doc.data().Tipo
+                DocId:doc.id, Name:DocData.Nombre,Type:DocData.Tipo
             }
             Products.push(Data);
         });
         setProducts(Products);
-        setFilteredArray(Products);
+        SetFilteredProducts(Products);
       });
 
     },[]);
-    const HandleSearch=(value)=>
+    const HandleFuncToDoWhenClick=(DocIdpar)=>
     {
-        SetSearchState(value);
-        setFilteredArray(Products.filter(i=> i.Name.includes(value),));
+        props.navigation.navigate('ProductDetailScreen',{DocId: DocIdpar});
     }
     return (
-        <ScrollView  >
-        
-         <SearchBar
-            onChangeText={HandleSearch}
-            value={SearchState}
-            style={{width:'80%'}}
-            round={true}
-            lightTheme={true}
-            containerStyle={{backgroundColor:'white'}}>
-            
-            </SearchBar>
-        {
-            FilteredArray.map((Product)=>
-                {
-                    return(
-                        <ListItem
-                            key={Product.DocId} 
-                            bottomDivider 
-                            onPress={()=>
-                            {
-                                props.navigation.navigate('ProductDetailScreen',{DocId: Product.DocId});
-                            }}
-                        >
-                            <ListItem.Chevron/>
-                            <ListItem.Content>
-                                <ListItem.Title>{Product.Name}</ListItem.Title>
-                                <ListItem.Subtitle>{Product.Type}</ListItem.Subtitle>
-                            </ListItem.Content>
-                        </ListItem>
-                    );
-                })
-        }
-      </ScrollView>
+        <View>
+        <SearchList
+        Array={Products}
+        FilteredArray={FilteredProducts}
+        setFilteredArray={SetFilteredProducts}
+        FilterAttribute={"Name"}
+        TittleAttributes={["Name"]}
+        SubTittleAttributes={["Type"]}
+        KeyAttribute={'DocId'}
+        FuncToDoWhenClick={HandleFuncToDoWhenClick}
+        />
+        </View>
     );
   };
 export default ViewProductsScreen;
