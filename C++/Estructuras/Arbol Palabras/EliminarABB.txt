@@ -1,0 +1,61 @@
+
+template<class T>
+bool ABB<T>::DeleteXObjAlg(T Data, Node<T>* LocalRoot,Node<T>* LastRoot)
+{
+	bool ans=false;
+	if (LocalRoot == NULL)
+	{
+		ans = false;
+	}
+	else
+	{
+		if (Data != *LocalRoot->getData())
+		{
+			DeleteXObjAlg(Data, LocalRoot->getLeft(), LocalRoot);
+			DeleteXObjAlg(Data, LocalRoot->getRight(), LocalRoot);
+		}
+		else
+		{
+			if (LocalRoot->getLeft() == NULL && LocalRoot->getRight() == NULL)
+			{
+				if (LastRoot != NULL && LastRoot->getLeft() == LocalRoot)
+				{
+					LastRoot->setLeft(NULL);
+				}
+				else if (LastRoot != NULL)
+				{
+					LastRoot->setRight(NULL);
+				}
+				delete LocalRoot;
+				ans = true;
+			}
+			else
+			{
+				T* AuxMaxMin = NULL;
+				int aux = rand() % 2;
+				if (LocalRoot->getLeft() == NULL && LocalRoot->getRight() != NULL)
+					aux = 0;
+				else if (LocalRoot->getLeft() != NULL && LocalRoot->getRight() == NULL)
+					aux = 1;
+				if (aux)
+				{
+					AuxMaxMin = searchMaxFromXRoot(LocalRoot->getLeft());
+					LocalRoot->setData(new T(*AuxMaxMin));
+					ans = DeleteXObjAlg(*AuxMaxMin, LocalRoot->getLeft(), LocalRoot);
+				}
+				else
+				{
+					AuxMaxMin = searchMinFromXRoot(LocalRoot->getRight());
+					LocalRoot->setData(new T(*AuxMaxMin));
+					ans = DeleteXObjAlg(*AuxMaxMin, LocalRoot->getRight(), LocalRoot);
+				}
+			}
+		}
+	}
+	return ans;
+}
+template<class T>
+bool ABB<T>::DeleteXObj(T Data)
+{
+	return DeleteXObjAlg(Data, Root, NULL);
+}
