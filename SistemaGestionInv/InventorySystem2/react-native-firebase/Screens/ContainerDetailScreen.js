@@ -34,7 +34,6 @@ class ProductDetailScreen extends Component
     }
     componentDidMount()
     {
-        console.log(this.props.route.params.DocId);
         this.setState({DocId:this.props.route.params.DocId});
         this.getContainerInfo(this.props.route.params.DocId);
     }

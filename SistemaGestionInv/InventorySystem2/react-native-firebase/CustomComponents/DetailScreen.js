@@ -1,4 +1,4 @@
-import React,{Component} from "react";
+import React,{Component,Fragment} from "react";
 import { View,Text, StyleSheet} from "react-native";
 import { Button,Divider } from 'react-native-elements';
 import { Input } from "react-native-elements/dist/input/Input";
@@ -11,7 +11,6 @@ class DetailScreen extends Component
   {
       super(props);
       this.state={
-        ViewMode:true,
         EditionModeTittle:'Enable edition mode',
         BackUpProduct:{},
         Product:{},
@@ -27,21 +26,22 @@ class DetailScreen extends Component
     }
     HandleCreationOfAppropiateComps= (ObjectAtt)=>
     {
-        if(typeof ObjectAtt[1]=='number')
+        if(ObjectAtt[0]!='Nombre' && ObjectAtt[0]!='Tipo')
+        {
+        if(ObjectAtt[0]=='Tallas')
         {
             return(
-                <CustomCounter key={ObjectAtt[0]} 
-                numOfCounter={this.props.Object[ObjectAtt[0]]} 
-                textStyle={styles.CounterTextStyle} 
-                buttonStyle={styles.CounterButtonsStyle}
-                disabledPlus={this.state.ViewMode}
-                disabledSubs={true}
-                containerStyle={styles.ContainerCounter}
-                label={ObjectAtt[0]}
-                labelStyle={styles.SubTitleCont} 
-                funcToDoWhenModifyVal={this.HandleChangeAtt}
-                NameOfStateToChange={ObjectAtt[0]}
-                ></CustomCounter>
+                <View  key={ObjectAtt[0]} >
+                    <Text>Tallas</Text>
+                    {Object.entries(ObjectAtt[1]).map((Talla)=>
+                    {
+                        return(
+                            <Text key={Talla[0]} >
+                                {Talla[0]} : {Talla[1]}
+                            </Text>
+                        );
+                    })}
+                </View> 
                 );
         }
         else
@@ -49,46 +49,59 @@ class DetailScreen extends Component
         
             return(<Input key={ObjectAtt[0]} 
             label={ObjectAtt[0]} 
-            disabled={this.state.ViewMode} 
+            disabled={this.props.ViewMode} 
             onChangeText={(value)=>this.HandleChangeAtt(ObjectAtt[0],value)}>
                 {ObjectAtt[1]}
             </Input>);
         }
     }
+    }
     HandleViewMode=()=>
     {
-        if(this.state.ViewMode)
+        if(this.props.ViewMode)
         {
-            this.setState({ViewMode:false});
+            this.props.setViewMode(false);
             this.setState({EditionModeTittle:"Cancel"});
         }
         else
         {
-            this.setState({ViewMode:true});
+            this.props.setViewMode(true);
             this.setState({EditionModeTittle:'Enable edition mode'});
         }
     }
     render(){
         return(
-            <View style={styles.MainViewContainer}>
+            <Fragment >
                 <View style={styles.SubViewTitle}>
                     <Text style={styles.TittleTextCont}>
-                        {this.props.TitleText}
+                        {this.props.BackUpObject['Nombre']}
                     </Text>
                     <Text style={styles.SubTitleCont}>
-                       {this.props.SubTitleText}
-
+                       {this.props.BackUpObject['Tipo']}
                     </Text>
                 </View>
                 <Divider orientation="horizontal" />
                 <View key={this.state.EditionModeTittle}>
+
+                <Input 
+                    label={'Nombre'} 
+                    disabled={this.props.ViewMode} 
+                    onChangeText={(value)=>this.HandleChangeAtt('Nombre',value)}>
+                        {this.props.BackUpObject['Nombre']}
+                </Input>
+                <Input 
+                    label={'Tipo'} 
+                    disabled={this.props.ViewMode} 
+                    onChangeText={(value)=>this.HandleChangeAtt('Tipo',value)}>
+                        {this.props.BackUpObject['Tipo']}
+                </Input>
                 
                 {Object.entries(this.props.BackUpObject).map((ObjectAtt)=>this.HandleCreationOfAppropiateComps(ObjectAtt))}
                 </View>
                 <Divider orientation="horizontal" />
                 <Button title={this.state.EditionModeTittle}  onPress={this.HandleViewMode}/>
                 <Button title={"Save"}  onPress={this.props.HandleSave}/>
-            </View>
+            </Fragment>
         );
     }
 }

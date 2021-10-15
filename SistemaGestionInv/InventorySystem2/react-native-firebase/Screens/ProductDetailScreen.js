@@ -1,5 +1,5 @@
 import React,{Component} from "react";
-import { View,Text, StyleSheet} from "react-native";
+import { View,Text, StyleSheet, ScrollView} from "react-native";
 import { Button,Divider } from 'react-native-elements';
 import { Input } from "react-native-elements/dist/input/Input";
 import firebase from '../DataBase/Firebase'
@@ -11,6 +11,7 @@ class ProductDetailScreen extends Component
   {
       super(props);
       this.state={
+        ViewMode:true,
         BackUpProduct:{},
         Product:{},
         DocId:"",
@@ -18,6 +19,8 @@ class ProductDetailScreen extends Component
       this.HandleProductUpdate=this.HandleProductUpdate.bind(this);
       this.getProductInfo=this.getProductInfo.bind(this);
       this.HandleSave=this.HandleSave.bind(this);
+      this.setViewMode=this.setViewMode.bind(this);
+
   }
     getProductInfo= async (DocId)=>
     {
@@ -44,37 +47,40 @@ class ProductDetailScreen extends Component
     {
         const ProductInfo=this.state.Product;
         firebase.db.collection('Productos').doc(this.state.DocId).set(ProductInfo);
-        Object.entries(this.state.BackUpProduct).forEach((att)=>
-        {
-            const {BackUpProduct:BUP}=this.state;
-            const {Product:Pr}=this.state;
-            this.setState({BackUpProduct:{...BUP ,[att[0]]:Pr[att[0]]}});
-        })
-
+        this.setState({BackUpProduct:ProductInfo});
+        this.setState({ViewMode:true});
+    }
+    setViewMode(ViewModeBool)
+    {
+        this.setState({ViewMode:ViewModeBool})
     }
     render(){
         return(
-            <View style={styles.MainViewContainer}>
+            <ScrollView >
+                <View style={{flex:1 }}>
                 <DetailScreen
                 setObject={this.HandleProductUpdate}
                 Object={this.state.Product}
                 BackUpObject={this.state.BackUpProduct}
                 HandleSave={this.HandleSave}
-                TitleText={this.state.BackUpProduct['Nombre']}
-                SubTitleText={this.state.BackUpProduct['Tipo']}
+                ViewMode={this.state.ViewMode}
+                setViewMode={this.setViewMode}
                 />
                 <Button title={"Set Products to containers"} 
                  onPress={()=>{
                     this.props.navigation.navigate('PutProductsIntoContainerScreen',{
-                     DocId: this.state.DocId,
-                     Name: this.state.Product.Nombre,
-                     QtyOfProduct: this.state.Product.CantidadStock,
+                        DocId: this.state.DocId,
+                        Name: this.state.Product.Nombre,
+                        QtyOfProduct: this.state.Product.CantidadStock,
                      })
                      }}/>
-            </View>
+                <Button title={"Add Products"}/>
+                     </View>
+            </ScrollView>
         );
     }
 }
+/**/
 const styles = StyleSheet.create({
     MainViewContainer:
     {
