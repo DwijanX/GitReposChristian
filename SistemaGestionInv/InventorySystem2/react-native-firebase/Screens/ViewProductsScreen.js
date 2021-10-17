@@ -13,22 +13,22 @@ const ViewProductsScreen = (props) => {
 
     useEffect(()=>
     {
-        firebase.db.collection('Productos').onSnapshot((querySnapshot)=>
+      firebase.db.collection('Lista Productos').doc('Lista').get().then((doc)=>
       {
-          const Products=[];
-        querySnapshot.docs.forEach((doc)=>
+        let Products=[];
+        Object.entries(doc.data()).forEach((Product)=>
         {
-            let DocData=doc.data();
-            let Data=
-            {
-                DocId:doc.id, Name:DocData.Nombre,Type:DocData.Tipo
-            }
-            Products.push(Data);
-        });
+          let DataAux={
+            DocId:Product[0],
+            Name:Product[1]['Nombre'],
+            Type:Product[1]['Tipo']
+          }
+          Products.push(DataAux);
+        })
         setProducts(Products);
         SetFilteredProducts(Products);
-      });
 
+      })
     },[]);
     const HandleFuncToDoWhenClick=(DocIdpar)=>
     {

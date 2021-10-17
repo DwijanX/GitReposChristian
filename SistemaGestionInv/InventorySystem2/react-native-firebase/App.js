@@ -14,6 +14,8 @@
  import ScannerScreen from './Screens/ScannerScreen';
  import ContainerDetailScreen from './Screens/ContainerDetailScreen'
  import ShowProductsContained from './Screens/ShowProductsContained';
+ import AddProductsNumScreen from './Screens/AddProductsNumScreen';
+ 
  import * as Font from 'expo-font';
  import AppLoading from 'expo-app-loading';
  import { Header} from 'react-native-elements';
@@ -52,13 +54,15 @@ import { func } from 'prop-types';
       headerTitleStyle: {
         fontWeight: 'bold',
       },
-    }}>      
+    }}>   
+
+    <Stack.Screen name="AddProductsNumScreen" component={AddProductsNumScreen}/>
     <Stack.Screen name="HomeScreen" component={HomeScreen}/>
 
     <Stack.Screen name="LogInScreen" component={LogInScreen}/>
 
+    <Stack.Screen name="ViewProductsScreen" component={ViewProductsScreen}/>
 
-       <Stack.Screen name="ViewProductsScreen" component={ViewProductsScreen}/>
        <Stack.Screen name="ContainerDetailScreen" component={ContainerDetailScreen}/>
 
       
