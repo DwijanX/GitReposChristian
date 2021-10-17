@@ -68,21 +68,25 @@ const AddProductsNumScreen=()=>
     }
     const HandleSave=()=>
     {
+        let AuxTallas=Tallas;
         firebase.db.collection('Productos').doc(value).get().then((doc)=>
         {
             Object.entries(doc.data()['Tallas']).forEach((Talla)=>
             {
-                setTallas({...Tallas,[Talla[0]]:Talla[1]+Tallas[Talla[0]]})
+                let newQty=Talla[1]+Tallas[Talla[0]];
+                AuxTallas={...AuxTallas,[Talla[0]]:newQty}
             })
         }).then(()=>
         {
-            firebase.db.collection('Productos').doc(value).update(Tallas);
+            firebase.db.collection('Productos').doc(value).set({
+                "Tallas":AuxTallas
+            }, { merge: true });
         })
 
     }
     
         return(
-            <View>
+            <View style={{paddingVertical:20}}>
                 <DropDownPicker
                     open={open}
                     value={value}

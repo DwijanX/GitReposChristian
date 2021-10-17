@@ -15,6 +15,7 @@
  import ContainerDetailScreen from './Screens/ContainerDetailScreen'
  import ShowProductsContained from './Screens/ShowProductsContained';
  import AddProductsNumScreen from './Screens/AddProductsNumScreen';
+ import AddNewProductScreen from './Screens/AddNewProductScreen';
  
  import * as Font from 'expo-font';
  import AppLoading from 'expo-app-loading';
@@ -55,9 +56,10 @@ import { func } from 'prop-types';
         fontWeight: 'bold',
       },
     }}>   
-
-    <Stack.Screen name="AddProductsNumScreen" component={AddProductsNumScreen}/>
     <Stack.Screen name="HomeScreen" component={HomeScreen}/>
+
+    <Stack.Screen name="AddNewProductScreen" component={AddNewProductScreen}/>
+    <Stack.Screen name="AddProductsNumScreen" component={AddProductsNumScreen}/>
 
     <Stack.Screen name="LogInScreen" component={LogInScreen}/>
 

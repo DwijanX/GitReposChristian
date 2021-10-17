@@ -31,9 +31,11 @@ class HomeScreen extends Component
         
         return(
             <View style={styles.GralView}>
-                <Button title="View Products" onPress={()=>{this.props.navigation.navigate('ViewProductsScreen');}}/>
-                <Button title="View Containers" onPress={()=>{this.props.navigation.navigate('ViewContainersScreen');}}/>
-                <Button title="Add Container" onPress={()=>{this.props.navigation.navigate('AddContainerScreen');}}/>
+                <Button title="Agregar productos nuevos" onPress={()=>{this.props.navigation.navigate('AddNewProductScreen');}}/>
+                <Button title="Agregar productos existentes" onPress={()=>{this.props.navigation.navigate('AddProductsNumScreen');}}/>
+                <Button title="Ver productos" onPress={()=>{this.props.navigation.navigate('ViewProductsScreen');}}/>
+                <Button title="Ver contenedores" onPress={()=>{this.props.navigation.navigate('ViewContainersScreen');}}/>
+                <Button title="Agregar Contenedores" onPress={()=>{this.props.navigation.navigate('AddContainerScreen');}}/>
                 <Button title="Scanner" onPress={()=>{this.props.navigation.navigate('ScannerScreen');}}/>
                 <Button title="Log Out"  onPress={this.HandleLogOut}/>
             </View>

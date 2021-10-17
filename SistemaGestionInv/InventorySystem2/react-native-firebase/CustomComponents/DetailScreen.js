@@ -11,7 +11,7 @@ class DetailScreen extends Component
   {
       super(props);
       this.state={
-        EditionModeTittle:'Enable edition mode',
+        EditionModeTittle:'Habilitar modo edicion',
         BackUpProduct:{},
         Product:{},
         DocId:"",
@@ -61,12 +61,12 @@ class DetailScreen extends Component
         if(this.props.ViewMode)
         {
             this.props.setViewMode(false);
-            this.setState({EditionModeTittle:"Cancel"});
+            this.setState({EditionModeTittle:"Deshabilitar modo edicion"});
         }
         else
         {
             this.props.setViewMode(true);
-            this.setState({EditionModeTittle:'Enable edition mode'});
+            this.setState({EditionModeTittle:'Habilitar modo edicion'});
         }
     }
     render(){
@@ -100,7 +100,7 @@ class DetailScreen extends Component
                 </View>
                 <Divider orientation="horizontal" />
                 <Button title={this.state.EditionModeTittle}  onPress={this.HandleViewMode}/>
-                <Button title={"Save"}  onPress={this.props.HandleSave}/>
+                <Button title={"Guardar"}  onPress={this.props.HandleSave}/>
             </Fragment>
         );
     }
