@@ -1,5 +1,6 @@
 #include <iostream>
 #include "AVL.h"
+#define FileDirection "E:\\100000Ordered.txt"
 using namespace std;
 void FunToShowInt(int* aux)
 {
@@ -21,7 +22,7 @@ int main()
     Tree.insert(16);
     Tree.ShowTree(&FunToShowInt);
     Tree.insert(14);
-    Tree.ShowTree(&FunToShowInt);*/
+    Tree.ShowTree(&FunToShowInt);
     Tree.insert(20);
     Tree.ShowTree(&FunToShowInt);
     Tree.insert(15);
@@ -33,6 +34,8 @@ int main()
     Tree.insert(32);
     Tree.ShowTree(&FunToShowInt);
     Tree.insert(24);
-    Tree.ShowTree(&FunToShowInt);
+    Tree.ShowTree(&FunToShowInt);*/
+    Tree.insertFromFile(FileDirection);
+    cout<<Tree.getHeight()<<endl;
     return 0;
 }

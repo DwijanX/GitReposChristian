@@ -12,7 +12,6 @@ private:
    
     void insertAlg(T* Data, Node<T>*& LocalRoot, bool& Continue);
    
-    void setColor(int color, Node<T>* LocalRoot);
     void simpleLeftRotation(Node<T>*& node);
     void simpleRightRotation(Node<T>*& node);
     void compoundRightRotation(Node<T>*& node);
@@ -20,9 +19,6 @@ private:
 
     void ShowXLevelAlg(void(*funcToShow)(T*), int* SearchedLevel, int LocalLevel, Node<T>* LocalRoot);
     int getHeightAlg(Node<T>* LocalRoot);
-    int getBlackHeightAlg(Node<T>* LocalRoot);
-    bool verifyThatEachSonOfRedNodeIsBlackAlg(Node<T>* LocalRoot,int FatherColor);
-    int CountNodesWOneSonAlg(Node<T>* LocalRoot);
 
 
 public:
@@ -32,10 +28,7 @@ public:
     void ShowTree(void(*funcToShow)(T*));
     void ShowXLevel(void(*funcToShow)(T*), int level);
     int getHeight();
-    int getBlackHeight();
     void insertFromFile(string FileDirection);
-    bool verifyThatEachSonOfRedNodeIsBlack();
-    int CountNodesWOneSon();
 };
 template <class T>
 AVL<T>::AVL()
@@ -278,82 +271,4 @@ void AVL<T>::insertFromFile(string FileDirection)
             insert(aux);
         }
     }
-}
-template <class T>
-bool AVL<T>::verifyThatEachSonOfRedNodeIsBlackAlg(Node<T>* LocalRoot,int FatherColor)
-{
-    bool Ans=true;
-    if(LocalRoot!=NULL)
-    {
-        if(FatherColor==red && LocalRoot->getColor()==red)
-        {
-            Ans=false;
-        }
-        else
-        {
-            Ans=verifyThatEachSonOfRedNodeIsBlackAlg(LocalRoot->getLeft(),LocalRoot->getColor());
-            if(Ans!=false)
-            {
-                Ans=verifyThatEachSonOfRedNodeIsBlackAlg(LocalRoot->getRight(),LocalRoot->getColor());
-            }
-        }
-    }
-    return Ans;
-}
-template <class T>
-bool AVL<T>::verifyThatEachSonOfRedNodeIsBlack()
-{
-    return verifyThatEachSonOfRedNodeIsBlackAlg(Root,black);
-}
-template <class T>
-int AVL<T>::getBlackHeightAlg(Node<T>* LocalRoot)
-{
-    int ans = 0;
-    int aux1, aux2;
-    if (LocalRoot != NULL)
-    {
-        aux1 = getBlackHeightAlg(LocalRoot->getLeft());
-        aux2 = getBlackHeightAlg(LocalRoot->getRight());
-        if(LocalRoot->getColor()==black)
-        {
-            ans+=1;
-        }
-        if (aux2 > aux1)
-            ans +=  aux2;
-        else
-            ans +=  aux1;
-    }
-    return ans;
-}
-template<class T>
-int AVL<T>::getBlackHeight()
-{
-    return getBlackHeightAlg(Root);
-}
-template<class T>
-int AVL<T>::CountNodesWOneSonAlg(Node<T>* LocalRoot)
-{
-    int ans=0;
-    if(LocalRoot->getLeft()!=NULL && LocalRoot->getRight()!=NULL)
-    {
-        ans+=CountNodesWOneSonAlg(LocalRoot->getLeft());
-        ans+=CountNodesWOneSonAlg(LocalRoot->getRight());
-    }
-    else
-    {
-        if(LocalRoot->getLeft()!=NULL)
-        {
-          ans+=1+CountNodesWOneSonAlg(LocalRoot->getLeft());
-        }
-        else if(LocalRoot->getRight()!=NULL)
-        {
-            ans+=1+CountNodesWOneSonAlg(LocalRoot->getRight());
-        }
-    }
-    return ans;
-}
-template<class T>
-int AVL<T>::CountNodesWOneSon()
-{
-    return CountNodesWOneSonAlg(Root);
 }

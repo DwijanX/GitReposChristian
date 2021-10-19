@@ -13,7 +13,6 @@ class CustomCounter extends Component
     static defaultProps=
     {
         numOfCounter:0,
-        LimitOfCounter:0
     }
 
     constructor(props)
@@ -21,7 +20,6 @@ class CustomCounter extends Component
         super(props);
         this.state={
             counter:this.props.numOfCounter,
-            LimitOfCounter:this.props.LimitOfCounter,
         }
         this.HandlePlus=this.HandlePlus.bind(this);
         this.HandleSubs=this.HandleSubs.bind(this);
@@ -35,7 +33,7 @@ class CustomCounter extends Component
    HandleSubs=()=>
   {
     const {counter:c}=this.state;
-      if(c-1>=LimitOfCounter)
+      if(c-1>=0)
       {
         this.setState({counter:c-1});
         this.props.funcToDoWhenModifyVal(this.props.NameOfStateToChange,c-1);
