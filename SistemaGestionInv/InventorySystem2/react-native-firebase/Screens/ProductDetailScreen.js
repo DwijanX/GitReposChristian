@@ -71,7 +71,7 @@ class ProductDetailScreen extends Component
                     this.props.navigation.navigate('PutProductsIntoContainerScreen',{
                         DocId: this.state.DocId,
                         Name: this.state.Product.Nombre,
-                        QtyOfProduct: this.state.Product.CantidadStock,
+                        Cantidades: this.state.Product.Cantidades,
                      })
                      }}/>
                 <Button title={"Add Products"}/>

@@ -78,7 +78,7 @@ const AddNewProductScreen=()=>
                 buttonStyle={styles.CounterButtonsStyle}
                 disabledPlus={false}
                 containerStyle={styles.ContainerCounter}
-                label={"Talla: "+Att[0]}
+                label={"Cantidad: "+Att[0]}
                 labelStyle={styles.CounterTextStyle} 
                 funcToDoWhenModifyVal={HandleCounters}
                 NameOfStateToChange={Att[0]}
@@ -97,15 +97,14 @@ const AddNewProductScreen=()=>
             TallasObj={...TallasObj,[talla]:Atts[talla]}
             delete Atts[talla]
         })
-        Atts={...Atts,['Tallas']:TallasObj}
-        console.log(Atts)
+        Atts={...Atts,['Cantidades']:TallasObj}
         firebase.db.collection('Productos').add(Atts).then(CreatedDoc=>{
             const docID=CreatedDoc.id;
             firebase.db.collection('Lista Productos').doc('Lista').set({
                 [docID]:{
                 'Nombre':Atts.Nombre,
                 'Tipo':Atts.Tipo,
-                'Tallas':Tallas
+                'Cantidades':Tallas
              }
             }, { merge: true })
         })      
@@ -117,7 +116,7 @@ const AddNewProductScreen=()=>
                 <Overlay  isVisible={visible} overlayStyle={styles.OverStyle} > 
                     <Input label={'Nombre del atributo'} onChangeText={(value)=>setNewAttributeName(value)}></Input>
                     <Input label={'Valor'} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
-                    <CheckBox title={'Es una talla'} checked={newAttributeIsTalla} onPress={toggleAttributeTalla}></CheckBox>
+                    <CheckBox title={'Es una cantidad'} checked={newAttributeIsTalla} onPress={toggleAttributeTalla}></CheckBox>
                     <Button title={'Save'} buttonStyle={styles.ButtonStyle} onPress={HandleNewAttribute}></Button>
                     <Button title={'Cancel'} onPress={toggleOverlay} buttonStyle={styles.ButtonStyle}></Button>
                 </Overlay>

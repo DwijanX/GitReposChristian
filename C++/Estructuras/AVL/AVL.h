@@ -16,7 +16,7 @@ private:
     void simpleRightRotation(Node<T>*& node);
     void compoundRightRotation(Node<T>*& node);
     void compoundLeftRotation(Node<T>*& node);
-
+	bool searchAlg(T* SearchedObj,Node<T>* LocalRoot);
     void ShowXLevelAlg(void(*funcToShow)(T*), int* SearchedLevel, int LocalLevel, Node<T>* LocalRoot);
     int getHeightAlg(Node<T>* LocalRoot);
 
@@ -28,6 +28,7 @@ public:
     void ShowTree(void(*funcToShow)(T*));
     void ShowXLevel(void(*funcToShow)(T*), int level);
     int getHeight();
+    bool search(T SearchedObj);
     void insertFromFile(string FileDirection);
 };
 template <class T>
@@ -271,4 +272,34 @@ void AVL<T>::insertFromFile(string FileDirection)
             insert(aux);
         }
     }
+}
+
+template<class T>
+bool AVL<T>::searchAlg(T* SearchedObj, Node<T>* LocalRoot)
+{
+	bool Ans=false;
+	if (LocalRoot != NULL)
+	{
+		if (*SearchedObj == *LocalRoot->getData())
+		{
+			Ans = true;
+		}
+		else
+		{
+			if (*SearchedObj >= *LocalRoot->getData())
+			{
+				Ans = searchAlg(SearchedObj, LocalRoot->getRight());
+			}
+			else
+			{
+				Ans = searchAlg(SearchedObj, LocalRoot->getLeft());
+			}
+		}
+	}
+	return Ans;
+}
+template<class T>
+bool AVL<T>::search(T SearchedObj)
+{
+	return searchAlg(&SearchedObj, Root);
 }

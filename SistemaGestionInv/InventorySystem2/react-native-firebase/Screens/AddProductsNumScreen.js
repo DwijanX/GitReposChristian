@@ -15,7 +15,7 @@ const AddProductsNumScreen=()=>
   const [value, setValue] = useState(0);
   const [items, setItems] = useState([]);
   const [Products,setProducts]=useState({});
-  const [Tallas,setTallas]=useState({});
+  const [Cantidades,setCantidades]=useState({});
   useEffect(()=>
     {
       firebase.db.collection('Lista Productos').doc('Lista').get().then((doc)=>
@@ -33,53 +33,53 @@ const AddProductsNumScreen=()=>
         setItems(Products);
       })
     },[]);
-    const setTallasArray=(value)=>
+    const setCantidadesArray=(value)=>
     {
         if(value!=0)
         {
-            let Tallas={};
-            Products[value]['Tallas'].forEach((Talla)=>
+            let Cantidades={};
+            Products[value]['Cantidades'].forEach((Cantidad)=>
             {
-                Tallas={...Tallas,[Talla]:0}
+                Cantidades={...Cantidades,[Cantidad]:0}
             })
-            setTallas(Tallas);
+            setCantidades(Cantidades);
         }
     }
-    const HandleCounters=(ModifiedTalla,Value)=>
+    const HandleCounters=(ModifiedCantidad,Value)=>
     {
-        setTallas({...Tallas, [ModifiedTalla]:Value})
+        setCantidades({...Cantidades, [ModifiedCantidad]:Value})
     }
-    const HandleCreationOfCounters=(Talla)=> //Talla [Talla,Qty]
+    const HandleCreationOfCounters=(Cantidad)=> //Cantidad [nombre,Qty]
     {
         return(
-            <CustomCounter key={Talla[0]}
-                numOfCounter={Tallas[Talla[0]]} 
+            <CustomCounter key={Cantidad[0]}
+                numOfCounter={Cantidades[Cantidad[0]]} 
                 textStyle={styles.CounterTextStyle} 
                 buttonStyle={styles.CounterButtonsStyle}
                 disabledPlus={false}
                 containerStyle={styles.ContainerCounter}
-                label={"Talla: "+Talla[0]}
+                label={"Cantidad: "+Cantidad[0]}
                 labelStyle={styles.CounterTextStyle} 
                 funcToDoWhenModifyVal={HandleCounters}
-                NameOfStateToChange={Talla[0]}
+                NameOfStateToChange={Cantidad[0]}
             >
             </CustomCounter>
             );
     }
     const HandleSave=()=>
     {
-        let AuxTallas=Tallas;
+        let AuxCantidades=Cantidades;
         firebase.db.collection('Productos').doc(value).get().then((doc)=>
         {
-            Object.entries(doc.data()['Tallas']).forEach((Talla)=>
+            Object.entries(doc.data()['Cantidades']).forEach((Cantidad)=>
             {
-                let newQty=Talla[1]+Tallas[Talla[0]];
-                AuxTallas={...AuxTallas,[Talla[0]]:newQty}
+                let newQty=Cantidad[1]+Cantidades[Cantidad[0]];
+                AuxCantidades={...AuxCantidades,[Cantidad[0]]:newQty}
             })
         }).then(()=>
         {
             firebase.db.collection('Productos').doc(value).set({
-                "Tallas":AuxTallas
+                "Cantidades":AuxCantidades
             }, { merge: true });
         })
 
@@ -94,10 +94,10 @@ const AddProductsNumScreen=()=>
                     setOpen={setOpen}
                     setValue={setValue}
                     setItems={setItems}
-                    onChangeValue={setTallasArray}
+                    onChangeValue={setCantidadesArray}
                     />
                 
-                {Object.entries(Tallas).map((Talla)=>HandleCreationOfCounters(Talla))}
+                {Object.entries(Cantidades).map((Cantidad)=>HandleCreationOfCounters(Cantidad))}
                 <Button title={'Save'} onPress={HandleSave}>
 
                 </Button>

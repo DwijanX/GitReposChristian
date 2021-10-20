@@ -19,6 +19,7 @@ private:
     bool verifyThatEachSonOfRedNodeIsBlackAlg(Node<T>* LocalRoot,int FatherColor);
     int CountNodesWOneSonAlg(Node<T>* LocalRoot);
 
+	bool searchAlg(T* SearchedObj,Node<T>* LocalRoot);
 
 public:
     BRTree();
@@ -31,6 +32,8 @@ public:
     void insertFromFile(string FileDirection);
     bool verifyThatEachSonOfRedNodeIsBlack();
     int CountNodesWOneSon();
+    bool search(T SearchedObj);
+
 };
 template <class T>
 BRTree<T>::BRTree()
@@ -321,4 +324,33 @@ template<class T>
 int BRTree<T>::CountNodesWOneSon()
 {
     return CountNodesWOneSonAlg(Root);
+}
+template<class T>
+bool BRTree<T>::searchAlg(T* SearchedObj, Node<T>* LocalRoot)
+{
+	bool Ans=false;
+	if (LocalRoot != NULL)
+	{
+		if (*SearchedObj == *LocalRoot->getData())
+		{
+			Ans = true;
+		}
+		else
+		{
+			if (*SearchedObj >= *LocalRoot->getData())
+			{
+				Ans = searchAlg(SearchedObj, LocalRoot->getRight());
+			}
+			else
+			{
+				Ans = searchAlg(SearchedObj, LocalRoot->getLeft());
+			}
+		}
+	}
+	return Ans;
+}
+template<class T>
+bool BRTree<T>::search(T SearchedObj)
+{
+	return searchAlg(&SearchedObj, Root);
 }

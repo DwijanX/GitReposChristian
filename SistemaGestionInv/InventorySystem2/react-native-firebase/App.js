@@ -56,10 +56,10 @@ import { func } from 'prop-types';
         fontWeight: 'bold',
       },
     }}>   
+    <Stack.Screen name="HomeScreen" component={HomeScreen}/>
 
 <Stack.Screen name="LogInScreen" component={LogInScreen}/>
 
-    <Stack.Screen name="HomeScreen" component={HomeScreen}/>
 
     <Stack.Screen name="AddNewProductScreen" component={AddNewProductScreen}/>
     <Stack.Screen name="AddProductsNumScreen" component={AddProductsNumScreen}/>

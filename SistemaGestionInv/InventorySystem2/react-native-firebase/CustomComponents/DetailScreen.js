@@ -28,16 +28,16 @@ class DetailScreen extends Component
     {
         if(ObjectAtt[0]!='Nombre' && ObjectAtt[0]!='Tipo')
         {
-        if(ObjectAtt[0]=='Tallas')
+        if(ObjectAtt[0]=='Cantidades')
         {
             return(
                 <View  key={ObjectAtt[0]} >
-                    <Text>Tallas</Text>
-                    {Object.entries(ObjectAtt[1]).map((Talla)=>
+                    <Text>Cantidades</Text>
+                    {Object.entries(ObjectAtt[1]).map((Cantidad)=>
                     {
                         return(
-                            <Text key={Talla[0]} >
-                                {Talla[0]} : {Talla[1]}
+                            <Text key={Cantidad[0]} >
+                                {Cantidad[0]} : {Cantidad[1]}
                             </Text>
                         );
                     })}
