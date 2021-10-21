@@ -56,6 +56,8 @@ import { func } from 'prop-types';
         fontWeight: 'bold',
       },
     }}>   
+       <Stack.Screen name="PutProductsIntoContainerScreen" component={PutProductsIntoContainerScreen}/>
+
     <Stack.Screen name="HomeScreen" component={HomeScreen}/>
 
 <Stack.Screen name="LogInScreen" component={LogInScreen}/>
@@ -74,7 +76,6 @@ import { func } from 'prop-types';
        <Stack.Screen name="AddContainerScreen" component={AddContainerScreen}/>
        <Stack.Screen name="ScannerScreen" component={ScannerScreen}/>
        <Stack.Screen name="ShowProductsContained" component={ShowProductsContained}/>
-       <Stack.Screen name="PutProductsIntoContainerScreen" component={PutProductsIntoContainerScreen}/>
        <Stack.Screen name="ProductDetailScreen" component={ProductDetailScreen}/>
      </Stack.Navigator>
    );
