@@ -14,7 +14,7 @@ const AddNewProductScreen=()=>
   const [newAttributeName,setNewAttributeName]=useState('')
   const [newAttributeValue,setNewAttributeValue]=useState('')
   const [Attributes,setAttributes]=useState({Nombre:'',Tipo:''})
-  const [Tallas,setTallas]=useState([])
+  const [Cantidades,setCantidades]=useState([])
   const [UpdatedAttributes,setUpdatedAttributes]=useState({Nombre:'',Tipo:''})
 
     const [visible, setVisible] = useState(false);
@@ -36,7 +36,7 @@ const AddNewProductScreen=()=>
             {
                 setAttributes({...Attributes,[newAttributeName]:parseInt(newAttributeValue)});
                 setUpdatedAttributes({...UpdatedAttributes,[newAttributeName]:parseInt(newAttributeValue)});
-                setTallas([...Tallas,newAttributeName])
+                setCantidades([...Cantidades,newAttributeName])
             }
             else
             {
@@ -57,7 +57,8 @@ const AddNewProductScreen=()=>
     }
     const HandleCounters=(ModifiedTalla,Value)=>
     {
-        setUpdatedAttributes({...UpdatedAttributes, [ModifiedTalla]:Value})
+        let aux= UpdatedAttributes[ModifiedTalla]+Value;
+        setUpdatedAttributes({...UpdatedAttributes, [ModifiedTalla]:aux})
     }
     const HandleCreationOfInputsWithAttributesArr=(Att)=>
     {
@@ -91,20 +92,20 @@ const AddNewProductScreen=()=>
     {
 
         let Atts=UpdatedAttributes;
-        let TallasObj={};
-        Tallas.forEach((talla)=>
+        let CantidadesObj={};
+        Cantidades.forEach((talla)=>
         {
-            TallasObj={...TallasObj,[talla]:Atts[talla]}
+            CantidadesObj={...CantidadesObj,[talla]:Atts[talla]}
             delete Atts[talla]
         })
-        Atts={...Atts,['Cantidades']:TallasObj}
+        Atts={...Atts,['Cantidades']:CantidadesObj}
         firebase.db.collection('Productos').add(Atts).then(CreatedDoc=>{
             const docID=CreatedDoc.id;
             firebase.db.collection('Lista Productos').doc('Lista').set({
                 [docID]:{
                 'Nombre':Atts.Nombre,
                 'Tipo':Atts.Tipo,
-                'Cantidades':Tallas
+                'Cantidades':Cantidades
              }
             }, { merge: true })
         })      

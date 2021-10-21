@@ -27,7 +27,30 @@ const PutProductsIntoContainerScreen =(props)=>
    });
    const [successfulLoad,setsuccessfulLoad]=useState(false);
    const [QtysIn0Template,setQtysIn0Template]=useState();
-    
+   const [StateOfCounters,setStateOfCounters]=useState();
+   const [AllowEditionForEachCounter,setAllowEditionForEachCounter]=useState({});
+    const setInitialStateOfCounters=(ContainedProducts,ProductQtys)=>  //ContainedProducts{DocId:{TypeQty:ContainedQty}} ProductQtys{TypeQty:TotalQty}
+    {
+        let Counters={};
+        let AllowEditionForEachCounterAux={};
+        Object.entries(ProductQtys).forEach((Qty)=>
+        {
+            let CounterAux  =0;
+            let AllowAddInCounter=true;
+            Object.entries(ContainedProducts).forEach((ContainedQty)=>
+            {
+                CounterAux+=ContainedQty[1][Qty[0]];
+            })
+            if(CounterAux==Qty[1])
+            {
+                AllowAddInCounter=false;
+            }
+            Counters={...Counters,[Qty[0]]:CounterAux};
+            AllowEditionForEachCounterAux={...AllowEditionForEachCounterAux,[Qty[0]]:AllowAddInCounter}
+        })
+        setStateOfCounters(Counters);
+        setAllowEditionForEachCounter(AllowEditionForEachCounterAux);
+    }
     const getInfo=async(DocId)=>
     {
         await firebase.db.collection('Contenedores').onSnapshot((querySnapshot)=>
@@ -45,7 +68,6 @@ const PutProductsIntoContainerScreen =(props)=>
               ContainersAux.push(Data);
           });
           setContainers(ContainersAux);
-          setsuccessfulLoad(true);
         });
         await firebase.db.collection('Productos/'+DocId+'/ContenidoEn').doc(DocId).get().then(Doc=>
         {
@@ -56,20 +78,24 @@ const PutProductsIntoContainerScreen =(props)=>
                 }
                 setQtysInContainers(auxData);
                 setQtysInContainersBackUp(auxData);
-                //setInitialStateOfGralCounter(auxData,props.route.params.QtyOfProduct);
+                setInitialStateOfCounters(auxData,{M:15,L:80});
             
         }
-        );
+        ).then(()=>
+        {
+            setsuccessfulLoad(true);
+        })
     }
+    
     useEffect(()=>
     {
         /*setProductName(props.route.params.Name);
         setProductId(props.route.params.DocId);
         setProductQtys(props.route.params.Cantidades);*/
         setProductName('Stitch');
-        setProductId('gCu171sea4VjxbX2W1A8');
+        setProductId('b0LLQ9maF8WEWVk2uJEn');
         setProductQtys({M:15,L:80});
-        getInfo('gCu171sea4VjxbX2W1A8');
+        getInfo('b0LLQ9maF8WEWVk2uJEn');
         let templateQtys={}
         Object.entries({M:15,L:80}).forEach((Qty)=>
         {
@@ -92,18 +118,27 @@ const PutProductsIntoContainerScreen =(props)=>
     const HandleCounters=(Mod,value)=> //Mod=[docid,TypeQty]  
     {
         let auxData=QtysInContainers[Mod[0]];
-        auxData={...auxData,[Mod[1]]:value};
+        auxData={...auxData,[Mod[1]]:auxData[Mod[1]]+value};
+        const c=StateOfCounters;
+        setStateOfCounters({...c,[Mod[1]]:c[Mod[1]]+value});
         setQtysInContainers({...QtysInContainers,[Mod[0]]:auxData})
+        if(c[Mod[1]]+value==ProductQtys[Mod[1]])
+        {
+            setAllowEditionForEachCounter({...AllowEditionForEachCounter,[Mod[1]]:false})
+        }
+        else if(c[Mod[1]]+value<ProductQtys[Mod[1]])
+        {
+            setAllowEditionForEachCounter({...AllowEditionForEachCounter,[Mod[1]]:true})
+        }
     }
     const HandleCreationOfCounters=(Container)=>  //{Description,DocId, Name,Type}
     {
-        
         if(QtysInContainersBackUp[Container.DocId]==null && successfulLoad)
         {
             setQtysInContainersBackUp({...QtysInContainersBackUp,[Container.DocId]:QtysIn0Template});
             setQtysInContainers({...QtysInContainersBackUp,[Container.DocId]:QtysIn0Template});
         }
-        if(QtysInContainersBackUp[Container.DocId]!=null)
+        if(QtysInContainersBackUp[Container.DocId]!=null && successfulLoad)
         {
             return(
                 <Fragment key={Container.DocId}>
@@ -116,7 +151,7 @@ const PutProductsIntoContainerScreen =(props)=>
                         numOfCounter={Qty[1]} 
                         textStyle={styles.CounterTextStyle} 
                         buttonStyle={styles.CounterButtonsStyle}
-                        disabledPlus={false}
+                        disabledPlus={!AllowEditionForEachCounter[Qty[0]]}
                         containerStyle={styles.ContainerCounter}
                         label={"Cantidad: "+Qty[0]}
                         labelStyle={styles.CounterTextStyle} 
@@ -133,7 +168,35 @@ const PutProductsIntoContainerScreen =(props)=>
     }
     const HandleSave=()=>
     {
-
+        let EmptyModifiedQtys=true;
+        let ModifiedQtys={};
+        Object.entries(QtysInContainers).forEach((DocQty)=>
+        {
+            if(QtysInContainersBackUp[DocQty[0]]!=DocQty[1])
+            {
+                ModifiedQtys={...ModifiedQtys,[DocQty[0]]:DocQty[1]};
+                EmptyModifiedQtys=false;
+            }
+        })
+        if(EmptyModifiedQtys==false)
+        {
+            firebase.db.collection('Productos/'+ProductId+'/ContenidoEn').doc(ProductId).set(ModifiedQtys,{merge:true});
+            
+            Object.entries(ModifiedQtys).forEach((Qty)=>  //QTY[{ContainerID,Qtys}]
+            {
+                firebase.db.collection('ProductosContenidos').doc(Qty[0]).update
+                (
+                    {
+                        [ProductId]:
+                        {
+                            Nombre:ProductName,
+                            Cantidades:Qty[1]
+                        }
+                    }
+                )
+            }
+            )
+        }
     }
     return(
         <View style={{flex:1, alignContent:'center', justifyContent:'center'}}>
@@ -144,9 +207,10 @@ const PutProductsIntoContainerScreen =(props)=>
             {
                     Containers.map((Container)=>HandleCreationOfCounters(Container))
             }
-            <Button title="Save" onPress={HandleSave}>
-
+            <Button title="Guardar" onPress={HandleSave}>
+            
             </Button>
+            <Button title='Atras'></Button>
         </View>
     );
 };
@@ -172,39 +236,8 @@ const styles = StyleSheet.create({
     }
   });
   /*
-  
 const PutProductsIntoContainerScreen =(props)=>
 {
-    const [DocId,setDocId]=useState("");
-    const [DocOfQtyId,setDocOfQtyId]=useState("");
-    const [Name,setName]=useState("");
-    const [Talla,setTalla]=useState("");
-    const [Cantidades,setCantidades]=useState();
-    const [CantidadesCounter,setCantidadesCounter]=useState(0);
-    const [MaxOfProductsContainedReached,setMaxOfProductsContainedReached]=useState(false);
-    const [Containers,setContainers]=useState([]);
-   // const [QtysInContainers,setQtysInContainers]=useState({});
-    //const [QtysInContainersBackUp,setQtysInContainersBackUp]=useState({});
-    const [successfulLoad,setsuccessfulLoad]=useState(false);
-
-
-    const setInitialStateOfGralCounter=(QtysInContainers,QtyOfProduct)=>
-    {
-        let auxCounter=0;
-        Object.entries(QtysInContainers).forEach((ContainerQty)=>
-        {
-            auxCounter+=ContainerQty[1]
-        })
-        setGralCounter(auxCounter);
-        if(auxCounter>=QtyOfProduct)
-        {
-            setMaxOfProductsContainedReached(true);
-        }
-        else
-        {
-            setMaxOfProductsContainedReached(false);
-        }
-    }
     const HandleSave=()=>
     {
         

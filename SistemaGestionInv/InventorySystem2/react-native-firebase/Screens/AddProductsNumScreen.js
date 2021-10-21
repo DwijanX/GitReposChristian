@@ -47,7 +47,8 @@ const AddProductsNumScreen=()=>
     }
     const HandleCounters=(ModifiedCantidad,Value)=>
     {
-        setCantidades({...Cantidades, [ModifiedCantidad]:Value})
+        let aux=Cantidades[ModifiedCantidad]+Value;
+        setCantidades({...Cantidades, [ModifiedCantidad]:aux})
     }
     const HandleCreationOfCounters=(Cantidad)=> //Cantidad [nombre,Qty]
     {

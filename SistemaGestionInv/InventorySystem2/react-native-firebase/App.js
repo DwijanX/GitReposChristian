@@ -56,9 +56,11 @@ import { func } from 'prop-types';
         fontWeight: 'bold',
       },
     }}>   
+
+<Stack.Screen name="HomeScreen" component={HomeScreen}/>
+
        <Stack.Screen name="PutProductsIntoContainerScreen" component={PutProductsIntoContainerScreen}/>
 
-    <Stack.Screen name="HomeScreen" component={HomeScreen}/>
 
 <Stack.Screen name="LogInScreen" component={LogInScreen}/>
 

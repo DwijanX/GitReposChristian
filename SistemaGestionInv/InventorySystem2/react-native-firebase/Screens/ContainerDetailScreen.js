@@ -64,14 +64,6 @@ class ProductDetailScreen extends Component
                 TitleText={this.state.BackUpContainer['Nombre']}
                 SubTitleText={this.state.BackUpContainer['Tipo']}
                 />
-                <Button title={"Set Products to containers"} 
-                 onPress={()=>{
-                    this.props.navigation.navigate('PutProductsIntoContainerScreen',{
-                     DocId: this.state.DocId,
-                     Name: this.state.Product.Nombre,
-                     QtyOfProduct: this.state.Product.CantidadStock,
-                     })
-                     }}/>
             </View>
         );
     }

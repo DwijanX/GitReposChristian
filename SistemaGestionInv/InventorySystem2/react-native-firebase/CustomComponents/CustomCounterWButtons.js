@@ -28,7 +28,7 @@ class CustomCounter extends Component
   {
       const {counter:c}=this.state;
       this.setState({counter:c+1});
-      this.props.funcToDoWhenModifyVal(this.props.NameOfStateToChange,c+1);
+      this.props.funcToDoWhenModifyVal(this.props.NameOfStateToChange,1);
   }
    HandleSubs=()=>
   {
@@ -36,7 +36,7 @@ class CustomCounter extends Component
       if(c-1>=0)
       {
         this.setState({counter:c-1});
-        this.props.funcToDoWhenModifyVal(this.props.NameOfStateToChange,c-1);
+        this.props.funcToDoWhenModifyVal(this.props.NameOfStateToChange,-1);
       }
   }
   render(){
