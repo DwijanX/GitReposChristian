@@ -56,14 +56,11 @@ import { func } from 'prop-types';
         fontWeight: 'bold',
       },
     }}>   
+   <Stack.Screen name="LogInScreen" component={LogInScreen}/>
 
-<Stack.Screen name="HomeScreen" component={HomeScreen}/>
+    <Stack.Screen name="HomeScreen" component={HomeScreen}/>
 
-       <Stack.Screen name="PutProductsIntoContainerScreen" component={PutProductsIntoContainerScreen}/>
-
-
-<Stack.Screen name="LogInScreen" component={LogInScreen}/>
-
+    <Stack.Screen name="PutProductsIntoContainerScreen" component={PutProductsIntoContainerScreen}/>
 
     <Stack.Screen name="AddNewProductScreen" component={AddNewProductScreen}/>
     <Stack.Screen name="AddProductsNumScreen" component={AddProductsNumScreen}/>
@@ -71,14 +68,14 @@ import { func } from 'prop-types';
 
     <Stack.Screen name="ViewProductsScreen" component={ViewProductsScreen}/>
 
-       <Stack.Screen name="ContainerDetailScreen" component={ContainerDetailScreen}/>
+    <Stack.Screen name="ContainerDetailScreen" component={ContainerDetailScreen}/>
 
       
-      <Stack.Screen name="ViewContainersScreen" component={ViewContainersScreen}/>
-       <Stack.Screen name="AddContainerScreen" component={AddContainerScreen}/>
-       <Stack.Screen name="ScannerScreen" component={ScannerScreen}/>
-       <Stack.Screen name="ShowProductsContained" component={ShowProductsContained}/>
-       <Stack.Screen name="ProductDetailScreen" component={ProductDetailScreen}/>
+    <Stack.Screen name="ViewContainersScreen" component={ViewContainersScreen}/>
+    <Stack.Screen name="AddContainerScreen" component={AddContainerScreen}/>
+    <Stack.Screen name="ScannerScreen" component={ScannerScreen}/>
+    <Stack.Screen name="ShowProductsContained" component={ShowProductsContained}/>
+    <Stack.Screen name="ProductDetailScreen" component={ProductDetailScreen}/>
      </Stack.Navigator>
    );
  }
