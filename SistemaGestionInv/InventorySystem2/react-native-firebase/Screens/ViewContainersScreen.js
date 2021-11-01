@@ -13,6 +13,22 @@ const ViewContainersScreen = (props) => {
 
     const GetContainersData=async()=>
     {
+        const ContainersAux=[];
+        firebase.db.collection('Listas').doc('Contenedores').get().then((doc)=>
+        {
+            Object.entries(doc.data()).forEach((Container)=>
+            {
+                let Data={
+                    DocId:Container[0], 
+                    Name:Container[1].Nombre,
+                    Type:Container[1].Tipo,
+                }
+              ContainersAux.push(Data);
+            })
+            setContainers(ContainersAux);
+            setFilteredContainers(ContainersAux);
+        })
+        /*
         await firebase.db.collection('Contenedores').onSnapshot((querySnapshot)=>
         {
             const Containers=[];
@@ -27,7 +43,7 @@ const ViewContainersScreen = (props) => {
           });
           setContainers(Containers);
           setFilteredContainers(Containers);
-        }); 
+        }); */
     }
     useEffect(()=>
     {

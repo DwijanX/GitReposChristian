@@ -42,9 +42,10 @@ const ProductDetailScreen=(props)=>
     const HandleSave= async()=>
     {
         firebase.db.collection('Contenedores').doc(DocId).set(Container)
-        if(BackUpContainer["Nombre"]!=Container["Nombre"])
+        if(BackUpContainer["Nombre"]!=Container["Nombre"] )
         {
             firebase.db.collection('ProductosContenidos').doc(DocId).set({"Nombre":Container["Nombre"]},{merge:true})
+            firebase.db.collection('Listas').doc('Contenedores').set({[DocId]:{"Nombre":Container["Nombre"],"Tipo":Container["Tipo"]}},{merge:true})
         }
         let aux={}
         Object.entries(BackUpContainer).forEach((att)=>

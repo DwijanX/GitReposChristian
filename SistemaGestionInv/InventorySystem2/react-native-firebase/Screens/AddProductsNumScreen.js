@@ -18,7 +18,8 @@ const AddProductsNumScreen=()=>
   const [Cantidades,setCantidades]=useState({});
   useEffect(()=>
     {
-      firebase.db.collection('Lista Productos').doc('Lista').get().then((doc)=>
+      firebase.db.collection('Listas').doc('Productos').get().then((doc)=>
+      //firebase.db.collection('Lista Productos').doc('Lista').get().then((doc)=>
       {
         let Products=[];
         Object.entries(doc.data()).forEach((Product)=>

@@ -14,10 +14,10 @@ const AddNewProductScreen=()=>
     const [newAttributeIsNumericField,setnewAttributeIsNumericField]=useState(false);
   const [newAttributeName,setNewAttributeName]=useState('')
   const [newAttributeValue,setNewAttributeValue]=useState('')
-  const [Attributes,setAttributes]=useState({Nombre:'',Tipo:'',Costo:0,"Precio de venta":0,"Demanda semanal":0,"Tiempo de reabastecimiento [dias]":0,"Criticidad":"baja"})
+  const [Attributes,setAttributes]=useState({Nombre:'',Tipo:'',Costo:"0","Precio de venta":"0","Demanda semanal":"0","Tiempo de reabastecimiento [dias]":"0","Criticidad":"baja"})
   const [NumericAttributes,setNumericAttributes]=useState(["Costo","Precio de venta","Demanda semanal","Tiempo de reabastecimiento [dias]"])
   const [Cantidades,setCantidades]=useState([])
-  const [UpdatedAttributes,setUpdatedAttributes]=useState({Nombre:'',Tipo:'',Costo:0,"Precio de venta":0,"Demanda semanal":0,"Tiempo de reabastecimiento [dias]":0,"Criticidad":"baja"})
+  const [UpdatedAttributes,setUpdatedAttributes]=useState({Nombre:'',Tipo:'',Costo:"0","Precio de venta":"0","Demanda semanal":"0","Tiempo de reabastecimiento [dias]":"0","Criticidad":"baja"})
   const [KeyboardTypeOverlay,setKeyboardTypeOverlay]=useState('default')
   const [visible, setVisible] = useState(false);
   const DropDownPickerAtts=["Precio de venta","Demanda semanal","Tiempo de reabastecimiento [dias]"]
@@ -150,11 +150,11 @@ const AddNewProductScreen=()=>
             Cantidades.push("General");
         }
         Atts={...Atts,['Cantidades']:CantidadesObj}
-        console.log(Cantidades)
 
         firebase.db.collection('Productos').add(Atts).then(CreatedDoc=>{
             const docID=CreatedDoc.id;
-            firebase.db.collection('Lista Productos').doc('Lista').set({
+            firebase.db.collection('Listas').doc('Productos').set({
+            //firebase.db.collection('Lista Productos').doc('Lista').set({
                 [docID]:{
                 'Nombre':Atts.Nombre,
                 'Tipo':Atts.Tipo,

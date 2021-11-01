@@ -53,6 +53,20 @@ const PutProductsIntoContainerScreen =(props)=>
     }
     const getInfo=async(DocId)=>
     {
+        const ContainersAux=[];
+        firebase.db.collection('Listas').doc('Contenedores').get().then((doc)=>
+        {
+            Object.entries(doc.data()).forEach((Container)=>
+            {
+                let Data={
+                    DocId:Container[0], 
+                    Name:Container[1].Nombre,
+                    Type:Container[1].Tipo,
+                }
+              ContainersAux.push(Data);
+            })
+          setContainers(ContainersAux);
+        })/*
         await firebase.db.collection('Contenedores').onSnapshot((querySnapshot)=>
         {
             const ContainersAux=[];
@@ -68,7 +82,7 @@ const PutProductsIntoContainerScreen =(props)=>
               ContainersAux.push(Data);
           });
           setContainers(ContainersAux);
-        });
+        });*/
         await firebase.db.collection('Productos/'+DocId+'/ContenidoEn').doc(DocId).get().then(Doc=>
         {
                 let auxData=Doc.data();
