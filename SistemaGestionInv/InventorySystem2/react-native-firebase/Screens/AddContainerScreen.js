@@ -38,6 +38,7 @@ class AddContainerScreen extends Component
             ).then((CreatedDoc)=>
             {
                 firebase.db.collection('ProductosContenidos').doc(CreatedDoc.id).set({Nombre:this.state.Nombre})
+                firebase.db.collection('Lista').doc('Contenedores').set({[CreatedDoc.id]:{Nombre:this.state.Nombre,Tipo:this.state.Tipo}},{merge:true})
             })
         }
         else

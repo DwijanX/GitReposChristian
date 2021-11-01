@@ -51,9 +51,16 @@ class ProductDetailScreen extends Component
         if(ProductInfo["Nombre"]!=BackUpProductInfo["Nombre"])
         {
             firebase.db.collection('Lista Productos').doc("Lista").set({[this.state.DocId]:{"Nombre":ProductInfo["Nombre"],"Tipo":ProductInfo["Tipo"]}},{merge:true})
-            /*const collection = firebase.db.collection("ProductosContenidos")
-            collection.where(this.state.DocId,"in",)
-            firebase.db.collection(Prod)*/
+            const collection = firebase.db.collection("ProductosContenidos")
+            collection.where(`${this.state.DocId}.Nombre`,"==",BackUpProductInfo["Nombre"]).get().then((ans)=>
+            {
+                let batch = firebase.db.batch()
+                ans.docs.forEach((doc) => {
+                    const docRef = firebase.db.collection('ProductosContenidos').doc(doc.id)
+                    batch.set(docRef, {[this.state.DocId]:{"Nombre":ProductInfo["Nombre"]}},{merge:true})
+                })
+                batch.commit();
+            })
         }
         let aux={}
         Object.entries(BackUpProductInfo).forEach((att)=>
