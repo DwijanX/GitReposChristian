@@ -99,7 +99,10 @@ const AddProductsNumScreen=()=>
                     />
                 
                 {Object.entries(Cantidades).map((Cantidad)=>HandleCreationOfCounters(Cantidad))}
-                <Button title={'Save'} onPress={HandleSave}>
+
+                <Button title={'Crear nueva cantidad'}/>
+                <Button title={'Guardar'} onPress={HandleSave}>
+
 
                 </Button>
             </View>

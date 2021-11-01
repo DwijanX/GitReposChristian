@@ -9,7 +9,6 @@ const ShowProductsContained=(props)=>
     const [Name,setName]=useState("");
     const [ProductsContained,setProductsContained]=useState({});
 
-
     useEffect(()=>
     {
         firebase.db.collection('ProductosContenidos').doc(props.route.params.DocId).get().then((doc)=>
@@ -20,13 +19,20 @@ const ShowProductsContained=(props)=>
             setProductsContained(data);
         })
     },[]);
-
+    const HandleCreationOfSubTitle=(Product)=>
+    {
+        let message=""
+        Object.entries(Product[1]["Cantidades"]).forEach(Cantidad => {
+            message+=Cantidad[0]+": "+Cantidad[1]+" ";
+        })
+        return message;
+    }
     return(
     <View  >
-        
         {
             Object.entries(ProductsContained).map((Product)=>
                 {
+                    let SubTitle=HandleCreationOfSubTitle(Product)
                     return(
                         <ListItem
                             key={Product[0]} 
@@ -39,7 +45,7 @@ const ShowProductsContained=(props)=>
                             <ListItem.Chevron/>
                             <ListItem.Content>
                                 <ListItem.Title>{Product[1].Nombre}</ListItem.Title>
-                                <ListItem.Subtitle>Talla: {Product[1].Talla}     Qty: {Product[1].Cantidad}</ListItem.Subtitle>
+                                <ListItem.Subtitle>Cantidades:{SubTitle}</ListItem.Subtitle>
                             </ListItem.Content>
                         </ListItem>
                     );

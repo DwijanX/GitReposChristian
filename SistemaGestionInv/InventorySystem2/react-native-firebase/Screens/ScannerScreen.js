@@ -45,8 +45,9 @@ const ScannerScreen=(props)=>
             let auxData={};
             setScanned(true);
             setInfo(data);
+            
             auxData=JSON.parse(data);
-            props.navigation.navigate('ShowProductsContained',{DocId: auxData.Id});
+            props.navigation.navigate('ShowProductsContained',{DocId: auxData.DocId});
             
         }
     return(

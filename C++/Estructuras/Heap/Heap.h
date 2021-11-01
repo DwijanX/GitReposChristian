@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include "Node.h"
+#include <list>
+#include <fstream>
 
 using namespace std;
 
@@ -20,7 +22,8 @@ public:
     T extractRoot();
     void ShowTree(void (*FuncToDo)(T));
     void ShowArray(void (*FuncToShow)(T));
-
+    void insertFromFile(string FileDirection);
+    list<T> HeapSort();
 };
 template <class T>
 Heap<T>::Heap(int ArrSize)
@@ -136,5 +139,29 @@ void Heap<T>::ShowArray(void (*FuncToShow)(T))
     for(int i=1;i<=LastOne;i++)
     {
         FuncToShow(Array[i]->getData());
+    }
+}
+template <class T>
+list<T> Heap<T>::HeapSort()
+{
+    list<T> ans;
+    while(LastOne!=-1)  //si LastOne==-1 arbol esta vacio
+    {
+        ans.push_back(extractRoot());
+    }
+    return ans;
+}
+template <class T>
+void Heap<T>::insertFromFile(string FileDirection)
+{
+    if(sizeof(T)==sizeof(int))
+    {
+        int aux;
+        ifstream File;
+        File.open(FileDirection);
+        while(File>>aux)
+        {
+            insert(aux);
+        }
     }
 }

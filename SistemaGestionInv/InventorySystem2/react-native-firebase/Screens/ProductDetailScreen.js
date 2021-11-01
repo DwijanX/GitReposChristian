@@ -46,8 +46,21 @@ class ProductDetailScreen extends Component
     HandleSave= async()=>
     {
         const ProductInfo=this.state.Product;
+        const BackUpProductInfo=this.state.BackUpProduct
         firebase.db.collection('Productos').doc(this.state.DocId).set(ProductInfo);
-        this.setState({BackUpProduct:ProductInfo});
+        if(ProductInfo["Nombre"]!=BackUpProductInfo["Nombre"])
+        {
+            firebase.db.collection('Lista Productos').doc("Lista").set({[this.state.DocId]:{"Nombre":ProductInfo["Nombre"],"Tipo":ProductInfo["Tipo"]}},{merge:true})
+            /*const collection = firebase.db.collection("ProductosContenidos")
+            collection.where(this.state.DocId,"in",)
+            firebase.db.collection(Prod)*/
+        }
+        let aux={}
+        Object.entries(BackUpProductInfo).forEach((att)=>
+        {
+            aux={...aux,[att[0]]:ProductInfo[att[0]]}
+        })
+        this.setState({BackUpProduct:aux});
         this.setState({ViewMode:true});
     }
     setViewMode(ViewModeBool)

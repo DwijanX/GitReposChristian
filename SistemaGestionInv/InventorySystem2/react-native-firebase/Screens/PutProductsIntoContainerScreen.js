@@ -78,7 +78,7 @@ const PutProductsIntoContainerScreen =(props)=>
                 }
                 setQtysInContainers(auxData);
                 setQtysInContainersBackUp(auxData);
-                setInitialStateOfCounters(auxData,{M:15,L:80});
+                setInitialStateOfCounters(auxData,props.route.params.Cantidades);
             
         }
         ).then(()=>
@@ -89,15 +89,15 @@ const PutProductsIntoContainerScreen =(props)=>
     
     useEffect(()=>
     {
-        /*setProductName(props.route.params.Name);
+        setProductName(props.route.params.Name);
         setProductId(props.route.params.DocId);
-        setProductQtys(props.route.params.Cantidades);*/
-        setProductName('Stitch');
+        setProductQtys(props.route.params.Cantidades);
+        /*setProductName('Stitch');
         setProductId('b0LLQ9maF8WEWVk2uJEn');
-        setProductQtys({M:15,L:80});
-        getInfo('b0LLQ9maF8WEWVk2uJEn');
+        setProductQtys({M:15,L:80});*/
+        getInfo(props.route.params.DocId);
         let templateQtys={}
-        Object.entries({M:15,L:80}).forEach((Qty)=>
+        Object.entries(props.route.params.Cantidades).forEach((Qty)=>
         {
             templateQtys={...templateQtys,[Qty[0]]:0}
         })

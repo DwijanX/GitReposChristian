@@ -26,6 +26,7 @@ class DetailScreen extends Component
     }
     HandleCreationOfAppropiateComps= (ObjectAtt)=>
     {
+
         if(ObjectAtt[0]!='Nombre' && ObjectAtt[0]!='Tipo')
         {
         if(ObjectAtt[0]=='Cantidades')
@@ -95,7 +96,6 @@ class DetailScreen extends Component
                     onChangeText={(value)=>this.HandleChangeAtt('Tipo',value)}>
                         {this.props.BackUpObject['Tipo']}
                 </Input>
-                
                 {Object.entries(this.props.BackUpObject).map((ObjectAtt)=>this.HandleCreationOfAppropiateComps(ObjectAtt))}
                 </View>
                 <Divider orientation="horizontal" />

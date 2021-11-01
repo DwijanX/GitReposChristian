@@ -1,25 +1,22 @@
-import React,{Component} from "react";
-import { View,Text, StyleSheet} from "react-native";
-import { Button,Divider } from 'react-native-elements';
+import React,{useState,useEffect,useRef  } from "react";
+import { View,Text, StyleSheet,Share} from "react-native";
+import { Button,Overlay } from 'react-native-elements';
 import { Input } from "react-native-elements/dist/input/Input";
 import firebase from '../DataBase/Firebase'
 import CustomCounter  from '../CustomComponents/CustomCounterWButtons'
 import DetailScreen from "../CustomComponents/DetailScreen";
-class ProductDetailScreen extends Component
+import QrOverlay from "../CustomComponents/QrOverlay";
+
+const ProductDetailScreen=(props)=>
 {
-    constructor(props)
-  {
-      super(props);
-      this.state={
-        BackUpContainer:{},
-        Container:{},
-        DocId:"",
-      }
-      this.HandleContainerUpdate=this.HandleContainerUpdate.bind(this);
-      this.getContainerInfo=this.getContainerInfo.bind(this);
-      this.HandleSave=this.HandleSave.bind(this);
-  }
-    getContainerInfo= async (DocId)=>
+    const[BackUpContainer,setBackUpContainer]=useState({})
+    const[Container,setContainer]=useState({})
+    const[DocId,setDocId]=useState("")
+    const[overlayVisible,setOverlayVisible]=useState(false)
+    const[ViewMode,setViewMode]=useState(true)
+
+
+    const getContainerInfo= async (DocId)=>
     {
         const dbRef=firebase.db.collection('Contenedores').doc(DocId)
         const doc= await dbRef.get();
@@ -28,45 +25,62 @@ class ProductDetailScreen extends Component
         Object.entries(ContainerData).forEach((Prop)=>{
             ContainerDataAux={...ContainerDataAux,[Prop[0]]:Prop[1]};
         });
-        this.setState({Container:ContainerDataAux});
-        this.setState({BackUpContainer:ContainerDataAux});
-        console.log(ContainerDataAux)
+        setContainer(ContainerDataAux)
+        setBackUpContainer(ContainerDataAux)
     }
-    componentDidMount()
+    useEffect(()=>
     {
-        this.setState({DocId:this.props.route.params.DocId});
-        this.getContainerInfo(this.props.route.params.DocId);
-    }
-    HandleContainerUpdate=(ContainerAux)=>
-    {
-        this.setState({Container:ContainerAux})
-    }
-    HandleSave= async()=>
-    {
-        const ProductInfo=this.state.Product;
-        firebase.db.collection('Contenedores').doc(this.state.DocId).set(ProductInfo);
-        Object.entries(this.state.BackUpContainer) .forEach((att)=>
-        {
-            const {BackUpContainer:BUC}=this.state;
-            const {Container:Ct}=this.state;
-            this.setState({BackUpContainer:{...BUC ,[att[0]]:Ct[att[0]]}});
-        })
+        setDocId(props.route.params.DocId);
+        getContainerInfo(props.route.params.DocId);
+    },[])
 
+    const HandleContainerUpdate=(ContainerAux)=>
+    {
+        setContainer(ContainerAux);
     }
-    render(){
+
+    const HandleSave= async()=>
+    {
+        firebase.db.collection('Contenedores').doc(DocId).set(Container)
+        if(BackUpContainer["Nombre"]!=Container["Nombre"])
+        {
+            firebase.db.collection('ProductosContenidos').doc(DocId).set({"Nombre":Container["Nombre"]},{merge:true})
+        }
+        let aux={}
+        Object.entries(BackUpContainer).forEach((att)=>
+        {
+            aux={...aux,[att[0]]:Container[att[0]]}
+        })
+        setBackUpContainer(aux);
+        setViewMode(true)
+    }
+
+    const toggleOverlay=()=>
+    {
+        setOverlayVisible(!overlayVisible);
+    }
         return(
             <View style={styles.MainViewContainer}>
                 <DetailScreen
-                setObject={this.HandleContainerUpdate}
-                Object={this.state.Container}
-                BackUpObject={this.state.BackUpContainer}
-                HandleSave={this.HandleSave}
-                TitleText={this.state.BackUpContainer['Nombre']}
-                SubTitleText={this.state.BackUpContainer['Tipo']}
+                setObject={HandleContainerUpdate}
+                Object={Container}
+                BackUpObject={BackUpContainer}
+                HandleSave={HandleSave}
+                ViewMode={ViewMode}
+                setViewMode={setViewMode}
                 />
+                <QrOverlay
+                data={`{"DocId":"${DocId}"}`}
+                ImageName={BackUpContainer["Nombre"]}
+                visible={overlayVisible}
+                toggleVisible={toggleOverlay}
+                />
+                <Button title="Get Qr Code" onPress={toggleOverlay}/>
+
+                <Button title="View Products Contained" onPress={()=>{props.navigation.navigate('ShowProductsContained',{DocId:DocId})}}/>
             </View>
         );
-    }
+    
 }
 const styles = StyleSheet.create({
     MainViewContainer:
