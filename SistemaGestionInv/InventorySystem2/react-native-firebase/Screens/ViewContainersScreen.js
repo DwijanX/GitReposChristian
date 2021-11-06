@@ -28,22 +28,6 @@ const ViewContainersScreen = (props) => {
             setContainers(ContainersAux);
             setFilteredContainers(ContainersAux);
         })
-        /*
-        await firebase.db.collection('Contenedores').onSnapshot((querySnapshot)=>
-        {
-            const Containers=[];
-          querySnapshot.docs.forEach((doc)=>
-          {
-              DocData=doc.data();
-              let Data=
-              {
-                  DocId:doc.id, Name:DocData.Nombre,Type:DocData.Tipo
-              }
-              Containers.push(Data);
-          });
-          setContainers(Containers);
-          setFilteredContainers(Containers);
-        }); */
     }
     useEffect(()=>
     {

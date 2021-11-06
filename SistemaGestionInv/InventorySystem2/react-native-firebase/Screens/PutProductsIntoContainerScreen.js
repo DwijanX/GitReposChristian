@@ -11,24 +11,14 @@ const PutProductsIntoContainerScreen =(props)=>
     const [ProductName,setProductName]=useState([]);
     const [ProductId,setProductId]=useState([]);
     const [ProductQtys,setProductQtys]=useState();
-    const [QtysInContainers,setQtysInContainers]=useState({
-        gCu171sea4VjxbX2W1A8:
-        {
-            M:0,
-            L:0
-        }
-   });
-    const [QtysInContainersBackUp,setQtysInContainersBackUp]=useState({
-        gCu171sea4VjxbX2W1A8:
-        {
-            M:0,
-            L:0
-        }
-   });
+    const [QtysInContainers,setQtysInContainers]=useState({});
+    const [QtysInContainersBackUp,setQtysInContainersBackUp]=useState({});
    const [successfulLoad,setsuccessfulLoad]=useState(false);
    const [QtysIn0Template,setQtysIn0Template]=useState();
    const [StateOfCounters,setStateOfCounters]=useState();
    const [AllowEditionForEachCounter,setAllowEditionForEachCounter]=useState({});
+   const [PrecioVenta,setPrecioVenta]=useState({});
+
     const setInitialStateOfCounters=(ContainedProducts,ProductQtys)=>  //ContainedProducts{DocId:{TypeQty:ContainedQty}} ProductQtys{TypeQty:TotalQty}
     {
         let Counters={};
@@ -41,9 +31,13 @@ const PutProductsIntoContainerScreen =(props)=>
             {
                 CounterAux+=ContainedQty[1][Qty[0]];
             })
-            if(CounterAux==Qty[1])
+            if(CounterAux==Qty[1] || (isNaN(CounterAux) && Qty[1]==0))
             {
                 AllowAddInCounter=false;
+            }
+            if(isNaN(CounterAux))
+            {
+                CounterAux=0;
             }
             Counters={...Counters,[Qty[0]]:CounterAux};
             AllowEditionForEachCounterAux={...AllowEditionForEachCounterAux,[Qty[0]]:AllowAddInCounter}
@@ -66,23 +60,7 @@ const PutProductsIntoContainerScreen =(props)=>
               ContainersAux.push(Data);
             })
           setContainers(ContainersAux);
-        })/*
-        await firebase.db.collection('Contenedores').onSnapshot((querySnapshot)=>
-        {
-            const ContainersAux=[];
-          querySnapshot.docs.forEach((doc)=>
-          {
-              let Data=
-              {
-                  DocId:doc.id, 
-                  Name:doc.data().Nombre,
-                  Type:doc.data().Tipo,
-                  Description:doc.data().Descripcion,
-              }
-              ContainersAux.push(Data);
-          });
-          setContainers(ContainersAux);
-        });*/
+        })
         await firebase.db.collection('Productos/'+DocId+'/ContenidoEn').doc(DocId).get().then(Doc=>
         {
                 let auxData=Doc.data();
@@ -93,7 +71,6 @@ const PutProductsIntoContainerScreen =(props)=>
                 setQtysInContainers(auxData);
                 setQtysInContainersBackUp(auxData);
                 setInitialStateOfCounters(auxData,props.route.params.Cantidades);
-            
         }
         ).then(()=>
         {
@@ -106,9 +83,7 @@ const PutProductsIntoContainerScreen =(props)=>
         setProductName(props.route.params.Name);
         setProductId(props.route.params.DocId);
         setProductQtys(props.route.params.Cantidades);
-        /*setProductName('Stitch');
-        setProductId('b0LLQ9maF8WEWVk2uJEn');
-        setProductQtys({M:15,L:80});*/
+        setPrecioVenta(props.route.params.PrecioVenta);
         getInfo(props.route.params.DocId);
         let templateQtys={}
         Object.entries(props.route.params.Cantidades).forEach((Qty)=>
@@ -117,17 +92,6 @@ const PutProductsIntoContainerScreen =(props)=>
         })
         setQtysIn0Template(templateQtys);
 
-       /*QtysInContainers
-       
-       {
-            gCu171sea4VjxbX2W1A8:
-            {
-                M:0,
-                L:0
-            }
-       }*/
-       
-        //getInfo(props.route.params.DocId).then(()=>{setsuccessfulLoad(true);})
     },[])
     const HandleCounters=(Mod,value)=> //Mod=[docid,TypeQty]  
     {
@@ -136,7 +100,7 @@ const PutProductsIntoContainerScreen =(props)=>
         const c=StateOfCounters;
         setStateOfCounters({...c,[Mod[1]]:c[Mod[1]]+value});
         setQtysInContainers({...QtysInContainers,[Mod[0]]:auxData})
-        if(c[Mod[1]]+value==ProductQtys[Mod[1]])
+        if(c[Mod[1]]+value>ProductQtys[Mod[1]])
         {
             setAllowEditionForEachCounter({...AllowEditionForEachCounter,[Mod[1]]:false})
         }
@@ -147,10 +111,16 @@ const PutProductsIntoContainerScreen =(props)=>
     }
     const HandleCreationOfCounters=(Container)=>  //{Description,DocId, Name,Type}
     {
-        if(QtysInContainersBackUp[Container.DocId]==null && successfulLoad)
+        
+        if(successfulLoad && Object.keys(QtysInContainersBackUp[Container.DocId]).length!=Object.keys(QtysIn0Template).length)
         {
-            setQtysInContainersBackUp({...QtysInContainersBackUp,[Container.DocId]:QtysIn0Template});
-            setQtysInContainers({...QtysInContainersBackUp,[Container.DocId]:QtysIn0Template});
+            let aux=Object.assign({}, QtysIn0Template)
+            for(let key in QtysInContainersBackUp[Container.DocId])
+            {
+                aux[key]=QtysInContainersBackUp[Container.DocId][key];
+            }
+            setQtysInContainersBackUp({...QtysInContainersBackUp,[Container.DocId]:aux});
+            setQtysInContainers({...QtysInContainersBackUp,[Container.DocId]:aux});
         }
         if(QtysInContainersBackUp[Container.DocId]!=null && successfulLoad)
         {
@@ -186,27 +156,37 @@ const PutProductsIntoContainerScreen =(props)=>
         let ModifiedQtys={};
         Object.entries(QtysInContainers).forEach((DocQty)=>
         {
-            if(QtysInContainersBackUp[DocQty[0]]!=DocQty[1])
+            let aux={}
+            Object.entries(DocQty[1]).forEach((ProductQty)=>
             {
-                ModifiedQtys={...ModifiedQtys,[DocQty[0]]:DocQty[1]};
+                if(ProductQty[1]!=QtysInContainersBackUp[DocQty[0]][ProductQty[0]])
+                {
+                    aux={...aux,[ProductQty[0]]:ProductQty[1]}
+                }
+            })
+            if(Object.keys(aux).length!=0)
+            {
+                ModifiedQtys={...ModifiedQtys,[DocQty[0]]:aux}; 
                 EmptyModifiedQtys=false;
             }
         })
         if(EmptyModifiedQtys==false)
         {
+            
             firebase.db.collection('Productos/'+ProductId+'/ContenidoEn').doc(ProductId).set(ModifiedQtys,{merge:true});
             
             Object.entries(ModifiedQtys).forEach((Qty)=>  //QTY[{ContainerID,Qtys}]
             {
-                firebase.db.collection('ProductosContenidos').doc(Qty[0]).update
+                firebase.db.collection('ProductosContenidos').doc(Qty[0]).set
                 (
                     {
                         [ProductId]:
                         {
                             Nombre:ProductName,
+                            "Precio de venta":PrecioVenta,
                             Cantidades:Qty[1]
                         }
-                    }
+                    },{merge:true}
                 )
             }
             )
@@ -249,53 +229,4 @@ const styles = StyleSheet.create({
         paddingHorizontal:20
     }
   });
-  /*
-const PutProductsIntoContainerScreen =(props)=>
-{
-    const HandleSave=()=>
-    {
-        
-        let ModifiedQtys={};
-        Object.entries(QtysInContainers).forEach((DocQty)=>
-        {
-            if(QtysInContainersBackUp[DocQty[0]]!=DocQty[1])
-            {
-                ModifiedQtys={...ModifiedQtys,[DocQty[0]]:DocQty[1]};
-            }
-        })
-        if(ModifiedQtys!={})
-        {
-            firebase.db.collection('Productos/'+DocId+'/ContenidoEn').doc(DocOfQtyId).update(ModifiedQtys);
-            Object.entries(ModifiedQtys).forEach((Qty)=>  //QTY[{ContainerID,Qty}]
-            {
-                if(Qty[1]!=0)
-                {
-                    firebase.db.collection('ProductosContenidos').doc(Qty[0]).update
-                    (
-                        {
-                            [DocId]:
-                            {
-                                Nombre:Name,
-                                Talla:Talla,
-                                Cantidad:Qty[1]
-                            }
-                        }
-                    )
-                }
-                else
-                {
-                    firebase.db.collection('ProductosContenidos').doc(Qty[0]).update
-                    (
-                        {
-                            [DocId]:firebase.firebase.firestore.FieldValue.delete()
-                        }
-                    );
-                }
-            })
-            setQtysInContainersBackUp(QtysInContainers);
-        }
-    }
-};
-  */
-  
 export default PutProductsIntoContainerScreen;

@@ -93,9 +93,9 @@ class ProductDetailScreen extends Component
                         DocId: this.state.DocId,
                         Name: this.state.Product.Nombre,
                         Cantidades: this.state.Product.Cantidades,
+                        PrecioVenta: this.state.Product["Precio de venta"]
                      })
                      }}/>
-                <Button title={"Add Products"}/>
                      </View>
             </ScrollView>
         );

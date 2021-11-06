@@ -1,5 +1,5 @@
 import React,{useEffect,useState,Fragment} from "react";
-import { View,Text, StyleSheet, ScrollView} from "react-native";
+import { View,Text, StyleSheet, ScrollView, ActionSheetIOS} from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import firebase from '../DataBase/Firebase';
 import CustomCounter  from '../CustomComponents/CustomCounterWButtons'
@@ -14,17 +14,19 @@ const AddNewProductScreen=()=>
     const [newAttributeIsNumericField,setnewAttributeIsNumericField]=useState(false);
   const [newAttributeName,setNewAttributeName]=useState('')
   const [newAttributeValue,setNewAttributeValue]=useState('')
+
   const [Attributes,setAttributes]=useState({Nombre:'',Tipo:'',Costo:"0","Precio de venta":"0","Demanda semanal":"0","Tiempo de reabastecimiento [dias]":"0","Criticidad":"baja"})
   const [NumericAttributes,setNumericAttributes]=useState(["Costo","Precio de venta","Demanda semanal","Tiempo de reabastecimiento [dias]"])
   const [Cantidades,setCantidades]=useState([])
   const [UpdatedAttributes,setUpdatedAttributes]=useState({Nombre:'',Tipo:'',Costo:"0","Precio de venta":"0","Demanda semanal":"0","Tiempo de reabastecimiento [dias]":"0","Criticidad":"baja"})
+  
   const [KeyboardTypeOverlay,setKeyboardTypeOverlay]=useState('default')
   const [visible, setVisible] = useState(false);
   const DropDownPickerAtts=["Precio de venta","Demanda semanal","Tiempo de reabastecimiento [dias]"]
   //Dropdown PickerStates
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(0);
-  const [items, setItems] = useState([{label:'baja',value:'baja'},{label:'moderada',value:'moderada'},{label:'alta',value:'alta'}]);
+  const [Criticality, setCriticality] = useState({"baja":false,"moderada":false,"alta":false});
+  const [SelectedCriticality, setSelectedCriticality] = useState("");
+  
   
     const toggleOverlay = () => {
       setVisible(!visible);
@@ -78,6 +80,22 @@ const AddNewProductScreen=()=>
     {
         setUpdatedAttributes({...UpdatedAttributes,[Attribute]:Value});
     }
+    const HandleCheckBoxClicked=(CriticalityKey)=>
+    {
+        if(Criticality[CriticalityKey]==false)
+        {
+            let aux=Criticality;
+            if(SelectedCriticality!="")
+            {
+                aux[SelectedCriticality]=false;
+            }
+            aux[CriticalityKey]=true;
+            setCriticality(aux);
+            setSelectedCriticality(CriticalityKey);
+            setUpdatedAttributes({...Attributes,["Criticidad"]:CriticalityKey})
+        }
+
+    }
     const HandleCreationOfInputsWithAttributesArr=(Att)=>
     {
         if(Att[0]!="Criticidad" && NumericAttributes.indexOf(Att[0])==-1 && Cantidades.indexOf(Att[0])==-1 )
@@ -98,22 +116,19 @@ const AddNewProductScreen=()=>
         }
         else 
         {
-            return(
+            return (
                 <Fragment key={Att[0]}>
                     <Text>{Att[0]} </Text>
-                    <DropDownPicker
-                        open={open}
-                        value={value}
-                        items={items}
-                        setOpen={setOpen}
-                        setValue={setValue}
-                        setItems={setItems}
-                        onChangeValue={(value)=>{
-                            setUpdatedAttributes({...Attributes,["Criticidad"]:value})
-                        }}
-                    />
+                    {Object.entries(Criticality).map((CriticalityKey)=>
+                    {
+                        return(
+                        <CheckBox key={CriticalityKey[0]}title={CriticalityKey[0]} checked={CriticalityKey[1]} onPress={()=>{
+                            HandleCheckBoxClicked(CriticalityKey[0])}}></CheckBox>
+                        );
+                        
+                    })}
                     </Fragment>
-            )
+            );
         }
     }
     const HandleSave=()=>
@@ -154,13 +169,25 @@ const AddNewProductScreen=()=>
         firebase.db.collection('Productos').add(Atts).then(CreatedDoc=>{
             const docID=CreatedDoc.id;
             firebase.db.collection('Listas').doc('Productos').set({
-            //firebase.db.collection('Lista Productos').doc('Lista').set({
                 [docID]:{
                 'Nombre':Atts.Nombre,
                 'Tipo':Atts.Tipo,
-                'Cantidades':Cantidades
+                'Cantidades':Cantidades,
+                "Precio de venta":Atts["Precio de venta"]
              }
             }, { merge: true })
+            let today = new Date();
+            let key=today.getHours()+"_" + today.getMinutes()+"_" + today.getSeconds()+"_"+today.getDay()+"_"+(today.getMonth()+1)+"_"+today.getFullYear()
+            firebase.db.collection('Historial').doc(`${today.getMonth()+1}${today.getUTCFullYear()}`).set(
+            {
+                [key]:{
+                    'DocId':docID,
+                    'Nombre':Atts.Nombre,
+                    'Operacion':'Agregacion',
+                    "Creado": firebase.FieldValue.serverTimestamp()
+                }
+            }
+            ,{merge:true})
         })   
         
     }
