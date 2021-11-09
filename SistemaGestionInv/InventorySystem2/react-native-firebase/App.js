@@ -17,6 +17,7 @@
  import AddProductsNumScreen from './Screens/AddProductsNumScreen';
  import AddNewProductScreen from './Screens/AddNewProductScreen';
  import CompromisedProductsScreen from './Screens/CompromisedProductsScreen';
+ import ABCScreen from './Screens/ABCScreen';
  
  import * as Font from 'expo-font';
  import AppLoading from 'expo-app-loading';
@@ -59,6 +60,7 @@ import { func } from 'prop-types';
     }}>   
 
 <Stack.Screen name="HomeScreen" component={HomeScreen}/>
+<Stack.Screen name="ABCScreen" component={ABCScreen}/>
 <Stack.Screen name="CompromisedProductsScreen" component={CompromisedProductsScreen}/>
 
     <Stack.Screen name="ViewProductsScreen" component={ViewProductsScreen}/>

@@ -38,6 +38,7 @@ class HomeScreen extends Component
                 <Button title="Agregar Contenedores" onPress={()=>{this.props.navigation.navigate('AddContainerScreen');}}/>
                 <Button title="Productos Comprometidos" onPress={()=>{this.props.navigation.navigate('CompromisedProductsScreen');}}/>
                 <Button title="Scanner" onPress={()=>{this.props.navigation.navigate('ScannerScreen');}}/>
+                <Button title="ABCScreen" onPress={()=>{this.props.navigation.navigate('ABCScreen');}}/>
                 <Button title="Log Out"  onPress={this.HandleLogOut}/>
             </View>
         );

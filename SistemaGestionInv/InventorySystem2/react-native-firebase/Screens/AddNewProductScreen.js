@@ -15,14 +15,14 @@ const AddNewProductScreen=()=>
   const [newAttributeName,setNewAttributeName]=useState('')
   const [newAttributeValue,setNewAttributeValue]=useState('')
 
-  const [Attributes,setAttributes]=useState({Nombre:'',Tipo:'',Costo:"0","Precio de venta":"0","Demanda semanal":"0","Tiempo de reabastecimiento [dias]":"0","Criticidad":"baja"})
-  const [NumericAttributes,setNumericAttributes]=useState(["Costo","Precio de venta","Demanda semanal","Tiempo de reabastecimiento [dias]"])
+  const [Attributes,setAttributes]=useState({Nombre:'',Tipo:'',Costo:"0","Precio de venta":"0","Demanda mensual":"0","Tiempo de reabastecimiento [dias]":"0","Criticidad":"baja"})
+  const [NumericAttributes,setNumericAttributes]=useState(["Costo","Precio de venta","Demanda mensual","Tiempo de reabastecimiento [dias]"])
   const [Cantidades,setCantidades]=useState([])
-  const [UpdatedAttributes,setUpdatedAttributes]=useState({Nombre:'',Tipo:'',Costo:"0","Precio de venta":"0","Demanda semanal":"0","Tiempo de reabastecimiento [dias]":"0","Criticidad":"baja"})
+  const [UpdatedAttributes,setUpdatedAttributes]=useState({Nombre:'',Tipo:'',Costo:"0","Precio de venta":"0","Demanda mensual":"0","Tiempo de reabastecimiento [dias]":"0","Criticidad":"baja"})
   
   const [KeyboardTypeOverlay,setKeyboardTypeOverlay]=useState('default')
   const [visible, setVisible] = useState(false);
-  const DropDownPickerAtts=["Precio de venta","Demanda semanal","Tiempo de reabastecimiento [dias]"]
+  const DropDownPickerAtts=["Precio de venta","Demanda mensual","Tiempo de reabastecimiento [dias]"]
   //Dropdown PickerStates
   const [Criticality, setCriticality] = useState({"baja":false,"moderada":false,"alta":false});
   const [SelectedCriticality, setSelectedCriticality] = useState("");

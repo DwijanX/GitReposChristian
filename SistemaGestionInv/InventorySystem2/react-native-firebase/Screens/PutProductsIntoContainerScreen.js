@@ -111,7 +111,7 @@ const PutProductsIntoContainerScreen =(props)=>
     }
     const HandleCreationOfCounters=(Container)=>  //{Description,DocId, Name,Type}
     {
-        
+        //bug si no hay nada en 
         if(successfulLoad && Object.keys(QtysInContainersBackUp[Container.DocId]).length!=Object.keys(QtysIn0Template).length)
         {
             let aux=Object.assign({}, QtysIn0Template)
