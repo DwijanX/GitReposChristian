@@ -8,6 +8,7 @@ import { Input } from 'react-native-elements/dist/input/Input';
 
 class AddContainerScreen extends Component
 {
+    
     constructor(props)
     {
         super(props)
@@ -46,22 +47,26 @@ class AddContainerScreen extends Component
             alert('Llene todos los campos');
         }
     }
+    componentDidMount()
+    {
+    this.props.navigation.setOptions({headerShown: true});
+    }
     render(){
         return(
-            <View >
-                <Input
+            <View style={styles.GralView} >
+                <Input labelStyle={styles.TextStyle}  inputStyle={styles.TextStyle}
                 label={"Nombre"}
                 onChangeText={(value)=>this.HandleTextChange("Nombre",value)}
                 ></Input>
-                <Input
+                <Input labelStyle={styles.TextStyle}  inputStyle={styles.TextStyle}
                 label={"Tipo"}
                 onChangeText={(value)=>this.HandleTextChange("Tipo",value)}
                 ></Input>
-                <Input
+                <Input labelStyle={styles.TextStyle}  inputStyle={styles.TextStyle}
                 label={"Descripcion de la ubicacion"}
                 onChangeText={(value)=>this.HandleTextChange("Ubicacion",value)}
                 ></Input>
-                <Input
+                <Input labelStyle={styles.TextStyle}  inputStyle={styles.TextStyle}
                 label={"Descripcion del contenedor"}
                 onChangeText={(value)=>this.HandleTextChange("Descripcion",value)}
                 ></Input> 
@@ -70,4 +75,28 @@ class AddContainerScreen extends Component
         );
     }
 }
+const styles = StyleSheet.create({
+    GralView:
+    {
+        flex:1,
+        backgroundColor: '#7f8c8d',
+    },
+    OverStyle:{
+        height:"75%",
+        width:'75%',
+    },
+    CheckBoxStyle:{
+        backgroundColor: '#7f8c8d',
+    },
+    ButtonStyle:{
+        height:40,
+        width:80
+    },
+    TextStyle:
+    {
+        fontSize:18,
+        fontFamily: 'Futura',
+        color:'#ecf0f1'
+    },
+  });
 export default AddContainerScreen

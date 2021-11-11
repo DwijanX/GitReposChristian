@@ -8,7 +8,7 @@ import { Button,Overlay,CheckBox } from 'react-native-elements';
 import { Input } from "react-native-elements/dist/input/Input";
 import AddProductsNumScreen from "./AddProductsNumScreen";
 
-const AddNewProductScreen=()=> 
+const AddNewProductScreen=(props)=> 
 {
     const [newAttributeIsCantidad,setnewAttributeIsCantidad]=useState(false);
     const [newAttributeIsNumericField,setnewAttributeIsNumericField]=useState(false);
@@ -34,6 +34,10 @@ const AddNewProductScreen=()=>
       setNewAttributeValue('');
       setnewAttributeIsCantidad(false);
     };
+    useEffect(()=>
+    {
+        props.navigation.setOptions({headerShown: true});
+    },[])
     const SetNumericKeyboardOverlay=(boolean)=>
     {
         if(boolean==true)
@@ -102,7 +106,7 @@ const AddNewProductScreen=()=>
         {
             return(
                 <Fragment key={Att[0]}>
-                    <Input label={Att[0]} value={UpdatedAttributes[Att[0]]} onChangeText={(value)=>HandleTextChangeWotUpdate(Att[0],value)} ></Input>
+                    <Input label={Att[0]} value={UpdatedAttributes[Att[0]]} labelStyle={styles.TextStyle} inputStyle={styles.TextStyle} onChangeText={(value)=>HandleTextChangeWotUpdate(Att[0],value)} ></Input>
                 </Fragment>
             );
         }
@@ -110,7 +114,7 @@ const AddNewProductScreen=()=>
         {
             return(
                 <Fragment key={Att[0]}>
-                    <Input label={Att[0]} keyboardType={'numeric'}  value={UpdatedAttributes[Att[0]]} onChangeText={(value)=>HandleTextChangeWotUpdate(Att[0],value)} ></Input>
+                    <Input label={Att[0]} keyboardType={'numeric'} labelStyle={styles.TextStyle}  inputStyle={styles.TextStyle} value={UpdatedAttributes[Att[0]]} onChangeText={(value)=>HandleTextChangeWotUpdate(Att[0],value)} ></Input>
                 </Fragment>
             ); 
         }
@@ -118,15 +122,17 @@ const AddNewProductScreen=()=>
         {
             return (
                 <Fragment key={Att[0]}>
-                    <Text>{Att[0]} </Text>
+                    <Text style={styles.TextStyle}>{Att[0]} </Text>
+                    <View style={{flexDirection:'row'}}>
                     {Object.entries(Criticality).map((CriticalityKey)=>
                     {
                         return(
-                        <CheckBox key={CriticalityKey[0]}title={CriticalityKey[0]} checked={CriticalityKey[1]} onPress={()=>{
+                        <CheckBox key={CriticalityKey[0]}title={CriticalityKey[0]} checkedColor={"#ecf0f1"} textStyle={styles.TextStyle} containerStyle={styles.CheckBoxStyle} checked={CriticalityKey[1]} onPress={()=>{
                             HandleCheckBoxClicked(CriticalityKey[0])}}></CheckBox>
                         );
                         
                     })}
+                    </View>
                     </Fragment>
             );
         }
@@ -193,11 +199,11 @@ const AddNewProductScreen=()=>
     }
 
         return(
-            <ScrollView style={{paddingVertical:50}}>
+            <ScrollView style={styles.GralView} >
                 <Overlay  isVisible={visible} overlayStyle={styles.OverStyle} > 
                     <Input label={'Nombre del atributo'} onChangeText={(value)=>setNewAttributeName(value)}></Input>
                     <Input label={'Valor'} keyboardType={KeyboardTypeOverlay} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
-                    <CheckBox title={'Es una cantidad del producto'} checked={newAttributeIsCantidad} disabled={newAttributeIsNumericField}onPress={toggleAttributeCantidad}></CheckBox>
+                    <CheckBox title={'Es una cantidad del producto'}  checked={newAttributeIsCantidad} disabled={newAttributeIsNumericField}onPress={toggleAttributeCantidad}></CheckBox>
                     <CheckBox title={'Es un campo numerico'} checked={newAttributeIsNumericField} disabled={newAttributeIsCantidad}onPress={toggleAttributeNumericField}></CheckBox>
                     <Button title={'Save'} buttonStyle={styles.ButtonStyle} onPress={HandleNewAttribute}></Button>
                     <Button title={'Cancel'} onPress={toggleOverlay} buttonStyle={styles.ButtonStyle}></Button>
@@ -213,32 +219,28 @@ const AddNewProductScreen=()=>
     
 }
 const styles = StyleSheet.create({
+    GralView:
+    {
+        flex:1,
+        backgroundColor: '#7f8c8d',
+    },
     OverStyle:{
         height:"75%",
         width:'75%',
+    },
+    CheckBoxStyle:{
+        backgroundColor: '#7f8c8d',
     },
     ButtonStyle:{
         height:40,
         width:80
     },
-    CounterButtonsStyle:
+    TextStyle:
     {
-        height:50,
-        width:40,
-        alignContent:'center',
-        justifyContent:'center',
-        backgroundColor:'#e1a8c0',
-    },
-    CounterTextStyle:
-    {
-        color:'black',
-        fontSize:25,
+        fontSize:18,
         fontFamily: 'Futura',
+        color:'#ecf0f1'
     },
-    ContainerCounter:
-    {
-        paddingHorizontal:20
-    }
   });
   
   

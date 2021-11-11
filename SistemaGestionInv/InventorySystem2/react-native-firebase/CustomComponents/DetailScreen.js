@@ -29,32 +29,33 @@ class DetailScreen extends Component
 
         if(ObjectAtt[0]!='Nombre' && ObjectAtt[0]!='Tipo')
         {
-        if(ObjectAtt[0]=='Cantidades')
-        {
-            return(
-                <View  key={ObjectAtt[0]} >
-                    <Text>Cantidades</Text>
-                    {Object.entries(ObjectAtt[1]).map((Cantidad)=>
-                    {
-                        return(
-                            <Text key={Cantidad[0]} >
-                                {Cantidad[0]} : {Cantidad[1]}
-                            </Text>
-                        );
-                    })}
-                </View> 
-                );
-        }
-        else
-        {
-        
-            return(<Input key={ObjectAtt[0]} 
-            label={ObjectAtt[0]} 
-            disabled={this.props.ViewMode} 
-            onChangeText={(value)=>this.HandleChangeAtt(ObjectAtt[0],value)}>
-                {ObjectAtt[1]}
-            </Input>);
-        }
+            if(ObjectAtt[0]=='Cantidades')
+            {
+                return(
+                    <View  key={ObjectAtt[0]} >
+                        <Text style={styles.TextStyle}>Cantidades</Text>
+                        {Object.entries(ObjectAtt[1]).map((Cantidad)=>
+                        {
+                            return(
+                                <Text key={Cantidad[0]}  style={styles.TextStyle}>
+                                    {Cantidad[0]} : {Cantidad[1]}
+                                </Text>
+                            );
+                        })}
+                    </View> 
+                    );
+            }
+            else
+            {
+            
+                return(<Input key={ObjectAtt[0]} 
+                labelStyle={styles.TextStyle}  inputStyle={styles.TextStyle}
+                label={ObjectAtt[0]} 
+                disabled={this.props.ViewMode} 
+                onChangeText={(value)=>this.HandleChangeAtt(ObjectAtt[0],value)}>
+                    {ObjectAtt[1]}
+                </Input>);
+            }
     }
     }
     HandleViewMode=()=>
@@ -85,12 +86,14 @@ class DetailScreen extends Component
                 <View key={this.state.EditionModeTittle}>
 
                 <Input 
+                    labelStyle={styles.TextStyle}  inputStyle={styles.TextStyle}
                     label={'Nombre'} 
                     disabled={this.props.ViewMode} 
                     onChangeText={(value)=>this.HandleChangeAtt('Nombre',value)}>
                         {this.props.BackUpObject['Nombre']}
                 </Input>
                 <Input 
+                    labelStyle={styles.TextStyle}  inputStyle={styles.TextStyle}
                     label={'Tipo'} 
                     disabled={this.props.ViewMode} 
                     onChangeText={(value)=>this.HandleChangeAtt('Tipo',value)}>
@@ -109,8 +112,15 @@ const styles = StyleSheet.create({
     MainViewContainer:
     {
         flex:1,
+        backgroundColor: '#7f8c8d',
         alignContent:"center",
         justifyContent:"flex-start"  
+    },
+    TextStyle:
+    {
+        fontSize:18,
+        fontFamily: 'Futura',
+        color:'#ecf0f1'
     },
     SubViewTitle:
     {
@@ -124,30 +134,15 @@ const styles = StyleSheet.create({
     {
         fontSize:30,
         fontFamily: 'Futura',
+        color:'#ecf0f1'
+
     },
     SubTitleCont:
     {
         fontSize:15,
         fontFamily: 'Futura',
+        color:'#ecf0f1'
     },
-    CounterButtonsStyle:
-    {
-        height:50,
-        width:40,
-        alignContent:'center',
-        justifyContent:'center',
-        backgroundColor:'#e1a8c0',
-    },
-    CounterTextStyle:
-    {
-        color:'black',
-        fontSize:25,
-        fontFamily: 'Futura',
-    },
-    ContainerCounter:
-    {
-        paddingHorizontal:20
-    }
   });
   
   

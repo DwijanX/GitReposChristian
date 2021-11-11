@@ -36,6 +36,7 @@ class ProductDetailScreen extends Component
     }
     componentDidMount()
     {
+        this.props.navigation.setOptions({headerShown: true});
         this.setState({DocId:this.props.route.params.DocId});
         this.getProductInfo(this.props.route.params.DocId);
     }
@@ -78,7 +79,7 @@ class ProductDetailScreen extends Component
     render(){
         return(
             <ScrollView >
-                <View style={{flex:1 }}>
+                <View style={styles.MainViewContainer}>
                 <DetailScreen
                 setObject={this.HandleProductUpdate}
                 Object={this.state.Product}
@@ -106,8 +107,8 @@ const styles = StyleSheet.create({
     MainViewContainer:
     {
         flex:1,
-        alignContent:"center",
-        justifyContent:"flex-start"  
+        backgroundColor: '#7f8c8d',
+
     },
     SubViewTitle:
     {
@@ -116,16 +117,6 @@ const styles = StyleSheet.create({
         alignContent:"center",
         alignItems:'center',
         justifyContent:"center"  
-    },
-    TittleTextCont:
-    {
-        fontSize:30,
-        fontFamily: 'Futura',
-    },
-    SubTitleCont:
-    {
-        fontSize:15,
-        fontFamily: 'Futura',
     },
     CounterButtonsStyle:
     {
@@ -145,6 +136,8 @@ const styles = StyleSheet.create({
     {
         paddingHorizontal:20
     }
+
+
   });
   
   

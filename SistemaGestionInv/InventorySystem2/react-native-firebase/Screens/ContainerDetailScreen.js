@@ -30,6 +30,7 @@ const ProductDetailScreen=(props)=>
     }
     useEffect(()=>
     {
+        props.navigation.setOptions({headerShown: true});
         setDocId(props.route.params.DocId);
         getContainerInfo(props.route.params.DocId);
     },[])
@@ -88,7 +89,9 @@ const styles = StyleSheet.create({
     {
         flex:1,
         alignContent:"center",
-        justifyContent:"flex-start"  
+        justifyContent:"flex-start",
+        backgroundColor: '#7f8c8d',
+
     },
     SubViewTitle:
     {

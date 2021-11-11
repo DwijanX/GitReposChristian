@@ -19,6 +19,7 @@ const ScannerScreen=(props)=>
     }
     useEffect(()=>
     {
+        props.navigation.setOptions({headerShown: true});
         askForCameraPermission();
     },[]);
 
@@ -68,7 +69,7 @@ const ScannerScreen=(props)=>
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#7f8c8d',
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
       overflow: 'hidden',
       borderRadius: 30,
       backgroundColor: 'tomato'
-    }
+    },
   });
   
 export default ScannerScreen;

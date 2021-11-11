@@ -80,6 +80,7 @@ const PutProductsIntoContainerScreen =(props)=>
     
     useEffect(()=>
     {
+        props.navigation.setOptions({headerShown: true});
         setProductName(props.route.params.Name);
         setProductId(props.route.params.DocId);
         setProductQtys(props.route.params.Cantidades);

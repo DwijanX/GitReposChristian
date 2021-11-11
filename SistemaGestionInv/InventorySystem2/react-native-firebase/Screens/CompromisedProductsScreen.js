@@ -30,6 +30,7 @@ const CompromisedProductsScreen=(props)=>
     }
     useEffect(()=>
     {
+        props.navigation.setOptions({headerShown: true});
         getCompromisedProducts()
     },[]);
 

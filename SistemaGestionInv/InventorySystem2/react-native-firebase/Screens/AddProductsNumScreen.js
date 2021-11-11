@@ -9,7 +9,7 @@ import { Input } from "react-native-elements/dist/input/Input";
 import { objectOf } from "prop-types";
 
 
-const AddProductsNumScreen=()=> 
+const AddProductsNumScreen=(props)=> 
 {
     const [open, setOpen] = useState(false);
   const [DDPValue, setDDPValue] = useState(0);
@@ -24,6 +24,7 @@ const AddProductsNumScreen=()=>
 
   useEffect(()=>
     {
+      props.navigation.setOptions({headerShown: true});
       firebase.db.collection('Listas').doc('Productos').get().then((doc)=>
       //firebase.db.collection('Lista Productos').doc('Lista').get().then((doc)=>
       {
@@ -59,20 +60,21 @@ const AddProductsNumScreen=()=>
     }
     const HandleCounters=(ModifiedCantidad,Value)=>
     {
-        let aux=Cantidades[ModifiedCantidad]+Value;
-        setCantidades({...Cantidades, [ModifiedCantidad]:aux})
+        let aux=Cantidades;
+        aux[ModifiedCantidad]+=Value; 
+        //setCantidades({...Cantidades, [ModifiedCantidad]:aux})
     }
     const HandleCreationOfCounters=(Cantidad)=> //Cantidad [nombre,Qty]
     {
         return(
             <CustomCounter key={Cantidad[0]}
                 numOfCounter={Cantidades[Cantidad[0]]} 
-                textStyle={styles.CounterTextStyle} 
+                textStyle={styles.TextStyle} 
                 buttonStyle={styles.CounterButtonsStyle}
                 disabledPlus={false}
                 containerStyle={styles.ContainerCounter}
                 label={"Cantidad: "+Cantidad[0]}
-                labelStyle={styles.CounterTextStyle} 
+                labelStyle={styles.TextStyle} 
                 funcToDoWhenModifyVal={HandleCounters}
                 NameOfStateToChange={Cantidad[0]}
             >
@@ -153,7 +155,7 @@ const AddProductsNumScreen=()=>
     }
     
         return(
-            <View style={{paddingVertical:20}}>
+            <View style={styles.GralView}>
                 <DropDownPicker
                     open={open}
                     value={DDPValue}
@@ -163,8 +165,9 @@ const AddProductsNumScreen=()=>
                     setItems={setItems}
                     onChangeValue={setCantidadesArray}
                     />
-                
-                {Object.entries(Cantidades).map((Cantidad)=>HandleCreationOfCounters(Cantidad))}
+                <View style={styles.CountersView}>
+                    {Object.entries(Cantidades).map((Cantidad)=>HandleCreationOfCounters(Cantidad))}
+                </View>
                 <Overlay  isVisible={visible} overlayStyle={styles.OverStyle} > 
                     <Input label={'Nombre de la cantidad'} onChangeText={(value)=>setNewAttributeName(value)}></Input>
                     <Input label={'cantidad'} keyboardType={"numeric"} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
@@ -182,7 +185,6 @@ const AddProductsNumScreen=()=>
                         alert("seleccione un producto");
                     }
                 }}/>
-                <Button title={'Cancel'} />
 
                 <Button title={'Guardar'} onPress={HandleSave}>
 
@@ -193,23 +195,39 @@ const AddProductsNumScreen=()=>
     
 }
 const styles = StyleSheet.create({
+    GralView:
+    {
+        flex:1,
+        backgroundColor: '#7f8c8d',
+    },
+    CountersView:
+    {
+        paddingVertical:20
+    },
+    OverStyle:{
+        height:"75%",
+        width:'75%',
+    },
+    CheckBoxStyle:{
+        backgroundColor: '#7f8c8d',
+    },
+    ButtonStyle:{
+        height:40,
+        width:80
+    },
+    TextStyle:
+    {
+        fontSize:18,
+        fontFamily: 'Futura',
+        color:'#ecf0f1'
+    },
+    ContainerCounter:{
+        paddingHorizontal:40,
+    },
     CounterButtonsStyle:
     {
         height:50,
-        width:40,
-        alignContent:'center',
-        justifyContent:'center',
-        backgroundColor:'#e1a8c0',
-    },
-    CounterTextStyle:
-    {
-        color:'black',
-        fontSize:25,
-        fontFamily: 'Futura',
-    },
-    ContainerCounter:
-    {
-        paddingHorizontal:20
+        width:50
     }
   });
   

@@ -1,7 +1,9 @@
 import React,{Component} from 'react';
-import {View,StyleSheet,Button} from 'react-native'
-import { Header,ButtonGroup } from 'react-native-elements';
-import { Icon } from 'react-native-elements/dist/icons/Icon';
+import {View,StyleSheet} from 'react-native'
+import { Button,Divider,ListItem,Overlay } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+
 import firebase from '../DataBase/Firebase';
 
 
@@ -14,6 +16,7 @@ class HomeScreen extends Component
           ShowHeader:true,
       }
       this.HandleLogOut=this.HandleLogOut.bind(this);
+      this.CreateButton=this.CreateButton.bind(this);
   }
   componentDidMount()
   {
@@ -26,20 +29,35 @@ class HomeScreen extends Component
     this.props.navigation.setOptions({headerShown: false});
       this.props.navigation.navigate('LogInScreen');
   }
+  CreateButton(Title,IconName,NameOfScreentoNavigate)
+  {
+    const IconProps = { size:20,color:'white'};
+      return(
+        <Button title={Title} icon={<Icon name={IconName} {...IconProps}/>} buttonStyle={styles.button} containerStyle={styles.buttonContainerStyle} onPress={()=>{this.props.navigation.navigate(NameOfScreentoNavigate);}}/>
+      );
+  }
    render()
     {
+    const IconProps = { size:20,color:'white'};
         
         return(
             <View style={styles.GralView}>
-                <Button title="Agregar productos nuevos" onPress={()=>{this.props.navigation.navigate('AddNewProductScreen');}}/>
-                <Button title="Agregar productos existentes" onPress={()=>{this.props.navigation.navigate('AddProductsNumScreen');}}/>
-                <Button title="Ver productos" onPress={()=>{this.props.navigation.navigate('ViewProductsScreen');}}/>
-                <Button title="Ver contenedores" onPress={()=>{this.props.navigation.navigate('ViewContainersScreen');}}/>
-                <Button title="Agregar Contenedores" onPress={()=>{this.props.navigation.navigate('AddContainerScreen');}}/>
-                <Button title="Productos Comprometidos" onPress={()=>{this.props.navigation.navigate('CompromisedProductsScreen');}}/>
-                <Button title="Scanner" onPress={()=>{this.props.navigation.navigate('ScannerScreen');}}/>
-                <Button title="ABCScreen" onPress={()=>{this.props.navigation.navigate('ABCScreen');}}/>
-                <Button title="Log Out"  onPress={this.HandleLogOut}/>
+                <View style={styles.ButtonView}>
+                    {this.CreateButton("Agregar productos nuevos","plus","AddNewProductScreen")}
+                    {this.CreateButton("Agregar productos existentes","plus","AddProductsNumScreen")}
+                    {this.CreateButton("Ver productos","list","ViewProductsScreen")}
+                    {this.CreateButton("Ver contenedores","list","ViewContainersScreen")}
+                </View>
+                <View style={styles.ButtonView}>
+                    {this.CreateButton("Agregar Contenedores","plus","AddContainerScreen")}
+                    {this.CreateButton("Productos Comprometidos","shopping-basket","CompromisedProductsScreen")}
+                    {this.CreateButton("Scanner","qrcode","ScannerScreen")}
+                    {this.CreateButton("ABCScreen","adn","ABCScreen")}
+                    <Button title="Log Out" icon={<Icon name='arrow-right' {...IconProps}/>} buttonStyle={styles.button}containerStyle={styles.buttonContainerStyle} onPress={this.HandleLogOut}/>
+                </View>
+                    
+
+                
             </View>
         );
     }
@@ -51,8 +69,25 @@ const styles = StyleSheet.create({
     {
         flex:1,
         backgroundColor:"#7f8c8d",
-        flexDirection:'column'
+        flexDirection:'row',
     },
+    ButtonView:
+    {
+        flex:1/2,
+        alignItems:"center",
+        paddingVertical:20,
+        paddingHorizontal:10
+    },
+    button: {
+        height:80,
+        width:"90%",
+        justifyContent: "space-evenly",
+      },
+    buttonContainerStyle:
+    {
+        paddingVertical:10,
+
+    }
 });
 
 export  default HomeScreen;

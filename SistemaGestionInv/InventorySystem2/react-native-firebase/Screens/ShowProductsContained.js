@@ -27,6 +27,7 @@ const ShowProductsContained=(props)=>
     }
     useEffect(()=>
     {
+        props.navigation.setOptions({headerShown: true});
         firebase.db.collection('ProductosContenidos').doc(props.route.params.DocId).get().then((doc)=>
         {
             let data=doc.data();

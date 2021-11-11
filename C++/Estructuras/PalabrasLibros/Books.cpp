@@ -39,6 +39,7 @@ vector<string> Books::getBookTitlesThatHasMoreThanXTypeOfWords(string Word,int X
 {
     vector<string> ans;
     list <Book> :: iterator it;
+    
     for(it = BooksList.begin(); it != BooksList.end(); ++it)
     {
         if(it->VerifyIfFreqOfWordIsGreaterThanX(Word,X))

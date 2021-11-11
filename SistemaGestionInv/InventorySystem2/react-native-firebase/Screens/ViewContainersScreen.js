@@ -31,6 +31,7 @@ const ViewContainersScreen = (props) => {
     }
     useEffect(()=>
     {
+        props.navigation.setOptions({headerShown: true});
         GetContainersData();
 
 
@@ -40,7 +41,7 @@ const ViewContainersScreen = (props) => {
         props.navigation.navigate('ContainerDetailScreen',{DocId: DocIdpar});
     }
     return (
-        <View>
+        <ScrollView style={styles.GralView}>
         <SearchList
         Array={Containers}
         FilteredArray={FilteredContainers}
@@ -52,7 +53,15 @@ const ViewContainersScreen = (props) => {
         FuncToDoWhenClick={HandleFuncToDoWhenClick}
         
         />
-        </View>
+        </ScrollView>
     );
   };
+  const styles = StyleSheet.create({
+    GralView:
+    {
+        flex:1,
+        backgroundColor: '#7f8c8d',
+    }
+  });
+  
 export default ViewContainersScreen;

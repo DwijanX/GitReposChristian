@@ -1,4 +1,4 @@
-import React,{Component,useEffect,useState} from 'react';
+import React,{Component,Fragment,useEffect,useState} from 'react';
 import { View,StyleSheet,Button,TextInput, ScrollView,Text} from 'react-native';
 import firebase from '../DataBase/Firebase';
 import { ListItem ,SearchBar,Header,CheckBox} from 'react-native-elements';
@@ -34,38 +34,58 @@ const SearchList = (props) => {
         return(<Text key={elem}>{aux}</Text>)
     }
     return (
-        <ScrollView >
+        <Fragment >
         
-        <View style={{width:'100%'}}>
-         <SearchBar
+        <View style={styles.GralView} >
+         <SearchBar 
             onChangeText={HandleSearch}
             value={SearchState}
             round={true}
             lightTheme={true}
-            containerStyle={{backgroundColor:'white'}}>
-            
-            </SearchBar>
+            containerStyle={styles.GralView}>
+         </SearchBar>
         </View>
         {
             props.FilteredArray.map((Elem)=>
                 {
                     return(
-                        <ListItem
+                        <ListItem containerStyle={styles.GralView}
                             key={Elem[KeyAttribute]} 
                             bottomDivider 
                             onPress={()=>props.FuncToDoWhenClick(Elem[KeyAttribute])}
                         >
                             <ListItem.Chevron/>
                             <ListItem.Content>
-                                <ListItem.Title>{setTextAttributes(TittleAttributes,Elem)}</ListItem.Title>
-                                <ListItem.Subtitle>{setTextAttributes(SubTittleAttributes,Elem)}</ListItem.Subtitle>
+                                <ListItem.Title style={styles.TextStyle}>{setTextAttributes(TittleAttributes,Elem)}</ListItem.Title>
+                                <ListItem.Subtitle style={styles.SubTitleStyle} >{setTextAttributes(SubTittleAttributes,Elem)}</ListItem.Subtitle>
                             </ListItem.Content>
                         </ListItem>
                     );
                 })
         }
 
-      </ScrollView>
+      </Fragment>
     );
   };
+  
+  
+  const styles = StyleSheet.create({
+    GralView:
+    {
+        backgroundColor: '#7f8c8d',
+        width:'100%'
+    },
+    TextStyle:
+    {
+        fontSize:18,
+        fontFamily: 'Futura',
+        color:'#ecf0f1'
+    },
+    SubTitleStyle:
+    {
+        fontSize:15,
+        fontFamily: 'Futura',
+        color:'#ecf0f1'
+    }
+  });
 export default SearchList;

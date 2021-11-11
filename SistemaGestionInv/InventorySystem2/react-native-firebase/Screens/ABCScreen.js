@@ -11,6 +11,18 @@ const ABCScreen=(props)=>
     const [ATypeProducts,setATypeProducts]=useState([])
     const [BTypeProducts,setBTypeProducts]=useState([])
     const [CTypeProducts,setCTypeProducts]=useState([])
+    const [SelectedProduct,setSelectedProduct]=useState()
+    const [ROP,setROP]=useState()
+    const [visible,setVisible]=useState(false)
+    const toggleOverlay = () => {
+        setVisible(!visible);
+      };
+    const CalculateROP=(Product)=>
+    {
+        let DemandMonth=Product["Demanda mensual"];
+        let LeadTimeMonth=Product["Tiempo de reabastecimiento"]/30;
+        setROP(DemandMonth*LeadTimeMonth);
+    }
     const getProductsData=()=>
     {
         let Products=firebase.db.collection("Productos").get().then( (Snapshot)=>
@@ -142,6 +154,8 @@ const ABCScreen=(props)=>
                             bottomDivider 
                             onPress={()=>
                             {
+                                CalculateROP();
+                                toggleOverlay();
                             }}
                         >
                             <ListItem.Chevron/>
@@ -155,6 +169,10 @@ const ABCScreen=(props)=>
     }
     return(
     <ScrollView  >
+        <Overlay  isVisible={visible} overlayStyle={styles.OverStyle} onBackdropPress={toggleOverlay}> 
+                    <Text>{SelectedProduct}</Text>
+                    <Text>Punto de Reorden:{ROP}</Text>
+        </Overlay>
         <Text>Productos Tipo A</Text>
             {getListOfArrayOfProducts(ATypeProducts)}
         <Divider></Divider>

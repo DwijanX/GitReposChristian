@@ -13,6 +13,7 @@ const ViewProductsScreen = (props) => {
 
     useEffect(()=>
     {
+      props.navigation.setOptions({headerShown: true});
       firebase.db.collection('Listas').doc('Productos').get().then((doc)=>
       {
         let Products=[];
@@ -35,7 +36,7 @@ const ViewProductsScreen = (props) => {
         props.navigation.navigate('ProductDetailScreen',{DocId: DocIdpar});
     }
     return (
-        <View>
+        <View style={styles.GralView}>
         <SearchList
         Array={Products}
         FilteredArray={FilteredProducts}
@@ -49,4 +50,12 @@ const ViewProductsScreen = (props) => {
         </View>
     );
   };
+  const styles = StyleSheet.create({
+    GralView:
+    {
+        flex:1,
+        backgroundColor: '#7f8c8d',
+    }
+  });
+  
 export default ViewProductsScreen;
