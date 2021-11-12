@@ -78,8 +78,8 @@ class ProductDetailScreen extends Component
     }
     render(){
         return(
-            <ScrollView >
-                <View style={styles.MainViewContainer}>
+            <ScrollView  style={styles.GralView}>
+                <View style={styles.GralView}>
                 <DetailScreen
                 setObject={this.HandleProductUpdate}
                 Object={this.state.Product}
@@ -102,9 +102,8 @@ class ProductDetailScreen extends Component
         );
     }
 }
-/**/
 const styles = StyleSheet.create({
-    MainViewContainer:
+    GralView:
     {
         flex:1,
         backgroundColor: '#7f8c8d',

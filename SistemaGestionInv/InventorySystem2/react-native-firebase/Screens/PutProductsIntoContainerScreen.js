@@ -1,5 +1,5 @@
 import React,{Component,Fragment,useEffect,useState} from "react";
-import { View,Text, StyleSheet, AsyncStorage} from "react-native";
+import { View,Text, StyleSheet, AsyncStorage, ScrollView} from "react-native";
 import { Button,Divider } from 'react-native-elements';
 import firebase from '../DataBase/Firebase'
 import CustomCounter  from '../CustomComponents/CustomCounterWButtons'
@@ -127,19 +127,19 @@ const PutProductsIntoContainerScreen =(props)=>
         {
             return(
                 <Fragment key={Container.DocId}>
-                <Text>{Container.Name}</Text>
+                <Text style={styles.TextStyle}>{Container.Name}</Text>
                 {Object.entries(QtysInContainersBackUp[Container.DocId]).map((Qty)=> //[TypeOfQty,Qty]
                 {
                     return(
                     <CustomCounter 
                         key={Qty[0]}
                         numOfCounter={Qty[1]} 
-                        textStyle={styles.CounterTextStyle} 
+                        textStyle={styles.TextStyle} 
                         buttonStyle={styles.CounterButtonsStyle}
                         disabledPlus={!AllowEditionForEachCounter[Qty[0]]}
                         containerStyle={styles.ContainerCounter}
                         label={"Cantidad: "+Qty[0]}
-                        labelStyle={styles.CounterTextStyle} 
+                        labelStyle={styles.TextStyle} 
                         funcToDoWhenModifyVal={HandleCounters}
                         NameOfStateToChange={[Container.DocId,Qty[0]]}
                             >
@@ -194,23 +194,34 @@ const PutProductsIntoContainerScreen =(props)=>
         }
     }
     return(
-        <View style={{flex:1, alignContent:'center', justifyContent:'center'}}>
-            <Text>
+        <ScrollView style={styles.GralView}>
+            <Text style={styles.TextStyle}>
                 {ProductName}
             </Text>
-
+            <View style={styles.SubView}>
             {
                     Containers.map((Container)=>HandleCreationOfCounters(Container))
             }
+            </View>
             <Button title="Guardar" onPress={HandleSave}>
             
             </Button>
             <Button title='Atras'></Button>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
+    GralView:
+    {
+        flex:1,
+        backgroundColor: '#7f8c8d',
+    },
+    SubView:
+    {
+        backgroundColor: '#7f8c8d',
+        paddingVertical:5
+    },
     CounterButtonsStyle:
     {
         height:50,
@@ -219,11 +230,11 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         backgroundColor:'#e1a8c0',
     },
-    CounterTextStyle:
+    TextStyle:
     {
-        color:'black',
-        fontSize:25,
+        fontSize:18,
         fontFamily: 'Futura',
+        color:'#ecf0f1'
     },
     ContainerCounter:
     {

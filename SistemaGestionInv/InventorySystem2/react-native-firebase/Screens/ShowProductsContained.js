@@ -1,5 +1,5 @@
 import React,{Fragment, useEffect,useState} from "react";
-import { View,Text, StyleSheet} from "react-native";
+import { View,Text, StyleSheet, ScrollView} from "react-native";
 import { Button,Divider,ListItem,Overlay } from 'react-native-elements';
 import firebase from '../DataBase/Firebase'
 import CustomCounter  from '../CustomComponents/CustomCounterWButtons'
@@ -135,7 +135,7 @@ const ShowProductsContained=(props)=>
         }
     }
     return(
-    <View  >
+    <ScrollView style={styles.GralView} >
          <Overlay isVisible={visible} >
                 <DropDownPicker
                         open={open}
@@ -171,6 +171,7 @@ const ShowProductsContained=(props)=>
                     let SubTitle=HandleCreationOfSubTitle(Product)
                     return(
                             <ListItem
+                                containerStyle={styles.GralView}
                                 key={Product[0]} 
                                 bottomDivider 
                                 onPress={()=>
@@ -191,37 +192,37 @@ const ShowProductsContained=(props)=>
                             >
                                 <ListItem.Chevron/>
                                 <ListItem.Content>
-                                    <ListItem.Title>{Product[1].Nombre}</ListItem.Title>
-                                    <ListItem.Subtitle>Cantidades:{SubTitle}</ListItem.Subtitle>
+                                    <ListItem.Title style={styles.TextStyle}>{Product[1].Nombre}</ListItem.Title>
+                                    <ListItem.Subtitle style={styles.SubTitleStyle}>Cantidades:{SubTitle}</ListItem.Subtitle>
                                 </ListItem.Content>
                             </ListItem>
                     );
                 })
         }
 
-    </View>
+    </ScrollView>
     );
     
 }
 const styles = StyleSheet.create({
-    CounterButtonsStyle:
+    GralView:
     {
-        height:50,
-        width:40,
-        alignContent:'center',
-        justifyContent:'center',
-        backgroundColor:'#e1a8c0',
+        backgroundColor: '#7f8c8d',
+
     },
-    CounterTextStyle:
+    TextStyle:
     {
-        color:'black',
-        fontSize:25,
+        fontSize:18,
         fontFamily: 'Futura',
+        color:'#ecf0f1'
     },
-    ContainerCounter:
+    SubTitleStyle:
     {
-        paddingHorizontal:20
+        fontSize:15,
+        fontFamily: 'Futura',
+        color:'#ecf0f1'
     }
+
   });
   
 export default ShowProductsContained

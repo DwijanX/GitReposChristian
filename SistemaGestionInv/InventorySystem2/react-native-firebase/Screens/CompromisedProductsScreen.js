@@ -1,5 +1,5 @@
 import React,{Fragment, useEffect,useState} from "react";
-import { View,Text, StyleSheet} from "react-native";
+import { View,Text, StyleSheet, ScrollView} from "react-native";
 import { Button,Divider,ListItem,Overlay } from 'react-native-elements';
 import firebase from '../DataBase/Firebase'
 import CustomCounter  from '../CustomComponents/CustomCounterWButtons'
@@ -106,12 +106,13 @@ const CompromisedProductsScreen=(props)=>
          }
     }
     return(
-    <View  >
+    <ScrollView style={styles.GralView} >
          {
             Object.entries(CompromisedProducts).map((Product)=>  //[Date,{Cantidad,Nombre,NombreContenedor,ContainerId,ProductId}]
                 {
                     return(
                         <ListItem
+                            containerStyle={styles.GralView}
                             key={Product[0]} 
                             bottomDivider 
                             onPress={()=>HandleClickOnListItem(Product[0])}
@@ -119,9 +120,9 @@ const CompromisedProductsScreen=(props)=>
                             <ListItem.CheckBox checked={ProductChecks[Product[0]]}/>
                             <ListItem.Chevron/>
                             <ListItem.Content>
-                                <ListItem.Title>{Product[1]["Nombre"]}</ListItem.Title>
-                                <ListItem.Subtitle>Contenedor: {Product[1]["Nombre del contenedor"]}</ListItem.Subtitle>
-                                <ListItem.Subtitle>{Product[1]["Nombre cantidad"]}: {Product[1]["Cantidad"]}</ListItem.Subtitle>
+                                <ListItem.Title style={styles.TitleStyle}>{Product[1]["Nombre"]}</ListItem.Title>
+                                <ListItem.Subtitle style={styles.SubTitleStyle}>Contenedor: {Product[1]["Nombre del contenedor"]}</ListItem.Subtitle>
+                                <ListItem.Subtitle style={styles.SubTitleStyle}>{Product[1]["Nombre cantidad"]}: {Product[1]["Cantidad"]}</ListItem.Subtitle>
                             </ListItem.Content>
                         </ListItem>
                     );
@@ -130,29 +131,28 @@ const CompromisedProductsScreen=(props)=>
         <Button  title="Revertir" onPress={HandleRevert}/>
         <Button  title="Confirmar Venta" onPress={HandleConfirmation}/>
         
-    </View>
+    </ScrollView>
     );
     
 }
 const styles = StyleSheet.create({
-    CounterButtonsStyle:
+    GralView:
     {
-        height:50,
-        width:40,
-        alignContent:'center',
-        justifyContent:'center',
-        backgroundColor:'#e1a8c0',
+        flex:1,
+        backgroundColor: '#7f8c8d',
     },
-    CounterTextStyle:
+    SubTitleStyle:
     {
-        color:'black',
-        fontSize:25,
+        fontSize:15,
         fontFamily: 'Futura',
+        color:'#ecf0f1'
     },
-    ContainerCounter:
+    TitleStyle:
     {
-        paddingHorizontal:20
-    }
+        fontSize:18,
+        fontFamily: 'Futura',
+        color:'#ecf0f1'
+    },
   });
   
 export default CompromisedProductsScreen

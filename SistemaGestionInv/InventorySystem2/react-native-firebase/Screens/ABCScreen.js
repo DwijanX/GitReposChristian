@@ -142,6 +142,7 @@ const ABCScreen=(props)=>
 
     useEffect(()=>
     {
+        props.navigation.setOptions({headerShown: true});
         ClassifyProducts();
     },[]);
     const getListOfArrayOfProducts=(Array)=>
@@ -149,18 +150,19 @@ const ABCScreen=(props)=>
         return(Array.map((Product)=>  
             {
                 return(
-                        <ListItem
+                        <ListItem 
+                            containerStyle={styles.GralView}
                             key={Product["Id"]} 
                             bottomDivider 
                             onPress={()=>
                             {
-                                CalculateROP();
+                                CalculateROP(Product);
                                 toggleOverlay();
                             }}
                         >
                             <ListItem.Chevron/>
                             <ListItem.Content>
-                                <ListItem.Title>{Product["Nombre"]}</ListItem.Title>
+                                <ListItem.Title style={styles.TextStyle}>{Product["Nombre"]}</ListItem.Title>
                             </ListItem.Content>
                         </ListItem>
                 );
@@ -168,18 +170,18 @@ const ABCScreen=(props)=>
     
     }
     return(
-    <ScrollView  >
+    <ScrollView style={styles.GralView} >
         <Overlay  isVisible={visible} overlayStyle={styles.OverStyle} onBackdropPress={toggleOverlay}> 
                     <Text>{SelectedProduct}</Text>
                     <Text>Punto de Reorden:{ROP}</Text>
         </Overlay>
-        <Text>Productos Tipo A</Text>
+        <Text style={styles.TextStyle}>Productos Tipo A</Text>
             {getListOfArrayOfProducts(ATypeProducts)}
         <Divider></Divider>
-        <Text>Productos Tipo B</Text>
+        <Text style={styles.TextStyle}>Productos Tipo B</Text>
             {getListOfArrayOfProducts(BTypeProducts)}
         <Divider></Divider>
-        <Text>Productos Tipo C</Text>
+        <Text style={styles.TextStyle}>Productos Tipo C</Text>
             {getListOfArrayOfProducts(CTypeProducts)}
         <Divider></Divider>
     </ScrollView>
@@ -187,24 +189,17 @@ const ABCScreen=(props)=>
     
 }
 const styles = StyleSheet.create({
-    CounterButtonsStyle:
+    GralView:
     {
-        height:50,
-        width:40,
-        alignContent:'center',
-        justifyContent:'center',
-        backgroundColor:'#e1a8c0',
+        flex:1,
+        backgroundColor: '#7f8c8d',
     },
-    CounterTextStyle:
+    TextStyle:
     {
-        color:'black',
-        fontSize:25,
+        fontSize:18,
         fontFamily: 'Futura',
+        color:'#ecf0f1'
     },
-    ContainerCounter:
-    {
-        paddingHorizontal:20
-    }
   });
   
 export default ABCScreen
