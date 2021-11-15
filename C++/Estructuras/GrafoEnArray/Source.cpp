@@ -3,6 +3,10 @@
 #define FileDirection "E:\\GraphFile.txt"
 using namespace std;
 
+void funcToShowInt(int* var)
+{
+    cout<<*var<<" ";
+}
 int main()
 {
     Graph graph(5);
@@ -24,5 +28,7 @@ int main()
             cout<<aux2[i]<<" ";
         }
     }
+    cout<<"\n";
+    graph.ShowGraph(funcToShowInt);
     return 0;
 }

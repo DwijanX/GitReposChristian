@@ -170,8 +170,7 @@ void Lista8<T>::Show(void (*Func)(T*))
 		Node<T>* Aux = First;
 		do
 		{
-			AuxCont = Aux->GetData();
-			Func(&AuxCont);
+			Func(Aux->GetData());
 			Aux = Aux->GetNext();
 		} while (Aux != NULL);
 	}

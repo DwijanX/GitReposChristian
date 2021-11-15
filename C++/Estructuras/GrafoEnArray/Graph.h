@@ -23,5 +23,5 @@ public:
     bool AmplitudeSearch(int Origin,int Destiny);
     bool DeepSearch(int Origin,int Destiny);
     vector<int> GetSavedPath(int Destiny);
-
+    void ShowGraph(void (funcToShowInt)(int*));
 };

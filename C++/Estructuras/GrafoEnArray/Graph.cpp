@@ -115,3 +115,12 @@ bool Graph::DeepSearch(int Origin,int Destiny)
     DeepSearchAlg(Origin,Destiny,&Found);
     return Found;
 }
+void Graph::ShowGraph(void (funcToShowInt)(int*))
+{
+    for(int i=0;i<Size;i++)
+    {
+        cout<<"Adyacencias de "<<i<<": ";
+        Array[i].getLista().Show(funcToShowInt);
+        cout<<"\n";
+    }
+}

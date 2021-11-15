@@ -10,7 +10,7 @@ const PutProductsIntoContainerScreen =(props)=>
     const [Containers,setContainers]=useState([]);
     const [ProductName,setProductName]=useState([]);
     const [ProductId,setProductId]=useState([]);
-    const [ProductQtys,setProductQtys]=useState();
+    const [ProductQtys,setProductQtys]=useState({});
     const [QtysInContainers,setQtysInContainers]=useState({});
     const [QtysInContainersBackUp,setQtysInContainersBackUp]=useState({});
    const [successfulLoad,setsuccessfulLoad]=useState(false);
@@ -101,7 +101,7 @@ const PutProductsIntoContainerScreen =(props)=>
         const c=StateOfCounters;
         setStateOfCounters({...c,[Mod[1]]:c[Mod[1]]+value});
         setQtysInContainers({...QtysInContainers,[Mod[0]]:auxData})
-        if(c[Mod[1]]+value>ProductQtys[Mod[1]])
+        if(c[Mod[1]]+value>=ProductQtys[Mod[1]])
         {
             setAllowEditionForEachCounter({...AllowEditionForEachCounter,[Mod[1]]:false})
         }
@@ -112,8 +112,7 @@ const PutProductsIntoContainerScreen =(props)=>
     }
     const HandleCreationOfCounters=(Container)=>  //{Description,DocId, Name,Type}
     {
-        //bug si no hay nada en 
-        if(successfulLoad && Object.keys(QtysInContainersBackUp[Container.DocId]).length!=Object.keys(QtysIn0Template).length)
+        if(successfulLoad && (QtysInContainersBackUp[Container.DocId]==undefined || Object.keys(QtysInContainersBackUp[Container.DocId]).length!=Object.keys(QtysIn0Template).length))
         {
             let aux=Object.assign({}, QtysIn0Template)
             for(let key in QtysInContainersBackUp[Container.DocId])
@@ -127,7 +126,7 @@ const PutProductsIntoContainerScreen =(props)=>
         {
             return(
                 <Fragment key={Container.DocId}>
-                <Text style={styles.TextStyle}>{Container.Name}</Text>
+                <Text style={styles.TitleStyle}>{Container.Name}</Text>
                 {Object.entries(QtysInContainersBackUp[Container.DocId]).map((Qty)=> //[TypeOfQty,Qty]
                 {
                     return(
@@ -146,6 +145,7 @@ const PutProductsIntoContainerScreen =(props)=>
                     </CustomCounter>
                     );
                 })}
+                <Divider orientation="horizontal" />
                 </Fragment>
                 );
         }
@@ -195,9 +195,19 @@ const PutProductsIntoContainerScreen =(props)=>
     }
     return(
         <ScrollView style={styles.GralView}>
-            <Text style={styles.TextStyle}>
+            <Text style={styles.TitleStyle}>
                 {ProductName}
             </Text>
+            <Text style={styles.TextStyle}>
+                Cantidades maximas disponibles
+            </Text>
+            {Object.entries(ProductQtys).map((Qty)=>
+                {
+                    return (<Text key={Qty[0]} style={styles.TextStyle}>
+                        {Qty[0]} : {Qty[1]}
+                        </Text>)
+                })}
+            <Divider orientation="horizontal" />
             <View style={styles.SubView}>
             {
                     Containers.map((Container)=>HandleCreationOfCounters(Container))
@@ -206,7 +216,6 @@ const PutProductsIntoContainerScreen =(props)=>
             <Button title="Guardar" onPress={HandleSave}>
             
             </Button>
-            <Button title='Atras'></Button>
         </ScrollView>
     );
 };
@@ -229,6 +238,13 @@ const styles = StyleSheet.create({
         alignContent:'center',
         justifyContent:'center',
         backgroundColor:'#e1a8c0',
+    },
+    TitleStyle:
+    {
+        fontSize:20,
+        fontFamily: 'Futura',
+        color:'#ecf0f1',
+        fontWeight:'bold'
     },
     TextStyle:
     {

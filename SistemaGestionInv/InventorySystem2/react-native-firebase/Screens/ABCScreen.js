@@ -11,7 +11,7 @@ const ABCScreen=(props)=>
     const [ATypeProducts,setATypeProducts]=useState([])
     const [BTypeProducts,setBTypeProducts]=useState([])
     const [CTypeProducts,setCTypeProducts]=useState([])
-    const [SelectedProduct,setSelectedProduct]=useState()
+    const [SelectedProduct,setSelectedProduct]=useState("")
     const [ROP,setROP]=useState()
     const [visible,setVisible]=useState(false)
     const toggleOverlay = () => {
@@ -21,7 +21,7 @@ const ABCScreen=(props)=>
     {
         let DemandMonth=Product["Demanda mensual"];
         let LeadTimeMonth=Product["Tiempo de reabastecimiento"]/30;
-        setROP(DemandMonth*LeadTimeMonth);
+        setROP(Math.ceil(DemandMonth*LeadTimeMonth));
     }
     const getProductsData=()=>
     {
@@ -157,6 +157,7 @@ const ABCScreen=(props)=>
                             onPress={()=>
                             {
                                 CalculateROP(Product);
+                                setSelectedProduct(Product["Nombre"]);
                                 toggleOverlay();
                             }}
                         >
