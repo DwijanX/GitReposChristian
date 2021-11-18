@@ -14,16 +14,17 @@ private:
     NodeGraph* Array;
     void SetNodesToInitialState();
     void DeepSearchAlg(int Origin,int Destiny,bool* Found);
-
 public:
     Graph(int ArrayLen);
     ~Graph();
-    void AddEdge(int OgNode,int DestNode);
+    void AddEdge(int OgNode,int DestNode,int Weight);
     void LoadFromFile(string FileDirection);
     bool AmplitudeSearch(int Origin,int Destiny);
     vector<int> AmplitudeSearchWotDestiny(int Origin);
     bool DeepSearch(int Origin,int Destiny);
     vector<int> GetSavedPath(int Destiny);
-    void ShowGraph(void (funcToShowInt)(int*));
+    void ShowGraph(void (funcToShowFirstOfAnIntPair)(pair<int,int>*));
     void showPathsToOrigin(int Origin);
+    void showPathsToOriginWithValues(int Origin);
+    void Dijkstra(int Origin);
 };
