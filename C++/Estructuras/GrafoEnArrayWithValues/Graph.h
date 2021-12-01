@@ -2,6 +2,7 @@
 #include <iostream>
 #include "NodeGraph.cpp"
 #include <fstream>
+#include <set>
 #include <vector>
 #include <queue>
 using namespace std;
@@ -12,6 +13,7 @@ class Graph
 private:
     int Size;
     NodeGraph* Array;
+    set<int> Tree;
     void SetNodesToInitialState();
     void DeepSearchAlg(int Origin,int Destiny,bool* Found);
 public:
@@ -27,4 +29,6 @@ public:
     void showPathsToOrigin(int Origin);
     void showPathsToOriginWithValues(int Origin);
     void Dijkstra(int Origin);
+    void kruskal();
+
 };
