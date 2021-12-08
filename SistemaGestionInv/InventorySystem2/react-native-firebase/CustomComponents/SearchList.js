@@ -19,11 +19,22 @@ const SearchList = (props) => {
         setKeyAttribute(props.KeyAttribute);
         setSubTittleAttributes(props.SubTittleAttributes);
         setTittleAttributes(props.TittleAttributes);
+        props.setFilteredArray(props.Array.sort(compare));
     },[]);
+    const compare=( a, b )=> {
+        if ( a[FilterAttribute] < b[FilterAttribute] ){
+          return -1;
+        }
+        if ( a[FilterAttribute] > b[FilterAttribute] ){
+          return 1;
+        }
+        return 0;
+      }
     const HandleSearch=(value)=>
     {
         SetSearchState(value);
         props.setFilteredArray(props.Array.filter(i=> i[FilterAttribute].includes(value),));
+        props.setFilteredArray(props.Array.sort(compare));
     }
     const setTextAttributes=(AttributesArray,elem)=>
     {
@@ -45,8 +56,9 @@ const SearchList = (props) => {
             containerStyle={styles.GralView}>
          </SearchBar>
         </View>
-        {
-            props.FilteredArray.map((Elem)=>
+        
+            <ScrollView>
+            {props.FilteredArray.map((Elem)=>
                 {
                     return(
                         <ListItem containerStyle={styles.GralView}
@@ -61,8 +73,9 @@ const SearchList = (props) => {
                             </ListItem.Content>
                         </ListItem>
                     );
-                })
-        }
+                })}
+            </ScrollView>
+        
 
       </Fragment>
     );

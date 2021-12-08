@@ -13,22 +13,36 @@ const ViewContainersScreen = (props) => {
 
     const GetContainersData=async()=>
     {
-        const ContainersAux=[];
+        let ContainersAux=[];
         firebase.db.collection('Listas').doc('Contenedores').get().then((doc)=>
         {
-            Object.entries(doc.data()).forEach((Container)=>
+            if(doc.data()!=undefined)
             {
-                let Data={
-                    DocId:Container[0], 
-                    Name:Container[1].Nombre,
-                    Type:Container[1].Tipo,
-                }
-              ContainersAux.push(Data);
-            })
+                Object.entries(doc.data()).forEach((Container)=>
+                {
+                    let Data={
+                        DocId:Container[0], 
+                        Name:Container[1].Nombre,
+                        Type:Container[1].Tipo,
+                    }
+                ContainersAux.push(Data);
+                })
+            }
+            ContainersAux=ContainersAux.sort(compare);
             setContainers(ContainersAux);
             setFilteredContainers(ContainersAux);
+            
         })
     }
+    const compare=( a, b )=> {
+        if ( a["Name"] < b["Name"] ){
+          return -1;
+        }
+        if ( a["Name"] > b["Name"] ){
+          return 1;
+        }
+        return 0;
+      }
     useEffect(()=>
     {
         props.navigation.setOptions({headerShown: true});

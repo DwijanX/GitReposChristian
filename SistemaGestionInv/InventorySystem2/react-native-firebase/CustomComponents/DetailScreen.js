@@ -5,6 +5,9 @@ import { Input } from "react-native-elements/dist/input/Input";
 import firebase from '../DataBase/Firebase'
 import CustomCounter  from '../CustomComponents/CustomCounterWButtons'
 import { render } from "react-dom";
+import DropDownPicker from 'react-native-dropdown-picker';
+import RadioButtonsGroup from '../CustomComponents/RadioButtonsGroup'
+
 class DetailScreen extends Component
 {
     constructor(props)
@@ -15,14 +18,24 @@ class DetailScreen extends Component
         BackUpProduct:{},
         Product:{},
         DocId:"",
+        open:false,
+        CriticityValue:"",
+        Criticality:{"baja":false,"moderada":false,"alta":false}
       }
       this.HandleChangeAtt=this.HandleChangeAtt.bind(this);
       this.HandleCreationOfAppropiateComps=this.HandleCreationOfAppropiateComps.bind(this);
       this.HandleViewMode=this.HandleViewMode.bind(this);
+      this.setCriticalityToRadioButtons=this.setCriticalityToRadioButtons.bind(this);
+      this.setCriticalityToInitialState=this.setCriticalityToInitialState.bind(this);
+      this.setObjectAsBackUpObject=this.setObjectAsBackUpObject.bind(this);
   }
     HandleChangeAtt= (ProductAtt,newValue)=>
     {
         this.props.setObject({...this.props.Object,[ProductAtt]:newValue});
+    }
+    setCriticalityToRadioButtons=(Crit)=>
+    {
+        this.props.setObject({...this.props.Object,["Criticidad"]:Crit});
     }
     HandleCreationOfAppropiateComps= (ObjectAtt)=>
     {
@@ -45,7 +58,19 @@ class DetailScreen extends Component
                     </View> 
                     );
             }
-            else
+            else if(ObjectAtt[0]=='Criticidad')
+            {
+                const CriticalityAux=this.state.Criticality
+                CriticalityAux[this.props.Object["Criticidad"]]=true
+                return(<RadioButtonsGroup key={ObjectAtt[0]}
+                RadioButtonBoolsObjects={this.state.Criticality}
+                FuncToUpdateWithKey={this.setCriticalityToRadioButtons}
+                labelText={ObjectAtt[0]}
+                selectedKey={this.props.Object["Criticidad"]}
+                disabled={this.props.ViewMode}
+                />);
+            }
+            else if(isNaN(ObjectAtt[1]))
             {
             
                 return(<Input key={ObjectAtt[0]} 
@@ -56,7 +81,28 @@ class DetailScreen extends Component
                     {ObjectAtt[1]}
                 </Input>);
             }
+            else
+            {
+                return(<Input key={ObjectAtt[0]} 
+                    labelStyle={styles.TextStyle}  inputStyle={styles.TextStyle}
+                    keyboardType="numeric"
+                    label={ObjectAtt[0]} 
+                    disabled={this.props.ViewMode}
+                    onChangeText={(value)=>this.HandleChangeAtt(ObjectAtt[0],parseInt(value) )}>
+                        {ObjectAtt[1]}
+                    </Input>);
+            }
     }
+    }
+    setCriticalityToInitialState=()=>
+    {
+        const Crit={"baja":false,"moderada":false,"alta":false}
+        Crit[this.props.BackUpObject["Criticidad"]]=true
+        this.setState({...this.state,["Criticality"]:Crit})
+    }
+    setObjectAsBackUpObject=()=>
+    {
+        this.props.setObject(this.props.BackUpObject)
     }
     HandleViewMode=()=>
     {
@@ -68,6 +114,8 @@ class DetailScreen extends Component
         else
         {
             this.props.setViewMode(true);
+            this.setObjectAsBackUpObject();
+            this.setCriticalityToInitialState();
             this.setState({EditionModeTittle:'Habilitar modo edicion'});
         }
     }

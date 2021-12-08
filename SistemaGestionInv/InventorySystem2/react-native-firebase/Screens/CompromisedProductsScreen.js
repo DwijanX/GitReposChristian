@@ -15,8 +15,11 @@ const CompromisedProductsScreen=(props)=>
     {
         firebase.db.collection("ProductosContenidos").doc("CompromisedProducts").get().then((doc)=>
         {
-            setCompromisedProducts(doc.data())
-            setProductChecksObj(doc.data());
+            if(doc.data()!=undefined)
+            {
+                setCompromisedProducts(doc.data())
+                setProductChecksObj(doc.data());
+            }
         })
     }
     const setProductChecksObj=(compromisedProducts)=>
@@ -40,12 +43,12 @@ const CompromisedProductsScreen=(props)=>
         if(aux.includes(IdItem))
         {
             aux.pop(IdItem);
-            setProductChecks({ProductChecks,[IdItem]:false})
+            setProductChecks({...ProductChecks,[IdItem]:false})
         }
         else
         {
             aux.push(IdItem);
-            setProductChecks({ProductChecks,[IdItem]:true})
+            setProductChecks({...ProductChecks,[IdItem]:true})
         }
     }
     const HandleRevert=()=>
@@ -89,7 +92,7 @@ const CompromisedProductsScreen=(props)=>
             SelectedProducts.forEach((Id) => {
                 aux={...aux,[Id]:{
                     'Operacion':'Venta',
-                    "Fecha de venta":CompromisedProducts[Id]["Agregacion"],
+                    "Fecha":CompromisedProducts[Id]["Agregacion"],
                     "Cantidad":CompromisedProducts[Id]["Cantidad"],
                     "Nombre":CompromisedProducts[Id]["Nombre"],
                     "Nombre cantidad":CompromisedProducts[Id]["Nombre cantidad"],
@@ -98,11 +101,10 @@ const CompromisedProductsScreen=(props)=>
                 }}
                 delete CompromisedProducts[Id]
             });
-            setCompromisedProducts(CompromisedProducts);
+            setSelectedProducts([])
             firebase.db.collection("ProductosContenidos").doc("CompromisedProducts").set(CompromisedProducts)
             var today = new Date();
-            firebase.db.collection('Historial').doc(`${today.getMonth()+1}${today.getUTCFullYear()}`).set(aux,{merge:true})
-            setSelectedProducts([])
+            firebase.db.collection('Historial').doc(`${today.getMonth()+1}${today.getUTCFullYear()}`).set(aux,{merge:true}).then(()=>alert("Registro exitoso!"))
          }
     }
     return(
@@ -128,8 +130,10 @@ const CompromisedProductsScreen=(props)=>
                     );
                 })
         }
-        <Button  title="Revertir" onPress={HandleRevert}/>
+        {Object.entries(CompromisedProducts).length>0 &&
+        <Button  title="Revertir" onPress={HandleRevert}/> &&
         <Button  title="Confirmar Venta" onPress={HandleConfirmation}/>
+        }
         
     </ScrollView>
     );

@@ -3,7 +3,6 @@ import {View,StyleSheet} from 'react-native'
 import { Button,Divider,ListItem,Overlay } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-
 import firebase from '../DataBase/Firebase';
 
 
@@ -18,10 +17,12 @@ class HomeScreen extends Component
       this.HandleLogOut=this.HandleLogOut.bind(this);
       this.CreateButton=this.CreateButton.bind(this);
   }
+  
   componentDidMount()
   {
-    this.props.navigation.setOptions({headerShown: true});
 
+    this.props.navigation.setOptions({headerShown: true});
+  
   }
   HandleLogOut()
   {
@@ -33,7 +34,7 @@ class HomeScreen extends Component
   {
     const IconProps = { size:20,color:'white'};
       return(
-        <Button title={Title} icon={<Icon name={IconName} {...IconProps}/>} buttonStyle={styles.button} containerStyle={styles.buttonContainerStyle} onPress={()=>{this.props.navigation.navigate(NameOfScreentoNavigate);}}/>
+        <Button  title={Title} icon={<Icon name={IconName} {...IconProps}/>} buttonStyle={styles.button} containerStyle={styles.buttonContainerStyle} onPress={()=>{this.props.navigation.navigate(NameOfScreentoNavigate);}}/>
       );
   }
    render()
@@ -47,6 +48,7 @@ class HomeScreen extends Component
                     {this.CreateButton("Agregar productos existentes","plus","AddProductsNumScreen")}
                     {this.CreateButton("Ver productos","list","ViewProductsScreen")}
                     {this.CreateButton("Ver contenedores","list","ViewContainersScreen")}
+                    {this.CreateButton("Historial","folder","HistoryScreen")}
                 </View>
                 <View style={styles.ButtonView}>
                     {this.CreateButton("Agregar Contenedores","plus","AddContainerScreen")}

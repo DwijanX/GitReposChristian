@@ -17,6 +17,7 @@ const ShowProductsContained=(props)=>
     const [selectedProductId,setselectedProductId]=useState()
     const [counterOfProduct,setCounterOfProduct]=useState(0)
     const [MaxOfProductReached,setMaxOfProductReached]=useState(false)
+    const [ResetCounter,setResetCounter]=useState(false)
 
     const toggleOverlay=()=>
     {
@@ -65,7 +66,6 @@ const ShowProductsContained=(props)=>
 
         }
         setCounterOfProduct(counterOfProduct+value)
-
     }
     const HandleSave=()=>
     {
@@ -117,7 +117,7 @@ const ShowProductsContained=(props)=>
             },{merge:true})
 
             let today = new Date();
-            let key=today.getHours()+"_" + today.getMinutes()+"_" + today.getSeconds()+"_"+today.getDay()+"_"+(today.getMonth()+1)+"_"+today.getFullYear()
+            let key=today.getHours()+"_" + today.getMinutes()+"_" + today.getSeconds()+"_"+today.getDate()+"_"+(today.getMonth()+1)+"_"+today.getFullYear()
             firebase.db.collection('ProductosContenidos').doc('CompromisedProducts').set({
                 [key]:{
                     "Nombre":ProductsContained[selectedProductId]["Nombre"],
@@ -136,34 +136,46 @@ const ShowProductsContained=(props)=>
     }
     return(
     <ScrollView style={styles.GralView} >
-         <Overlay isVisible={visible} >
+         <Overlay isVisible={visible} overlayStyle={styles.OverStyle}>
                 <DropDownPicker
                         open={open}
                         value={valueDP}
                         items={items}
-                        setOpen={setOpen}
+                        setOpen={(openVal)=>
+                            {
+                                setCounterOfProduct(0)
+                                setMaxOfProductReached(false)
+                                setResetCounter(true)
+                                setResetCounter(false)
+                                setOpen(openVal)
+                            }}
                         setValue={setValueDP}
                         setItems={setItems}
                         onChangeValue={HandleChangeOfQty}
                         />
+                        
+                { valueDP!=0  && ResetCounter==false &&
                 <CustomCounter 
                 numOfCounter={counterOfProduct} 
-                textStyle={styles.CounterTextStyle} 
+                textStyle={styles.TextStyle} 
                 buttonStyle={styles.CounterButtonsStyle}
                 disabledPlus={MaxOfProductReached}
                 containerStyle={styles.ContainerCounter}
                 label={"Cantidad: "}//ProductsContained[selectedProductId]["Nombre"]}
-                labelStyle={styles.CounterTextStyle} 
+                labelStyle={styles.TextStyle} 
                 funcToDoWhenModifyVal={HandleCounterModified}
                 NameOfStateToChange={valueDP}
-            >
-            </CustomCounter>
-                
-                <Button title={'Comprometer'} onPress={()=>{
-                    HandleSave();
-                    toggleOverlay();
-                    }}></Button>
-                <Button title={'Cancelar'} onPress={toggleOverlay}></Button>
+                />
+                 }
+                 { valueDP!=0  && 
+                <View style={styles.ButtonsContainer}>
+                    <Button title={'Comprometer'} buttonStyle={styles.ButtonStyle} onPress={()=>{
+                        HandleSave();
+                        toggleOverlay();
+                        }}></Button>
+                    <Button title={'Cancelar'} buttonStyle={styles.ButtonStyle} onPress={toggleOverlay}></Button>
+                </View>
+                }
             </Overlay>
         {
             Object.entries(ProductsContained).map((Product)=>  
@@ -221,8 +233,36 @@ const styles = StyleSheet.create({
         fontSize:15,
         fontFamily: 'Futura',
         color:'#ecf0f1'
+    },
+    OverStyle:{
+        height:"40%",
+        width:'75%',
+        backgroundColor: '#7f8c8d',
+    },
+    ButtonStyle:{
+        width:'65%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
+    },
+    ButtonsContainer:
+    {
+        marginTop:20,
+        alignItems:"center",
+        textAlign:"center"
+    },
+    CounterButtonsStyle:
+    {
+        height:45,
+        width:45,
+        alignContent:'center',
+        justifyContent:'center',
+    },
+    ContainerCounter:
+    {
+        paddingHorizontal:20
     }
-
   });
   
 export default ShowProductsContained

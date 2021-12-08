@@ -23,6 +23,8 @@ const PutProductsIntoContainerScreen =(props)=>
     {
         let Counters={};
         let AllowEditionForEachCounterAux={};
+        if(ProductQtys!=undefined)
+        {
         Object.entries(ProductQtys).forEach((Qty)=>
         {
             let CounterAux  =0;
@@ -42,6 +44,7 @@ const PutProductsIntoContainerScreen =(props)=>
             Counters={...Counters,[Qty[0]]:CounterAux};
             AllowEditionForEachCounterAux={...AllowEditionForEachCounterAux,[Qty[0]]:AllowAddInCounter}
         })
+        }
         setStateOfCounters(Counters);
         setAllowEditionForEachCounter(AllowEditionForEachCounterAux);
     }
@@ -50,6 +53,8 @@ const PutProductsIntoContainerScreen =(props)=>
         const ContainersAux=[];
         firebase.db.collection('Listas').doc('Contenedores').get().then((doc)=>
         {
+            if(doc.data()!=undefined)
+            {
             Object.entries(doc.data()).forEach((Container)=>
             {
                 let Data={
@@ -59,6 +64,8 @@ const PutProductsIntoContainerScreen =(props)=>
                 }
               ContainersAux.push(Data);
             })
+            }
+            
           setContainers(ContainersAux);
         })
         await firebase.db.collection('Productos/'+DocId+'/ContenidoEn').doc(DocId).get().then(Doc=>
@@ -210,12 +217,14 @@ const PutProductsIntoContainerScreen =(props)=>
             <Divider orientation="horizontal" />
             <View style={styles.SubView}>
             {
+                Containers.length>0 &&
                     Containers.map((Container)=>HandleCreationOfCounters(Container))
             }
             </View>
-            <Button title="Guardar" onPress={HandleSave}>
-            
-            </Button>
+            {
+                Containers.length>0 &&            
+                <Button title="Guardar" onPress={HandleSave}/>
+            }
         </ScrollView>
     );
 };

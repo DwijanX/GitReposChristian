@@ -7,7 +7,6 @@ const ScannerScreen=(props)=>
 {
     const [hasPermission,setHasPermission]=useState(null);
     const [scanned,setScanned]=useState(false);
-    const [info,setInfo]=useState('Not yet scanned');
 
     const askForCameraPermission=()=>
     {
@@ -45,11 +44,20 @@ const ScannerScreen=(props)=>
         {
             let auxData={};
             setScanned(true);
-            setInfo(data);
-            
-            auxData=JSON.parse(data);
-            props.navigation.navigate('ShowProductsContained',{DocId: auxData.DocId});
-            
+            try
+            {
+                auxData=JSON.parse(data);
+            } catch(e) {
+                alert("Invalid Qr Code"); 
+            }
+            if(auxData.DocId!=undefined)
+            {
+                props.navigation.navigate('ShowProductsContained',{DocId: auxData.DocId});
+            }
+            else
+            {
+                alert("Invalid Qr Code"); 
+            }
         }
     return(
         <View style={styles.container}>
@@ -59,10 +67,7 @@ const ScannerScreen=(props)=>
                 style={{height:400,width:400}}
                 />
             </View>
-            <Text style={styles.maintext}>
-                {info}
-            </Text>
-            {scanned && <Button title="scan again" onPress={()=>{setScanned(false)}}/>}
+            {scanned && <Button title="scan again" buttonStyle={styles.ButtonStyle} onPress={()=>{setScanned(false)}}/>}
         </View>
     );
 }
@@ -85,6 +90,14 @@ const styles = StyleSheet.create({
       overflow: 'hidden',
       borderRadius: 30,
       backgroundColor: 'tomato'
+    },
+    ButtonStyle:{
+        marginTop:5,
+        width:'65%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
     },
   });
   

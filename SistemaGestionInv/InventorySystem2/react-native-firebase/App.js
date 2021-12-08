@@ -18,6 +18,8 @@
  import AddNewProductScreen from './Screens/AddNewProductScreen';
  import CompromisedProductsScreen from './Screens/CompromisedProductsScreen';
  import ABCScreen from './Screens/ABCScreen';
+ import HistoryScreen from './Screens/HistoryScreen';
+ 
  
  import * as Font from 'expo-font';
  import AppLoading from 'expo-app-loading';
@@ -72,6 +74,7 @@ import { func } from 'prop-types';
     <Stack.Screen name="ScannerScreen" component={ScannerScreen}/>
     <Stack.Screen name="ShowProductsContained" component={ShowProductsContained}/>
     <Stack.Screen name="ProductDetailScreen" component={ProductDetailScreen}/>
+    <Stack.Screen name="HistoryScreen" component={HistoryScreen}/>
      </Stack.Navigator>
    );
  }

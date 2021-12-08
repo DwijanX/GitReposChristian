@@ -40,6 +40,10 @@ class AddContainerScreen extends Component
             {
                 firebase.db.collection('ProductosContenidos').doc(CreatedDoc.id).set({Nombre:this.state.Nombre})
                 firebase.db.collection('Listas').doc('Contenedores').set({[CreatedDoc.id]:{Nombre:this.state.Nombre,Tipo:this.state.Tipo}},{merge:true})
+            }).then(()=>
+            {
+                alert("Se registro correctamente") 
+                props.navigation.navigate('HomeScreen');
             })
         }
         else

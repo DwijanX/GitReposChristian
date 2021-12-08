@@ -14,23 +14,35 @@ const ViewProductsScreen = (props) => {
     useEffect(()=>
     {
       props.navigation.setOptions({headerShown: true});
-      firebase.db.collection('Listas').doc('Productos').get().then((doc)=>
+      firebase.db.collection('Listas').doc('Productos').get().then(async (doc)=>
       {
         let Products=[];
-        Object.entries(doc.data()).forEach((Product)=>
+        if(doc.data()!=undefined)
         {
-          let DataAux={
-            DocId:Product[0],
-            Name:Product[1]['Nombre'],
-            Type:Product[1]['Tipo']
-          }
-          Products.push(DataAux);
-        })
+            Object.entries(doc.data()).forEach((Product)=>
+            {
+              let DataAux={
+                DocId:Product[0],
+                Name:Product[1]['Nombre'],
+                Type:Product[1]['Tipo']
+              }
+              Products.push(DataAux);
+            })
+        }
+        Products=Products.sort(compare);
         setProducts(Products);
         SetFilteredProducts(Products);
-
       })
     },[]);
+    const compare=( a, b )=> {
+      if ( a["Name"] < b["Name"] ){
+        return -1;
+      }
+      if ( a["Name"] > b["Name"] ){
+        return 1;
+      }
+      return 0;
+    }
     const HandleFuncToDoWhenClick=(DocIdpar)=>
     {
         props.navigation.navigate('ProductDetailScreen',{DocId: DocIdpar});

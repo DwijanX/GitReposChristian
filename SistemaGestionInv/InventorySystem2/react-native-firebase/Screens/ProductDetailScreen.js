@@ -48,18 +48,18 @@ class ProductDetailScreen extends Component
     {
         const ProductInfo=this.state.Product;
         const BackUpProductInfo=this.state.BackUpProduct
+
         firebase.db.collection('Productos').doc(this.state.DocId).set(ProductInfo);
-        if(ProductInfo["Nombre"]!=BackUpProductInfo["Nombre"])
+        if(ProductInfo["Nombre"]!=BackUpProductInfo["Nombre"] || ProductInfo["Precio de venta"]!=BackUpProductInfo["Precio de venta"] )
         {
-            firebase.db.collection('Listas').doc("Productos").set({[this.state.DocId]:{"Nombre":ProductInfo["Nombre"],"Tipo":ProductInfo["Tipo"]}},{merge:true})
-            //firebase.db.collection('Lista Productos').doc("Lista").set({[this.state.DocId]:{"Nombre":ProductInfo["Nombre"],"Tipo":ProductInfo["Tipo"]}},{merge:true})
+            firebase.db.collection('Listas').doc("Productos").set({[this.state.DocId]:{"Nombre":ProductInfo["Nombre"],"Tipo":ProductInfo["Tipo"],"Precio de venta":ProductInfo["Precio de venta"]}},{merge:true})
             const collection = firebase.db.collection("ProductosContenidos")
             collection.where(`${this.state.DocId}.Nombre`,"==",BackUpProductInfo["Nombre"]).get().then((ans)=>
             {
                 let batch = firebase.db.batch()
                 ans.docs.forEach((doc) => {
                     const docRef = firebase.db.collection('ProductosContenidos').doc(doc.id)
-                    batch.set(docRef, {[this.state.DocId]:{"Nombre":ProductInfo["Nombre"]}},{merge:true})
+                    batch.set(docRef, {[this.state.DocId]:{"Nombre":ProductInfo["Nombre"],"Precio de venta":ProductInfo["Precio de venta"]}},{merge:true})
                 })
                 batch.commit();
             })

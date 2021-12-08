@@ -1,9 +1,9 @@
 import React,{Component} from 'react';
-import { View,StyleSheet,TextInput,Image, ScrollView, Text} from 'react-native';
+import { View,StyleSheet,TextInput,Image, ScrollView, Text,} from 'react-native';
 import firebase from '../DataBase/Firebase';
-import { ThemeProvider,Input,Button} from 'react-native-elements';
+import { ThemeProvider,Input,Button,CheckBox} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { CommonActions } from '@react-navigation/native';
 const theme={
     Button:{
         buttonStyle:{
@@ -39,6 +39,18 @@ const theme={
             color:'#ecf0f1'
         }
     },
+    CheckBox:
+    {
+        containerStyle:{
+            backgroundColor:'#c0c0c0',
+            borderColor:'#c0c0c0'
+        },
+        checkedColor:"#e1a8c0",
+        uncheckedColor:"#e1a8c0",
+        textStyle:{
+            color:"#ecf0f1"
+        }
+    }
     
 }
 
@@ -49,7 +61,8 @@ class LogInScreen extends Component
       super(props);
       this.state={
         Email:" ",
-        Password:""
+        Password:"",
+        RememberCheck:false
       };
       this.HandleTextChange=this.HandleTextChange.bind(this);
       this.HandleLogIn=this.HandleLogIn.bind(this);
@@ -58,6 +71,7 @@ class LogInScreen extends Component
   componentDidMount()
   {
     this.props.navigation.setOptions({headerShown: false});
+    this.HandleNextScreenIfValid()
   }
   HandleTextChange (name,value)
   {
@@ -68,9 +82,25 @@ class LogInScreen extends Component
     const {Email,Password}=this.state;
     if(Email!="" && Password!="")
     {
-        firebase.auth.signInWithEmailAndPassword(Email,Password).then(this.HandleNextScreenIfValid).catch((e)=>{
-            alert(e);
-        });
+        if(this.state.RememberCheck)
+        {
+            firebase.auth.setPersistence(firebase.AuthValue.Persistence.LOCAL).then(()=>
+            {
+                firebase.auth.signInWithEmailAndPassword(Email,Password).then(this.HandleNextScreenIfValid).catch((e)=>{
+                    alert(e);
+              });
+            })
+        }
+        else
+        {
+            firebase.auth.setPersistence(firebase.AuthValue.Persistence.NONE).then(()=>
+            {
+                firebase.auth.signInWithEmailAndPassword(Email,Password).then(this.HandleNextScreenIfValid).catch((e)=>{
+                    alert(e);
+              });
+            })
+        }
+        
     }
   }
   HandleNextScreenIfValid()
@@ -79,9 +109,19 @@ class LogInScreen extends Component
         {
             if(user!=undefined)
             {
-                this.props.navigation.navigate('HomeScreen');
+                this.props.navigation.dispatch(
+                     CommonActions.reset({
+                       index: 0,
+                       routes: [{ name: "HomeScreen" }]
+                     }));
+                   
             }
         });
+  }
+  ToggleCheckBoxClicked()
+  {
+      const aux=!this.state.RememberCheck
+    this.setState({...this.state,["RememberCheck"]:aux})
   }
   
    render()
@@ -105,10 +145,12 @@ class LogInScreen extends Component
                         </Input>
                         <Input 
                         placeholder="Password" 
+                        secureTextEntry={true}
                         onChangeText={(value)=>this.HandleTextChange('Password',value)}
                         leftIcon={<Icon name='lock' {...IconProps} />}>
                             
                         </Input>
+                        <CheckBox title='Remember Me'  checked={this.state.RememberCheck} onPress={() => this.ToggleCheckBoxClicked()}></CheckBox>
                         <Button  title="Log In" onPress={()=>this.HandleLogIn()}>
 
                         </Button>   

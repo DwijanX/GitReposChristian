@@ -109,8 +109,10 @@ const AddProductsNumScreen=(props)=>
         if(DDPValue!=0)
         {
              let AuxCantidades=Object.assign({}, Cantidades);
+             let Name="aux"
             firebase.db.collection('Productos').doc(DDPValue).get().then((doc)=>
             {
+                Name=doc.data()["Nombre"]
                 Object.entries(doc.data()['Cantidades']).forEach((Cantidad)=>
                 {
                     if(Cantidades[Cantidad[0]]!=0)
@@ -137,16 +139,35 @@ const AddProductsNumScreen=(props)=>
                         "Cantidades":AuxCantidades
                     }, { merge: true });
                 }
-            })
-            /*var today = new Date();
-            firebase.db.collection('Historial').doc(`${today.getMonth()+1}${today.getUTCFullYear()}`).set(
+            }).then(()=>
+            {
+                let AuxCantidades2=Object.assign({}, Cantidades);
+                Object.entries(AuxCantidades2).forEach((Cantidad)=>
+                    {
+                        if(Cantidad[1]==0)
+                        {
+                            delete AuxCantidades2[Cantidad[0]]
+                        }
+                    })
+                let today = new Date();
+                let key=today.getHours()+"_" + today.getMinutes()+"_" + today.getSeconds()+"_"+today.getDate()+"_"+(today.getMonth()+1)+"_"+today.getFullYear()
+                firebase.db.collection('Historial').doc(`${today.getMonth()+1}${today.getUTCFullYear()}`).set(
                 {
-                'Nombre':Atts.Nombre,
-                'Operacion':'Agregacion',
-                "Cantidad":,
-                "Creado": firebase.FieldValue.serverTimestamp()
+                    [key]:{
+                        'Nombre':Name,
+                        'Operacion':'Agregacion',
+                        "Cantidades":AuxCantidades2,
+                        "Fecha": firebase.FieldValue.serverTimestamp()
+                    }
                 }
-                ,{merge:true})*/
+                ,{merge:true})
+            }).then(()=>
+            {
+                alert("Guardado exitoso")
+                setDDPValue(0)
+            })
+            
+
         }
         else
         {
@@ -165,15 +186,20 @@ const AddProductsNumScreen=(props)=>
                     setItems={setItems}
                     onChangeValue={setCantidadesArray}
                     />
-                <View style={styles.CountersView}>
-                    {Object.entries(Cantidades).map((Cantidad)=>HandleCreationOfCounters(Cantidad))}
-                </View>
+                { DDPValue!=0 &&
+                    <View style={styles.CountersView}>
+                        {Object.entries(Cantidades).map((Cantidad)=>HandleCreationOfCounters(Cantidad))}
+                    </View>
+                }   
                 <Overlay  isVisible={visible} overlayStyle={styles.OverStyle} > 
-                    <Input label={'Nombre de la cantidad'} onChangeText={(value)=>setNewAttributeName(value)}></Input>
-                    <Input label={'cantidad'} keyboardType={"numeric"} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
+                    <Input label={'Nombre de la cantidad'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} onChangeText={(value)=>setNewAttributeName(value)}></Input>
+                    <Input label={'cantidad'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} keyboardType={"numeric"} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
+                    <View style={styles.ButtonsContainer}>
                     <Button title={'Save'} buttonStyle={styles.ButtonStyle} onPress={HandleNewQty}></Button>
                     <Button title={'Cancel'} buttonStyle={styles.ButtonStyle} onPress={toggleOverlay}></Button>
+                    </View>
                 </Overlay>
+                { DDPValue!=0 &&
                 <Button title={'Crear nueva cantidad'} onPress={()=>{
                    
                     if(DDPValue!=0)
@@ -185,11 +211,11 @@ const AddProductsNumScreen=(props)=>
                         alert("seleccione un producto");
                     }
                 }}/>
+              }
+                { DDPValue!=0 &&
 
-                <Button title={'Guardar'} onPress={HandleSave}>
-
-
-                </Button>
+                <Button title={'Guardar'} onPress={HandleSave}/>
+                }
             </View>
         );
     
@@ -205,15 +231,19 @@ const styles = StyleSheet.create({
         paddingVertical:20
     },
     OverStyle:{
-        height:"75%",
+        height:"40%",
         width:'75%',
+        backgroundColor: '#7f8c8d',
     },
     CheckBoxStyle:{
         backgroundColor: '#7f8c8d',
     },
     ButtonStyle:{
-        height:40,
-        width:80
+        width:'65%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
     },
     TextStyle:
     {
@@ -228,7 +258,24 @@ const styles = StyleSheet.create({
     {
         height:50,
         width:50
-    }
+    },  
+    inputStyle:
+    {
+        height:40,
+        fontSize:20,
+        fontFamily: 'Futura',
+        color:'#ecf0f1',
+    },
+    inputContainerStyle:
+    {
+        borderBottomColor:"#ecf0f1",
+        color:'#ecf0f1'
+    },
+    ButtonsContainer:
+    {
+        alignItems:"center",
+        textAlign:"center"
+    },
   });
   
   

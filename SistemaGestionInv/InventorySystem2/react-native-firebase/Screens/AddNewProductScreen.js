@@ -7,6 +7,7 @@ import CustomCounter  from '../CustomComponents/CustomCounterWButtons'
 import { Button,Overlay,CheckBox } from 'react-native-elements';
 import { Input } from "react-native-elements/dist/input/Input";
 import AddProductsNumScreen from "./AddProductsNumScreen";
+import RadioButtonsGroup from '../CustomComponents/RadioButtonsGroup'
 
 const AddNewProductScreen=(props)=> 
 {
@@ -22,10 +23,7 @@ const AddNewProductScreen=(props)=>
   
   const [KeyboardTypeOverlay,setKeyboardTypeOverlay]=useState('default')
   const [visible, setVisible] = useState(false);
-  const DropDownPickerAtts=["Precio de venta","Demanda mensual","Tiempo de reabastecimiento [dias]"]
-  //Dropdown PickerStates
-  const [Criticality, setCriticality] = useState({"baja":false,"moderada":false,"alta":false});
-  const [SelectedCriticality, setSelectedCriticality] = useState("");
+  const [Criticality, setCriticality] = useState({"baja":true,"moderada":false,"alta":false});
   
   
     const toggleOverlay = () => {
@@ -84,21 +82,9 @@ const AddNewProductScreen=(props)=>
     {
         setUpdatedAttributes({...UpdatedAttributes,[Attribute]:Value});
     }
-    const HandleCheckBoxClicked=(CriticalityKey)=>
+    const setCriticalityToRadioButtons=(value)=>
     {
-        if(Criticality[CriticalityKey]==false)
-        {
-            let aux=Criticality;
-            if(SelectedCriticality!="")
-            {
-                aux[SelectedCriticality]=false;
-            }
-            aux[CriticalityKey]=true;
-            setCriticality(aux);
-            setSelectedCriticality(CriticalityKey);
-            setUpdatedAttributes({...Attributes,["Criticidad"]:CriticalityKey})
-        }
-
+        setUpdatedAttributes({...UpdatedAttributes,["Criticidad"]:value})
     }
     const HandleCreationOfInputsWithAttributesArr=(Att)=>
     {
@@ -121,99 +107,103 @@ const AddNewProductScreen=(props)=>
         else 
         {
             return (
-                <Fragment key={Att[0]}>
-                    <Text style={styles.TextStyle}>{Att[0]} </Text>
-                    <View style={{flexDirection:'row'}}>
-                    {Object.entries(Criticality).map((CriticalityKey)=>
-                    {
-                        return(
-                        <CheckBox key={CriticalityKey[0]}title={CriticalityKey[0]} checkedColor={"#ecf0f1"} textStyle={styles.TextStyle} containerStyle={styles.CheckBoxStyle} checked={CriticalityKey[1]} onPress={()=>{
-                            HandleCheckBoxClicked(CriticalityKey[0])}}></CheckBox>
-                        );
-                        
-                    })}
-                    </View>
-                    </Fragment>
+                <RadioButtonsGroup key={Att[0]}
+                RadioButtonBoolsObjects={Criticality}
+                FuncToUpdateWithKey={setCriticalityToRadioButtons}
+                labelText={Att[0]}
+                selectedKey={"baja"}
+                />
             );
         }
     }
+ 
     const HandleSave=()=>
     {
-
         let Atts=UpdatedAttributes;
         let CantidadesObj={};
-        Cantidades.forEach((Cantidad)=>
+        if(UpdatedAttributes["Nombre"]!="" && UpdatedAttributes["Tipo"]!="" )
         {
-            if(Atts[Cantidad]!=NaN)
+            Cantidades.forEach((Cantidad)=>
             {
-                CantidadesObj={...CantidadesObj,[Cantidad]:parseInt(Atts[Cantidad])}
-            }
-            else
-            {
-                CantidadesObj={...CantidadesObj,[Cantidad]:0}
-            }
-            delete Atts[Cantidad]
-        })
-        NumericAttributes.forEach((NumericAtt)=>
-        {
-            if(isNaN(parseInt(Atts[NumericAtt]))==false)
-            {
-                Atts={...Atts,[NumericAtt]:parseInt(Atts[NumericAtt])}
-            }
-            else
-            {
-                Atts={...Atts,[NumericAtt]:0}
-            }
-        })
-        if(Object.keys(CantidadesObj).length === 0)
-        {
-            CantidadesObj={"General":0}
-            Cantidades.push("General");
-        }
-        Atts={...Atts,['Cantidades']:CantidadesObj}
-
-        firebase.db.collection('Productos').add(Atts).then(CreatedDoc=>{
-            const docID=CreatedDoc.id;
-            firebase.db.collection('Listas').doc('Productos').set({
-                [docID]:{
-                'Nombre':Atts.Nombre,
-                'Tipo':Atts.Tipo,
-                'Cantidades':Cantidades,
-                "Precio de venta":Atts["Precio de venta"]
-             }
-            }, { merge: true })
-            let today = new Date();
-            let key=today.getHours()+"_" + today.getMinutes()+"_" + today.getSeconds()+"_"+today.getDay()+"_"+(today.getMonth()+1)+"_"+today.getFullYear()
-            firebase.db.collection('Historial').doc(`${today.getMonth()+1}${today.getUTCFullYear()}`).set(
-            {
-                [key]:{
-                    'DocId':docID,
-                    'Nombre':Atts.Nombre,
-                    'Operacion':'Agregacion',
-                    "Creado": firebase.FieldValue.serverTimestamp()
+                if(Atts[Cantidad]!=NaN)
+                {
+                    CantidadesObj={...CantidadesObj,[Cantidad]:parseInt(Atts[Cantidad])}
                 }
+                else
+                {
+                    CantidadesObj={...CantidadesObj,[Cantidad]:0}
+                }
+                delete Atts[Cantidad]
+            })
+            NumericAttributes.forEach((NumericAtt)=>
+            {
+                if(isNaN(parseInt(Atts[NumericAtt]))==false)
+                {
+                    Atts={...Atts,[NumericAtt]:parseInt(Atts[NumericAtt])}
+                }
+                else
+                {
+                    Atts={...Atts,[NumericAtt]:0}
+                }
+            })
+            if(Object.keys(CantidadesObj).length === 0)
+            {
+                CantidadesObj={"General":0}
+                Cantidades.push("General");
             }
-            ,{merge:true})
-        })   
+            Atts={...Atts,['Cantidades']:CantidadesObj}
+
+            firebase.db.collection('Productos').add(Atts).then(CreatedDoc=>{
+                const docID=CreatedDoc.id;
+                firebase.db.collection('Listas').doc('Productos').set({
+                    [docID]:{
+                    'Nombre':Atts.Nombre,
+                    'Tipo':Atts.Tipo,
+                    'Cantidades':Cantidades,
+                    "Precio de venta":Atts["Precio de venta"]
+                }
+                }, { merge: true })
+                let today = new Date();
+                let key=today.getHours()+"_" + today.getMinutes()+"_" + today.getSeconds()+"_"+today.getDate()+"_"+(today.getMonth()+1)+"_"+today.getFullYear()
+                firebase.db.collection('Historial').doc(`${today.getMonth()+1}${today.getUTCFullYear()}`).set(
+                {
+                    [key]:{
+                        'Nombre':Atts.Nombre,
+                        'Operacion':'Creacion',
+                        "Fecha": firebase.FieldValue.serverTimestamp()
+                    }
+                }
+                ,{merge:true})
+            }).then(()=>{
+                alert("Se registro correctamente") 
+                props.navigation.navigate('HomeScreen');
+            })
+        }
+        else
+        {
+            alert("Llene los campos correctamente")
+        }
         
     }
 
         return(
             <ScrollView style={styles.GralView} >
                 <Overlay  isVisible={visible} overlayStyle={styles.OverStyle} > 
-                    <Input label={'Nombre del atributo'} onChangeText={(value)=>setNewAttributeName(value)}></Input>
-                    <Input label={'Valor'} keyboardType={KeyboardTypeOverlay} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
-                    <CheckBox title={'Es una cantidad del producto'}  checked={newAttributeIsCantidad} disabled={newAttributeIsNumericField}onPress={toggleAttributeCantidad}></CheckBox>
-                    <CheckBox title={'Es un campo numerico'} checked={newAttributeIsNumericField} disabled={newAttributeIsCantidad}onPress={toggleAttributeNumericField}></CheckBox>
+                    <Input label={'Nombre del atributo'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} inputStyle={styles.inputStyle} inputContainerStyle={styles.inputContainerStyle} onChangeText={(value)=>setNewAttributeName(value)}></Input>
+                    <Input label={'Valor'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} inputStyle={styles.inputStyle} inputContainerStyle={styles.inputContainerStyle} keyboardType={KeyboardTypeOverlay} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
+
+                    <CheckBox title={'Es una cantidad del producto'} containerStyle={styles.containerStyleCheckBox} checkedColor="#ecf0f1" uncheckedColor="#ecf0f1" textStyle={styles.LowerTextStyle} checked={newAttributeIsCantidad} disabled={newAttributeIsNumericField}onPress={toggleAttributeCantidad}></CheckBox>
+                    <CheckBox title={'Es un campo numerico'} containerStyle={styles.containerStyleCheckBox} checkedColor="#ecf0f1" uncheckedColor="#ecf0f1" textStyle={styles.LowerTextStyle}  checked={newAttributeIsNumericField} disabled={newAttributeIsCantidad}onPress={toggleAttributeNumericField}></CheckBox>
+                    <View style={styles.ButtonsContainer}>
                     <Button title={'Save'} buttonStyle={styles.ButtonStyle} onPress={HandleNewAttribute}></Button>
                     <Button title={'Cancel'} onPress={toggleOverlay} buttonStyle={styles.ButtonStyle}></Button>
+                    </View>
                 </Overlay>
                 {Object.entries(Attributes).map((Att)=>HandleCreationOfInputsWithAttributesArr(Att))}
                 
-
                 <Button title={'Add Attribute'} onPress={toggleOverlay}></Button>
-                <Button title={'Save'}  onPress={HandleSave}></Button>
-                <Button title={'Cancel'} ></Button>
+                <Button title={'Save'} onPress={HandleSave}></Button>
+                <Button title={'Cancel'}  ></Button>
             </ScrollView>
         );
     
@@ -225,15 +215,25 @@ const styles = StyleSheet.create({
         backgroundColor: '#7f8c8d',
     },
     OverStyle:{
-        height:"75%",
+        height:"60%",
         width:'75%',
+        backgroundColor: '#7f8c8d',
+    },
+    ButtonsContainer:
+    {
+        alignItems:"center",
+        textAlign:"center"
     },
     CheckBoxStyle:{
+
         backgroundColor: '#7f8c8d',
     },
     ButtonStyle:{
-        height:40,
-        width:80
+        width:'65%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
     },
     TextStyle:
     {
@@ -241,6 +241,29 @@ const styles = StyleSheet.create({
         fontFamily: 'Futura',
         color:'#ecf0f1'
     },
+    LowerTextStyle:
+    {
+        fontSize:15,
+        fontFamily: 'Futura',
+        color:'#ecf0f1'
+    },
+    inputStyle:
+    {
+        height:40,
+        fontSize:20,
+        fontFamily: 'Futura',
+        color:'#ecf0f1',
+    },
+    inputContainerStyle:
+    {
+        borderBottomColor:"#ecf0f1",
+        color:'#ecf0f1'
+    },
+    containerStyleCheckBox:{
+        backgroundColor:'#7f8c8d',
+        borderColor:'#7f8c8d'
+    },
+    
   });
   
   
