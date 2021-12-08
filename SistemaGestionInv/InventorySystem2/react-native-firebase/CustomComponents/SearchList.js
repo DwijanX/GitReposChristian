@@ -33,8 +33,7 @@ const SearchList = (props) => {
     const HandleSearch=(value)=>
     {
         SetSearchState(value);
-        props.setFilteredArray(props.Array.filter(i=> i[FilterAttribute].includes(value),));
-        props.setFilteredArray(props.Array.sort(compare));
+        props.setFilteredArray((props.Array.filter(i=> i[FilterAttribute].includes(value),)).sort(compare));
     }
     const setTextAttributes=(AttributesArray,elem)=>
     {
@@ -85,20 +84,20 @@ const SearchList = (props) => {
   const styles = StyleSheet.create({
     GralView:
     {
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
         width:'100%'
     },
     TextStyle:
     {
         fontSize:18,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
     SubTitleStyle:
     {
         fontSize:15,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     }
   });
 export default SearchList;

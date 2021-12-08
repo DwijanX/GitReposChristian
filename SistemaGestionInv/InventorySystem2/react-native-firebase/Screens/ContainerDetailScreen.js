@@ -90,45 +90,9 @@ const styles = StyleSheet.create({
         flex:1,
         alignContent:"center",
         justifyContent:"flex-start",
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
 
     },
-    SubViewTitle:
-    {
-        paddingVertical:15,
-        width:"100%",
-        alignContent:"center",
-        alignItems:'center',
-        justifyContent:"center"  
-    },
-    TittleTextCont:
-    {
-        fontSize:30,
-        fontFamily: 'Futura',
-    },
-    SubTitleCont:
-    {
-        fontSize:15,
-        fontFamily: 'Futura',
-    },
-    CounterButtonsStyle:
-    {
-        height:50,
-        width:40,
-        alignContent:'center',
-        justifyContent:'center',
-        backgroundColor:'#e1a8c0',
-    },
-    CounterTextStyle:
-    {
-        color:'black',
-        fontSize:25,
-        fontFamily: 'Futura',
-    },
-    ContainerCounter:
-    {
-        paddingHorizontal:20
-    }
   });
   
   

@@ -72,6 +72,7 @@ const ShowProductsContained=(props)=>
         if(valueDP!=0 && counterOfProduct>0)
         {
             let aux=ProductsContained;
+            let BackupProduct=Object.assign({}, ProductsContained[selectedProductId])
             if((aux[selectedProductId]["Cantidades"][valueDP]-counterOfProduct)==0)
             {
                 delete aux[selectedProductId]["Cantidades"][valueDP]
@@ -120,14 +121,14 @@ const ShowProductsContained=(props)=>
             let key=today.getHours()+"_" + today.getMinutes()+"_" + today.getSeconds()+"_"+today.getDate()+"_"+(today.getMonth()+1)+"_"+today.getFullYear()
             firebase.db.collection('ProductosContenidos').doc('CompromisedProducts').set({
                 [key]:{
-                    "Nombre":ProductsContained[selectedProductId]["Nombre"],
+                    "Nombre":BackupProduct["Nombre"],
                     "Nombre del contenedor":Name,
                     "Cantidad":counterOfProduct,
                     "Nombre cantidad":valueDP,
                     "ProductId":selectedProductId,
                     "ContainerId":ContainerId,
                     "Agregacion": firebase.FieldValue.serverTimestamp(),
-                    ["Precio de venta"]: ProductsContained[selectedProductId]["Precio de venta"]
+                    ["Precio de venta"]: BackupProduct["Precio de venta"]
 
                 }
             },{merge:true});
@@ -219,25 +220,25 @@ const ShowProductsContained=(props)=>
 const styles = StyleSheet.create({
     GralView:
     {
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
 
     },
     TextStyle:
     {
         fontSize:18,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
     SubTitleStyle:
     {
         fontSize:15,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
     OverStyle:{
         height:"40%",
         width:'75%',
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
     },
     ButtonStyle:{
         width:'65%',

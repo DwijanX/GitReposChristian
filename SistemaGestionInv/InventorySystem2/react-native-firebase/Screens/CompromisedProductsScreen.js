@@ -131,7 +131,9 @@ const CompromisedProductsScreen=(props)=>
                 })
         }
         {Object.entries(CompromisedProducts).length>0 &&
-        <Button  title="Revertir" onPress={HandleRevert}/> &&
+        <Button  title="Revertir" onPress={HandleRevert}/> 
+        }
+        {Object.entries(CompromisedProducts).length>0 &&
         <Button  title="Confirmar Venta" onPress={HandleConfirmation}/>
         }
         
@@ -143,19 +145,19 @@ const styles = StyleSheet.create({
     GralView:
     {
         flex:1,
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
     },
     SubTitleStyle:
     {
         fontSize:15,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
     TitleStyle:
     {
         fontSize:18,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
   });
   

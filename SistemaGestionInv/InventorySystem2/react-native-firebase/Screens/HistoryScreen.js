@@ -166,7 +166,7 @@ const HistoryScreen =(props)=>
 
                 />
             </View>
-            <Button title="Get Info" onPress={RetrieveInfo}></Button>
+            <Button title="Get Info" buttonStyle={styles.ButtonStyle} onPress={RetrieveInfo}></Button>
             <ScrollView style={{width:"100%"}}>
             {Object.entries(HistoryInfo).map((Elem)=>HandleCreationOfApropiateListItem(Elem))}
             </ScrollView>
@@ -179,13 +179,13 @@ const styles = StyleSheet.create({
     GralView:
     {
         flex:1,
-        backgroundColor: '#c0c0c0',
+        backgroundColor: 'white',
         alignItems:'center'
 
     },
     ListCont:
     {
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
         width:'100%'
     },
     DropDownPickerCont:
@@ -201,14 +201,22 @@ const styles = StyleSheet.create({
     {
         fontSize:18,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
     SubTitleStyle:
     {
         fontSize:15,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
-    }
+        color:'black'
+    },
+    ButtonStyle:{
+        backgroundColor:"#2189db",
+        width:'65%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
+    },
 });
 
 export default HistoryScreen;

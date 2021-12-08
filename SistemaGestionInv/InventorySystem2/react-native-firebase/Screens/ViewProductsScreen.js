@@ -66,7 +66,7 @@ const ViewProductsScreen = (props) => {
     GralView:
     {
         flex:1,
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
     }
   });
   

@@ -74,7 +74,7 @@ const ScannerScreen=(props)=>
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#7f8c8d',
+      backgroundColor: 'white',
       alignItems: 'center',
       justifyContent: 'center',
     },

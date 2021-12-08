@@ -106,37 +106,9 @@ const styles = StyleSheet.create({
     GralView:
     {
         flex:1,
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
 
     },
-    SubViewTitle:
-    {
-        paddingVertical:15,
-        width:"100%",
-        alignContent:"center",
-        alignItems:'center',
-        justifyContent:"center"  
-    },
-    CounterButtonsStyle:
-    {
-        height:50,
-        width:40,
-        alignContent:'center',
-        justifyContent:'center',
-        backgroundColor:'#e1a8c0',
-    },
-    CounterTextStyle:
-    {
-        color:'black',
-        fontSize:25,
-        fontFamily: 'Futura',
-    },
-    ContainerCounter:
-    {
-        paddingHorizontal:20
-    }
-
-
   });
   
   

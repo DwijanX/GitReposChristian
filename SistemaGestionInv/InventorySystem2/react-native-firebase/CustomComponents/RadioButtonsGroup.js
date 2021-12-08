@@ -11,6 +11,7 @@ const RadioButtonsGroup = (props) => {
     useEffect(()=>
     {
         setSelectedKey(props.selectedKey)
+
     },[])
     const HandleCheckBoxClicked=(key)=>
     {
@@ -30,12 +31,18 @@ const RadioButtonsGroup = (props) => {
     }
     return (
         <Fragment >
-                    <Text style={styles.TextStyle}>{props.labelText} </Text>
+                    <Text  style={{color:props.TextColor}} style={styles.TextStyleBold}>{props.labelText} </Text>
                     <View style={{flexDirection:'row'}}>
                     {Object.entries(props.RadioButtonBoolsObjects).map((Key)=>
                     {
                         return(
-                        <CheckBox key={Key[0]}title={Key[0]} disabled={props.disabled} checkedColor={"#ecf0f1"} textStyle={styles.TextStyle} containerStyle={styles.CheckBoxStyle} checked={Key[1]} onPress={()=>{
+                        <CheckBox key={Key[0]}title={Key[0]}
+                         disabled={props.disabled} 
+                         checkedColor={props.TextColor} 
+                         textStyle={styles.TextStyle} 
+                         textStyle={{color:props.TextColor}} 
+                         containerStyle={{backgroundColor: props.BgrColor, }} 
+                         checked={Key[1]} onPress={()=>{
                             HandleCheckBoxClicked(Key[0])}}></CheckBox>
                         );
                         
@@ -47,26 +54,16 @@ const RadioButtonsGroup = (props) => {
   
   
   const styles = StyleSheet.create({
-    GralView:
-    {
-        backgroundColor: '#7f8c8d',
-        width:'100%'
-    },
     TextStyle:
     {
         fontSize:18,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
     },
-    SubTitleStyle:
+    TextStyleBold:
     {
-        fontSize:15,
+        fontSize:18,
+        fontWeight:'bold',
         fontFamily: 'Futura',
-        color:'#ecf0f1'
-    },
-    CheckBoxStyle:{
-
-        backgroundColor: '#7f8c8d',
     },
   });
 export default RadioButtonsGroup;

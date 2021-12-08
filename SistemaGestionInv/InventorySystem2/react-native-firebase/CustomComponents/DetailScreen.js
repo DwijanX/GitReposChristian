@@ -7,7 +7,18 @@ import CustomCounter  from '../CustomComponents/CustomCounterWButtons'
 import { render } from "react-dom";
 import DropDownPicker from 'react-native-dropdown-picker';
 import RadioButtonsGroup from '../CustomComponents/RadioButtonsGroup'
+import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
+/*
+
+                        {Object.entries(ObjectAtt[1]).map((Cantidad)=>
+                        {
+                            return(
+                                <Text key={Cantidad[0]}  style={styles.TextStyle}>
+                                    {Cantidad[0]} : {Cantidad[1]}
+                                </Text>
+                            );
+                        })}*/
 class DetailScreen extends Component
 {
     constructor(props)
@@ -20,7 +31,8 @@ class DetailScreen extends Component
         DocId:"",
         open:false,
         CriticityValue:"",
-        Criticality:{"baja":false,"moderada":false,"alta":false}
+        Criticality:{"baja":false,"moderada":false,"alta":false},
+        QtysHeadTable: ['Nombre', 'Cantidad'],
       }
       this.HandleChangeAtt=this.HandleChangeAtt.bind(this);
       this.HandleCreationOfAppropiateComps=this.HandleCreationOfAppropiateComps.bind(this);
@@ -44,17 +56,18 @@ class DetailScreen extends Component
         {
             if(ObjectAtt[0]=='Cantidades')
             {
+                let QtysBodyTableAux=[]
+                Object.entries(ObjectAtt[1]).forEach((Cantidad)=>
+                {
+                    QtysBodyTableAux.push([Cantidad[0],Cantidad[1]])
+                })
                 return(
-                    <View  key={ObjectAtt[0]} >
-                        <Text style={styles.TextStyle}>Cantidades</Text>
-                        {Object.entries(ObjectAtt[1]).map((Cantidad)=>
-                        {
-                            return(
-                                <Text key={Cantidad[0]}  style={styles.TextStyle}>
-                                    {Cantidad[0]} : {Cantidad[1]}
-                                </Text>
-                            );
-                        })}
+                    <View style={styles.NotInputContainers} key={ObjectAtt[0]} >
+                        <Text style={styles.TextStyleBold}>Cantidades</Text>
+                        <Table borderStyle={{borderWidth: 2, borderColor: 'black'}}>
+                            <Row data={this.state.QtysHeadTable}/>
+                            <Rows data={QtysBodyTableAux} />
+                        </Table>
                     </View> 
                     );
             }
@@ -62,13 +75,16 @@ class DetailScreen extends Component
             {
                 const CriticalityAux=this.state.Criticality
                 CriticalityAux[this.props.Object["Criticidad"]]=true
-                return(<RadioButtonsGroup key={ObjectAtt[0]}
-                RadioButtonBoolsObjects={this.state.Criticality}
-                FuncToUpdateWithKey={this.setCriticalityToRadioButtons}
-                labelText={ObjectAtt[0]}
-                selectedKey={this.props.Object["Criticidad"]}
-                disabled={this.props.ViewMode}
-                />);
+                return(
+                <View style={styles.NotInputContainers} key={ObjectAtt[0]}>
+                    <RadioButtonsGroup 
+                    RadioButtonBoolsObjects={this.state.Criticality}
+                    FuncToUpdateWithKey={this.setCriticalityToRadioButtons}
+                    labelText={ObjectAtt[0]}
+                    selectedKey={this.props.Object["Criticidad"]}
+                    disabled={this.props.ViewMode}
+                    />
+                </View>);
             }
             else if(isNaN(ObjectAtt[1]))
             {
@@ -149,7 +165,7 @@ class DetailScreen extends Component
                 </Input>
                 {Object.entries(this.props.BackUpObject).map((ObjectAtt)=>this.HandleCreationOfAppropiateComps(ObjectAtt))}
                 </View>
-                <Divider orientation="horizontal" />
+                <Divider style={styles.DetailsMarginBottom} orientation="horizontal" />
                 <Button title={this.state.EditionModeTittle}  onPress={this.HandleViewMode}/>
                 <Button title={"Guardar"}  onPress={this.props.HandleSave}/>
             </Fragment>
@@ -160,7 +176,7 @@ const styles = StyleSheet.create({
     MainViewContainer:
     {
         flex:1,
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
         alignContent:"center",
         justifyContent:"flex-start"  
     },
@@ -168,7 +184,14 @@ const styles = StyleSheet.create({
     {
         fontSize:18,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
+    },
+    TextStyleBold:
+    {
+        fontSize:18,
+        fontWeight:'bold',
+        fontFamily: 'Futura',
+        color:'black'
     },
     SubViewTitle:
     {
@@ -182,15 +205,23 @@ const styles = StyleSheet.create({
     {
         fontSize:30,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
 
     },
     SubTitleCont:
     {
         fontSize:15,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
+    NotInputContainers:
+    {
+        marginHorizontal:7
+    },
+    DetailsMarginBottom:
+    {
+        marginBottom:10
+    }
   });
   
   

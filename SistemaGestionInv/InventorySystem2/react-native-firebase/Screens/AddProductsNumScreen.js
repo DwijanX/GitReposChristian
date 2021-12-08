@@ -26,7 +26,6 @@ const AddProductsNumScreen=(props)=>
     {
       props.navigation.setOptions({headerShown: true});
       firebase.db.collection('Listas').doc('Productos').get().then((doc)=>
-      //firebase.db.collection('Lista Productos').doc('Lista').get().then((doc)=>
       {
         let Products=[];
         Object.entries(doc.data()).forEach((Product)=>
@@ -38,9 +37,20 @@ const AddProductsNumScreen=(props)=>
           Products.push(DataAux);
         })
         setProducts(doc.data());
+        Products=Products.sort(compare);
         setItems(Products);
+
       })
     },[]);
+    const compare=( a, b )=> {
+        if ( a["label"] < b["label"] ){
+          return -1;
+        }
+        if ( a["label"] > b["label"] ){
+          return 1;
+        }
+        return 0;
+      }
     const toggleOverlay = () => {
         setVisible(!visible);
         setNewAttributeName('');
@@ -193,7 +203,7 @@ const AddProductsNumScreen=(props)=>
                 }   
                 <Overlay  isVisible={visible} overlayStyle={styles.OverStyle} > 
                     <Input label={'Nombre de la cantidad'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} onChangeText={(value)=>setNewAttributeName(value)}></Input>
-                    <Input label={'cantidad'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} keyboardType={"numeric"} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
+                    <Input label={'Cantidad'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} keyboardType={"numeric"} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
                     <View style={styles.ButtonsContainer}>
                     <Button title={'Save'} buttonStyle={styles.ButtonStyle} onPress={HandleNewQty}></Button>
                     <Button title={'Cancel'} buttonStyle={styles.ButtonStyle} onPress={toggleOverlay}></Button>
@@ -224,7 +234,7 @@ const styles = StyleSheet.create({
     GralView:
     {
         flex:1,
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
     },
     CountersView:
     {
@@ -233,10 +243,10 @@ const styles = StyleSheet.create({
     OverStyle:{
         height:"40%",
         width:'75%',
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
     },
     CheckBoxStyle:{
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
     },
     ButtonStyle:{
         width:'65%',
@@ -249,7 +259,7 @@ const styles = StyleSheet.create({
     {
         fontSize:18,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
     ContainerCounter:{
         paddingHorizontal:40,
@@ -264,12 +274,12 @@ const styles = StyleSheet.create({
         height:40,
         fontSize:20,
         fontFamily: 'Futura',
-        color:'#ecf0f1',
+        color:'black',
     },
     inputContainerStyle:
     {
-        borderBottomColor:"#ecf0f1",
-        color:'#ecf0f1'
+        borderBottomColor:"black",
+        color:'black'
     },
     ButtonsContainer:
     {

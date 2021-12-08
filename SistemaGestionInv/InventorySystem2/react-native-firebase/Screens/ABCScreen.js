@@ -193,52 +193,16 @@ const styles = StyleSheet.create({
     GralView:
     {
         flex:1,
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
     },
     TextStyle:
     {
         fontSize:18,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
   });
   
 export default ABCScreen
-
-
-/*
-Demanda
-muy Alta 1
-Alta  0.78
-Media 0.56
-Baja 0.33 
-Muy Baja 0.11
-
-LeadTime
-muy largo  1
-largo  0.78
-Media  0.56
-corto 0.33
-Muy corto 0.11
-
-Criticality
-High  1
-Moderate  0.78
-Low  0.33
-
-demanda
-alta 6 o +
-moderada 3-5
-baja 0-2
-
-tiempo de reabastecimiento
-
-alta 7 o +
-moderada 3-6
-baja 0-2
-
-A items
-constituted approximately the top 15 per cent, B items approximately the next
-35 per cent, and C items approximately the last 50 per cent of SKUs*/
 
 

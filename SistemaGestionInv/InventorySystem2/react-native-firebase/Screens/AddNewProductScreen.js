@@ -112,6 +112,8 @@ const AddNewProductScreen=(props)=>
                 FuncToUpdateWithKey={setCriticalityToRadioButtons}
                 labelText={Att[0]}
                 selectedKey={"baja"}
+                BgrColor="white"
+                TextColor="black"
                 />
             );
         }
@@ -192,8 +194,8 @@ const AddNewProductScreen=(props)=>
                     <Input label={'Nombre del atributo'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} inputStyle={styles.inputStyle} inputContainerStyle={styles.inputContainerStyle} onChangeText={(value)=>setNewAttributeName(value)}></Input>
                     <Input label={'Valor'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} inputStyle={styles.inputStyle} inputContainerStyle={styles.inputContainerStyle} keyboardType={KeyboardTypeOverlay} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
 
-                    <CheckBox title={'Es una cantidad del producto'} containerStyle={styles.containerStyleCheckBox} checkedColor="#ecf0f1" uncheckedColor="#ecf0f1" textStyle={styles.LowerTextStyle} checked={newAttributeIsCantidad} disabled={newAttributeIsNumericField}onPress={toggleAttributeCantidad}></CheckBox>
-                    <CheckBox title={'Es un campo numerico'} containerStyle={styles.containerStyleCheckBox} checkedColor="#ecf0f1" uncheckedColor="#ecf0f1" textStyle={styles.LowerTextStyle}  checked={newAttributeIsNumericField} disabled={newAttributeIsCantidad}onPress={toggleAttributeNumericField}></CheckBox>
+                    <CheckBox title={'Es una cantidad del producto'} containerStyle={styles.containerStyleCheckBox} checkedColor="black" uncheckedColor="black" textStyle={styles.LowerTextStyle} checked={newAttributeIsCantidad} disabled={newAttributeIsNumericField}onPress={toggleAttributeCantidad}></CheckBox>
+                    <CheckBox title={'Es un campo numerico'} containerStyle={styles.containerStyleCheckBox} checkedColor="black" uncheckedColor="black" textStyle={styles.LowerTextStyle}  checked={newAttributeIsNumericField} disabled={newAttributeIsCantidad}onPress={toggleAttributeNumericField}></CheckBox>
                     <View style={styles.ButtonsContainer}>
                     <Button title={'Save'} buttonStyle={styles.ButtonStyle} onPress={HandleNewAttribute}></Button>
                     <Button title={'Cancel'} onPress={toggleOverlay} buttonStyle={styles.ButtonStyle}></Button>
@@ -212,12 +214,12 @@ const styles = StyleSheet.create({
     GralView:
     {
         flex:1,
-        backgroundColor: '#7f8c8d',
+        backgroundColor: "white",//'#7f8c8d',
     },
     OverStyle:{
         height:"60%",
         width:'75%',
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
     },
     ButtonsContainer:
     {
@@ -226,7 +228,7 @@ const styles = StyleSheet.create({
     },
     CheckBoxStyle:{
 
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
     },
     ButtonStyle:{
         width:'65%',
@@ -239,29 +241,29 @@ const styles = StyleSheet.create({
     {
         fontSize:18,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
     LowerTextStyle:
     {
         fontSize:15,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
     inputStyle:
     {
         height:40,
         fontSize:20,
         fontFamily: 'Futura',
-        color:'#ecf0f1',
+        color:'black',
     },
     inputContainerStyle:
     {
-        borderBottomColor:"#ecf0f1",
-        color:'#ecf0f1'
+        borderBottomColor:"black",
+        color:'black'
     },
     containerStyleCheckBox:{
-        backgroundColor:'#7f8c8d',
-        borderColor:'#7f8c8d'
+        backgroundColor:'white',
+        borderColor:'white'
     },
     
   });

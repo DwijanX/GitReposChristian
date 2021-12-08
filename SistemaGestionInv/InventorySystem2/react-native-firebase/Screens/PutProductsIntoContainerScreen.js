@@ -180,9 +180,6 @@ const PutProductsIntoContainerScreen =(props)=>
         })
         if(EmptyModifiedQtys==false)
         {
-            
-            firebase.db.collection('Productos/'+ProductId+'/ContenidoEn').doc(ProductId).set(ModifiedQtys,{merge:true});
-            
             Object.entries(ModifiedQtys).forEach((Qty)=>  //QTY[{ContainerID,Qtys}]
             {
                 firebase.db.collection('ProductosContenidos').doc(Qty[0]).set
@@ -198,6 +195,12 @@ const PutProductsIntoContainerScreen =(props)=>
                 )
             }
             )
+            firebase.db.collection('Productos/'+ProductId+'/ContenidoEn').doc(ProductId).set(ModifiedQtys,{merge:true}).then(()=>
+            {
+                let QtysInContainersBackUpPointer=QtysInContainersBackUp
+                QtysInContainersBackUpPointer=Object.assign({}, QtysInContainers)
+                alert("Se registro correctamente") 
+            })
         }
     }
     return(
@@ -233,11 +236,11 @@ const styles = StyleSheet.create({
     GralView:
     {
         flex:1,
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
     },
     SubView:
     {
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
         paddingVertical:5
     },
     CounterButtonsStyle:
@@ -246,20 +249,20 @@ const styles = StyleSheet.create({
         width:40,
         alignContent:'center',
         justifyContent:'center',
-        backgroundColor:'#e1a8c0',
+        backgroundColor:'#2189db',
     },
     TitleStyle:
     {
         fontSize:20,
         fontFamily: 'Futura',
-        color:'#ecf0f1',
+        color:'black',
         fontWeight:'bold'
     },
     TextStyle:
     {
         fontSize:18,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
     ContainerCounter:
     {

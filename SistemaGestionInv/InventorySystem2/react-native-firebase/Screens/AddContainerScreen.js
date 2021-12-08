@@ -43,7 +43,7 @@ class AddContainerScreen extends Component
             }).then(()=>
             {
                 alert("Se registro correctamente") 
-                props.navigation.navigate('HomeScreen');
+                this.props.navigation.navigate('HomeScreen');
             })
         }
         else
@@ -83,24 +83,17 @@ const styles = StyleSheet.create({
     GralView:
     {
         flex:1,
-        backgroundColor: '#7f8c8d',
+        backgroundColor: 'white',
     },
     OverStyle:{
         height:"75%",
         width:'75%',
     },
-    CheckBoxStyle:{
-        backgroundColor: '#7f8c8d',
-    },
-    ButtonStyle:{
-        height:40,
-        width:80
-    },
     TextStyle:
     {
         fontSize:18,
         fontFamily: 'Futura',
-        color:'#ecf0f1'
+        color:'black'
     },
   });
 export default AddContainerScreen
