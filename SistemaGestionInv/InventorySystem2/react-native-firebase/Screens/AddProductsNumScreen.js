@@ -1,5 +1,5 @@
 import React,{useEffect,useState,Fragment} from "react";
-import { View,Text, StyleSheet,Picker} from "react-native";
+import { View,Text, StyleSheet,Picker, ScrollView} from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import firebase from '../DataBase/Firebase';
 import CustomCounter  from '../CustomComponents/CustomCounterWButtons'
@@ -37,7 +37,7 @@ const AddProductsNumScreen=(props)=>
           Products.push(DataAux);
         })
         setProducts(doc.data());
-        Products=Products.sort(compare);
+        Products.sort(compare);
         setItems(Products);
 
       })
@@ -196,21 +196,10 @@ const AddProductsNumScreen=(props)=>
                     setItems={setItems}
                     onChangeValue={setCantidadesArray}
                     />
+                <ScrollView>
+                <View style={styles.ButtonsContainer}>
                 { DDPValue!=0 &&
-                    <View style={styles.CountersView}>
-                        {Object.entries(Cantidades).map((Cantidad)=>HandleCreationOfCounters(Cantidad))}
-                    </View>
-                }   
-                <Overlay  isVisible={visible} overlayStyle={styles.OverStyle} > 
-                    <Input label={'Nombre de la cantidad'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} onChangeText={(value)=>setNewAttributeName(value)}></Input>
-                    <Input label={'Cantidad'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} keyboardType={"numeric"} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
-                    <View style={styles.ButtonsContainer}>
-                    <Button title={'Save'} buttonStyle={styles.ButtonStyle} onPress={HandleNewQty}></Button>
-                    <Button title={'Cancel'} buttonStyle={styles.ButtonStyle} onPress={toggleOverlay}></Button>
-                    </View>
-                </Overlay>
-                { DDPValue!=0 &&
-                <Button title={'Crear nueva cantidad'} onPress={()=>{
+                <Button title={'Crear nueva cantidad'} buttonStyle={styles.ButtonStyle} onPress={()=>{
                    
                     if(DDPValue!=0)
                     {
@@ -223,9 +212,25 @@ const AddProductsNumScreen=(props)=>
                 }}/>
               }
                 { DDPValue!=0 &&
-
-                <Button title={'Guardar'} onPress={HandleSave}/>
+                <Button title={'Guardar'} buttonStyle={styles.ButtonStyle} onPress={HandleSave}/>
                 }
+                </View>
+
+                { DDPValue!=0 &&
+                    <View style={styles.CountersView}>
+                        {Object.entries(Cantidades).map((Cantidad)=>HandleCreationOfCounters(Cantidad))}
+                    </View>
+                }   
+                </ScrollView>
+                <Overlay  isVisible={visible} overlayStyle={styles.OverStyle} > 
+                    <Input label={'Nombre de la cantidad'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} onChangeText={(value)=>setNewAttributeName(value)}></Input>
+                    <Input label={'Cantidad'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} keyboardType={"numeric"} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
+                    <View style={styles.ButtonsContainer}>
+                    <Button title={'Save'} buttonStyle={styles.ButtonStyle} onPress={HandleNewQty}></Button>
+                    <Button title={'Cancel'} buttonStyle={styles.ButtonStyle} onPress={toggleOverlay}></Button>
+                    </View>
+                </Overlay>
+                
             </View>
         );
     
@@ -248,13 +253,6 @@ const styles = StyleSheet.create({
     CheckBoxStyle:{
         backgroundColor: 'white',
     },
-    ButtonStyle:{
-        width:'65%',
-        marginVertical:2,
-        alignItems:'center',
-        alignContent:"center",
-        justifyContent:'space-evenly',
-    },
     TextStyle:
     {
         fontSize:18,
@@ -267,7 +265,8 @@ const styles = StyleSheet.create({
     CounterButtonsStyle:
     {
         height:50,
-        width:50
+        width:50,
+        backgroundColor:"#7b838c"
     },  
     inputStyle:
     {
@@ -280,6 +279,15 @@ const styles = StyleSheet.create({
     {
         borderBottomColor:"black",
         color:'black'
+    },
+    ButtonStyle:{
+        marginTop:10,
+        width:'65%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
+        backgroundColor:"#7b838c"
     },
     ButtonsContainer:
     {

@@ -98,6 +98,8 @@ const styles = StyleSheet.create({
         alignItems:'center',
         alignContent:"center",
         justifyContent:'space-evenly',
+        backgroundColor:"#7b838c"
+
     },
   });
   

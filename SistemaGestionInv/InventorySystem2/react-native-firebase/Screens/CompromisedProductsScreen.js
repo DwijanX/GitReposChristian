@@ -108,7 +108,8 @@ const CompromisedProductsScreen=(props)=>
          }
     }
     return(
-    <ScrollView style={styles.GralView} >
+    <View style={styles.GralView} >
+        <ScrollView>
          {
             Object.entries(CompromisedProducts).map((Product)=>  //[Date,{Cantidad,Nombre,NombreContenedor,ContainerId,ProductId}]
                 {
@@ -130,14 +131,18 @@ const CompromisedProductsScreen=(props)=>
                     );
                 })
         }
+        </ScrollView>
+        <Divider orientation="horizontal" />
+        <View style={styles.ButtonsContainer}>
         {Object.entries(CompromisedProducts).length>0 &&
-        <Button  title="Revertir" onPress={HandleRevert}/> 
+        <Button  title="Revertir" buttonStyle={styles.ButtonStyle} onPress={HandleRevert}/> 
         }
         {Object.entries(CompromisedProducts).length>0 &&
-        <Button  title="Confirmar Venta" onPress={HandleConfirmation}/>
+        <Button  title="Confirmar Venta" buttonStyle={styles.ButtonStyle} onPress={HandleConfirmation}/>
         }
+        </View>
         
-    </ScrollView>
+    </View>
     );
     
 }
@@ -158,6 +163,20 @@ const styles = StyleSheet.create({
         fontSize:18,
         fontFamily: 'Futura',
         color:'black'
+    },
+    ButtonsContainer:
+    {
+        alignItems:"center",
+        textAlign:"center"
+    },
+    ButtonStyle:{
+        marginTop:10,
+        width:'65%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
+        backgroundColor:"#7b838c"
     },
   });
   

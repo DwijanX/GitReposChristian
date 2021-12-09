@@ -137,7 +137,7 @@ const ShowProductsContained=(props)=>
     }
     return(
     <ScrollView style={styles.GralView} >
-         <Overlay isVisible={visible} overlayStyle={styles.OverStyle}>
+         <Overlay isVisible={visible} overlayStyle={styles.OverStyle} onBackdropPress={toggleOverlay}>
                 <DropDownPicker
                         open={open}
                         value={valueDP}
@@ -246,7 +246,9 @@ const styles = StyleSheet.create({
         alignItems:'center',
         alignContent:"center",
         justifyContent:'space-evenly',
+        backgroundColor:"#7b838c"
     },
+    
     ButtonsContainer:
     {
         marginTop:20,
@@ -259,6 +261,7 @@ const styles = StyleSheet.create({
         width:45,
         alignContent:'center',
         justifyContent:'center',
+        backgroundColor:'#7b838c'
     },
     ContainerCounter:
     {

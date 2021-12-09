@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
         color:'black'
     },
     ButtonStyle:{
-        backgroundColor:"#2189db",
+        backgroundColor:"#7b838c",
         width:'65%',
         marginVertical:2,
         alignItems:'center',

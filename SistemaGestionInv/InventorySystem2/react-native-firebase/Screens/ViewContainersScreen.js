@@ -65,8 +65,8 @@ const ViewContainersScreen = (props) => {
         SubTittleAttributes={["Type"]}
         KeyAttribute={'DocId'}
         FuncToDoWhenClick={HandleFuncToDoWhenClick}
-        
         />
+        
         </ScrollView>
     );
   };
@@ -75,7 +75,7 @@ const ViewContainersScreen = (props) => {
     {
         flex:1,
         backgroundColor: 'white',
-    }
+    },
   });
   
 export default ViewContainersScreen;

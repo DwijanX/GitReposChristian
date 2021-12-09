@@ -189,24 +189,27 @@ const AddNewProductScreen=(props)=>
     }
 
         return(
-            <ScrollView style={styles.GralView} >
-                <Overlay  isVisible={visible} overlayStyle={styles.OverStyle} > 
-                    <Input label={'Nombre del atributo'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} inputStyle={styles.inputStyle} inputContainerStyle={styles.inputContainerStyle} onChangeText={(value)=>setNewAttributeName(value)}></Input>
-                    <Input label={'Valor'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} inputStyle={styles.inputStyle} inputContainerStyle={styles.inputContainerStyle} keyboardType={KeyboardTypeOverlay} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
+            <View style={styles.GralView}>
+                <ScrollView  >
+                    <Overlay  isVisible={visible} overlayStyle={styles.OverStyle} > 
+                        <Input label={'Nombre del atributo'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} inputStyle={styles.inputStyle} inputContainerStyle={styles.inputContainerStyle} onChangeText={(value)=>setNewAttributeName(value)}></Input>
+                        <Input label={'Valor'} inputContainerStyle={styles.inputContainerStyle} labelStyle={styles.TextStyle} inputStyle={styles.inputStyle} inputContainerStyle={styles.inputContainerStyle} keyboardType={KeyboardTypeOverlay} value={newAttributeValue} onChangeText={(value)=>setNewAttributeValue(value)}></Input>
 
-                    <CheckBox title={'Es una cantidad del producto'} containerStyle={styles.containerStyleCheckBox} checkedColor="black" uncheckedColor="black" textStyle={styles.LowerTextStyle} checked={newAttributeIsCantidad} disabled={newAttributeIsNumericField}onPress={toggleAttributeCantidad}></CheckBox>
-                    <CheckBox title={'Es un campo numerico'} containerStyle={styles.containerStyleCheckBox} checkedColor="black" uncheckedColor="black" textStyle={styles.LowerTextStyle}  checked={newAttributeIsNumericField} disabled={newAttributeIsCantidad}onPress={toggleAttributeNumericField}></CheckBox>
-                    <View style={styles.ButtonsContainer}>
-                    <Button title={'Save'} buttonStyle={styles.ButtonStyle} onPress={HandleNewAttribute}></Button>
-                    <Button title={'Cancel'} onPress={toggleOverlay} buttonStyle={styles.ButtonStyle}></Button>
-                    </View>
-                </Overlay>
-                {Object.entries(Attributes).map((Att)=>HandleCreationOfInputsWithAttributesArr(Att))}
+                        <CheckBox title={'Es una cantidad del producto'} containerStyle={styles.containerStyleCheckBox} checkedColor="black" uncheckedColor="black" textStyle={styles.LowerTextStyle} checked={newAttributeIsCantidad} disabled={newAttributeIsNumericField}onPress={toggleAttributeCantidad}></CheckBox>
+                        <CheckBox title={'Es un campo numerico'} containerStyle={styles.containerStyleCheckBox} checkedColor="black" uncheckedColor="black" textStyle={styles.LowerTextStyle}  checked={newAttributeIsNumericField} disabled={newAttributeIsCantidad}onPress={toggleAttributeNumericField}></CheckBox>
+                        <View style={styles.ButtonsContainer}>
+                        <Button title={'Save'} buttonStyle={styles.ButtonStyle} onPress={HandleNewAttribute}></Button>
+                        <Button title={'Cancel'} onPress={toggleOverlay} buttonStyle={styles.ButtonStyle}></Button>
+                        </View>
+                    </Overlay>
+                    {Object.entries(Attributes).map((Att)=>HandleCreationOfInputsWithAttributesArr(Att))}
+                </ScrollView>
                 
-                <Button title={'Add Attribute'} onPress={toggleOverlay}></Button>
-                <Button title={'Save'} onPress={HandleSave}></Button>
-                <Button title={'Cancel'}  ></Button>
-            </ScrollView>
+                <View style={styles.ButtonsContainer}>
+                    <Button title={'Add Attribute'} buttonStyle={styles.ButtonStyle} onPress={toggleOverlay}></Button>
+                    <Button title={'Save'}  buttonStyle={styles.ButtonStyle} onPress={HandleSave}></Button>
+                </View>
+            </View>
         );
     
 }
@@ -221,21 +224,9 @@ const styles = StyleSheet.create({
         width:'75%',
         backgroundColor: 'white',
     },
-    ButtonsContainer:
-    {
-        alignItems:"center",
-        textAlign:"center"
-    },
     CheckBoxStyle:{
 
         backgroundColor: 'white',
-    },
-    ButtonStyle:{
-        width:'65%',
-        marginVertical:2,
-        alignItems:'center',
-        alignContent:"center",
-        justifyContent:'space-evenly',
     },
     TextStyle:
     {
@@ -265,7 +256,20 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         borderColor:'white'
     },
-    
+    ButtonStyle:{
+        marginTop:10,
+        width:'65%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
+        backgroundColor:"#7b838c"
+    },
+    ButtonsContainer:
+    {
+        alignItems:"center",
+        textAlign:"center"
+    },
   });
   
   

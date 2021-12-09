@@ -7,7 +7,7 @@ import CustomCounter  from '../CustomComponents/CustomCounterWButtons'
 import { render } from "react-dom";
 import DropDownPicker from 'react-native-dropdown-picker';
 import RadioButtonsGroup from '../CustomComponents/RadioButtonsGroup'
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 
 /*
 
@@ -56,11 +56,21 @@ class DetailScreen extends Component
         {
             if(ObjectAtt[0]=='Cantidades')
             {
+                let compare=( a, b )=> {
+                    if ( a[0] < b[0] ){
+                      return -1;
+                    }
+                    if ( a[0] > b[0] ){
+                      return 1;
+                    }
+                    return 0;
+                  }
                 let QtysBodyTableAux=[]
                 Object.entries(ObjectAtt[1]).forEach((Cantidad)=>
                 {
                     QtysBodyTableAux.push([Cantidad[0],Cantidad[1]])
                 })
+                QtysBodyTableAux.sort(compare)
                 return(
                     <View style={styles.NotInputContainers} key={ObjectAtt[0]} >
                         <Text style={styles.TextStyleBold}>Cantidades</Text>
@@ -166,8 +176,10 @@ class DetailScreen extends Component
                 {Object.entries(this.props.BackUpObject).map((ObjectAtt)=>this.HandleCreationOfAppropiateComps(ObjectAtt))}
                 </View>
                 <Divider style={styles.DetailsMarginBottom} orientation="horizontal" />
-                <Button title={this.state.EditionModeTittle}  onPress={this.HandleViewMode}/>
-                <Button title={"Guardar"}  onPress={this.props.HandleSave}/>
+                <View style={styles.ButtonsContainer}>
+                <Button title={this.state.EditionModeTittle} buttonStyle={styles.ButtonStyle}  onPress={this.HandleViewMode}/>
+                <Button title={"Guardar"} buttonStyle={styles.ButtonStyle}  onPress={this.props.HandleSave}/>
+                </View>
             </Fragment>
         );
     }
@@ -221,7 +233,21 @@ const styles = StyleSheet.create({
     DetailsMarginBottom:
     {
         marginBottom:10
-    }
+    },
+    ButtonStyle:{
+        marginTop:10,
+        width:'65%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
+        backgroundColor:"#7b838c"
+    },
+    ButtonsContainer:
+    {
+        alignItems:"center",
+        textAlign:"center"
+    },
   });
   
   

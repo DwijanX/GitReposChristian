@@ -3,6 +3,7 @@ import { View,Text, StyleSheet, AsyncStorage, ScrollView} from "react-native";
 import { Button,Divider } from 'react-native-elements';
 import firebase from '../DataBase/Firebase'
 import CustomCounter  from '../CustomComponents/CustomCounterWButtons'
+import { Table, Row, Rows } from 'react-native-table-component';
 
 
 const PutProductsIntoContainerScreen =(props)=>
@@ -158,6 +159,34 @@ const PutProductsIntoContainerScreen =(props)=>
         }
         
     }
+    const HandleCreationOfTable=()=>
+    {
+        let compare=( a, b )=> {
+            if ( a[0] < b[0] ){
+              return -1;
+            }
+            if ( a[0] > b[0] ){
+              return 1;
+            }
+            return 0;
+          }
+        let BodyTable=[]
+        let HeadTable=['Nombre', 'Cantidad']
+        Object.entries(ProductQtys).forEach((Qty)=>
+        {
+            BodyTable.push([Qty[0],Qty[1]])
+        })
+        BodyTable.sort(compare)
+        return(
+                <View style={styles.NotInputContainers} >
+                    <Text style={styles.TextStyleBold}>Cantidades</Text>
+                    <Table borderStyle={{borderWidth: 2, borderColor: 'black'}}>
+                        <Row data={HeadTable}/>
+                        <Rows data={BodyTable} />
+                    </Table>
+                </View> 
+        );
+    }
     const HandleSave=()=>
     {
         let EmptyModifiedQtys=true;
@@ -204,31 +233,32 @@ const PutProductsIntoContainerScreen =(props)=>
         }
     }
     return(
-        <ScrollView style={styles.GralView}>
-            <Text style={styles.TitleStyle}>
-                {ProductName}
-            </Text>
-            <Text style={styles.TextStyle}>
-                Cantidades maximas disponibles
-            </Text>
-            {Object.entries(ProductQtys).map((Qty)=>
+        <View style={styles.GralView}>
+            <ScrollView >
+                <Text style={styles.TitleStyle}>
+                    {ProductName}
+                </Text>
+                <Text style={styles.TextStyle}>
+                    Cantidades maximas disponibles
+                </Text>
+                {HandleCreationOfTable()}
+
+                <Divider orientation="horizontal" />
+                <View style={styles.SubView}>
                 {
-                    return (<Text key={Qty[0]} style={styles.TextStyle}>
-                        {Qty[0]} : {Qty[1]}
-                        </Text>)
-                })}
-            <Divider orientation="horizontal" />
-            <View style={styles.SubView}>
-            {
-                Containers.length>0 &&
-                    Containers.map((Container)=>HandleCreationOfCounters(Container))
-            }
-            </View>
+                    Containers.length>0 &&
+                        Containers.map((Container)=>HandleCreationOfCounters(Container))
+                }
+                </View>
+                
+            </ScrollView>
+            <View style={styles.ButtonsContainer}>
             {
                 Containers.length>0 &&            
-                <Button title="Guardar" onPress={HandleSave}/>
+                <Button title="Guardar" buttonStyle={styles.ButtonStyle} onPress={HandleSave}/>
             }
-        </ScrollView>
+            </View>
+        </View>
     );
 };
 
@@ -249,7 +279,7 @@ const styles = StyleSheet.create({
         width:40,
         alignContent:'center',
         justifyContent:'center',
-        backgroundColor:'#2189db',
+        backgroundColor:'#7b838c',
     },
     TitleStyle:
     {
@@ -267,6 +297,32 @@ const styles = StyleSheet.create({
     ContainerCounter:
     {
         paddingHorizontal:20
-    }
+    },
+    
+    ButtonsContainer:
+    {
+        alignItems:"center",
+        textAlign:"center"
+    },
+    ButtonStyle:{
+        marginTop:10,
+        width:'65%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
+        backgroundColor:"#7b838c"
+    },
+    TextStyleBold:
+    {
+        fontSize:18,
+        fontWeight:'bold',
+        fontFamily: 'Futura',
+        color:'black'
+    },
+    NotInputContainers:
+    {
+        marginHorizontal:7
+    },
   });
 export default PutProductsIntoContainerScreen;

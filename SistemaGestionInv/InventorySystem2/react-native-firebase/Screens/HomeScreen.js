@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
         height:80,
         width:"90%",
         justifyContent: "space-evenly",
+        backgroundColor:"#7b838c"
       },
     buttonContainerStyle:
     {

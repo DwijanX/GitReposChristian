@@ -80,24 +80,26 @@ class ProductDetailScreen extends Component
         return(
             <ScrollView  style={styles.GralView}>
                 <View style={styles.GralView}>
-                <DetailScreen
-                setObject={this.HandleProductUpdate}
-                Object={this.state.Product}
-                BackUpObject={this.state.BackUpProduct}
-                HandleSave={this.HandleSave}
-                ViewMode={this.state.ViewMode}
-                setViewMode={this.setViewMode}
-                />
-                <Button title={"Set Products to containers"} 
-                 onPress={()=>{
-                    this.props.navigation.navigate('PutProductsIntoContainerScreen',{
-                        DocId: this.state.DocId,
-                        Name: this.state.Product.Nombre,
-                        Cantidades: this.state.Product.Cantidades,
-                        PrecioVenta: this.state.Product["Precio de venta"]
-                     })
-                     }}/>
-                     </View>
+                    <DetailScreen
+                    setObject={this.HandleProductUpdate}
+                    Object={this.state.Product}
+                    BackUpObject={this.state.BackUpProduct}
+                    HandleSave={this.HandleSave}
+                    ViewMode={this.state.ViewMode}
+                    setViewMode={this.setViewMode}
+                    />
+                    <View style={styles.ButtonsContainer}>
+                        <Button title={"Set Products to containers"} buttonStyle={styles.ButtonStyle}
+                        onPress={()=>{ 
+                            this.props.navigation.navigate('PutProductsIntoContainerScreen',{
+                                DocId: this.state.DocId,
+                                Name: this.state.Product.Nombre,
+                                Cantidades: this.state.Product.Cantidades,
+                                PrecioVenta: this.state.Product["Precio de venta"]
+                            })
+                            }}/>
+                    </View>
+                </View>
             </ScrollView>
         );
     }
@@ -108,6 +110,21 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor: 'white',
 
+    },
+    
+    ButtonStyle:{
+        marginTop:10,
+        width:'65%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
+        backgroundColor:"#7b838c"
+    },
+    ButtonsContainer:
+    {
+        alignItems:"center",
+        textAlign:"center"
     },
   });
   

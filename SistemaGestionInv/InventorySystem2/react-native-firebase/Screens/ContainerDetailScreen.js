@@ -77,9 +77,11 @@ const ProductDetailScreen=(props)=>
                 visible={overlayVisible}
                 toggleVisible={toggleOverlay}
                 />
-                <Button title="Get Qr Code" onPress={toggleOverlay}/>
+                <View style={styles.ButtonsContainer}>
+                <Button title="Get Qr Code" buttonStyle={styles.ButtonStyle} onPress={toggleOverlay}/>
 
-                <Button title="View Products Contained" onPress={()=>{props.navigation.navigate('ShowProductsContained',{DocId:DocId})}}/>
+                <Button title="View Products Contained" buttonStyle={styles.ButtonStyle} onPress={()=>{props.navigation.navigate('ShowProductsContained',{DocId:DocId})}}/>
+                </View>
             </View>
         );
     
@@ -92,6 +94,20 @@ const styles = StyleSheet.create({
         justifyContent:"flex-start",
         backgroundColor: 'white',
 
+    },
+    ButtonStyle:{
+        marginTop:10,
+        width:'65%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
+        backgroundColor:"#7b838c"
+    },
+    ButtonsContainer:
+    {
+        alignItems:"center",
+        textAlign:"center"
     },
   });
   

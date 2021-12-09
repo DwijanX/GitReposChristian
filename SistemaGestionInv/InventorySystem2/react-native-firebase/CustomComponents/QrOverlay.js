@@ -2,7 +2,7 @@ import React,{ Fragment,useRef,useState } from 'react';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library'
 import { Button,Overlay } from 'react-native-elements';
-
+import { View, StyleSheet} from "react-native";
 import QRCode from 'react-native-qrcode-svg';
 
 
@@ -51,26 +51,49 @@ const QrOverlay=(props)=>
     return(
         <Fragment>
         <Overlay  isVisible={props.visible}  onBackdropPress={props.toggleVisible}> 
-            <QRCode
-                logo={require('../assets/logo-fin.png')}
-                logoSize={40}
-                getRef={(ref) => (myQRCode = ref)}
-                value={props.data}
-                size={250}
-                color="black"
-                backgroundColor="white"
-                logoSize={30}
-                logoMargin={6}
-                logoBorderRadius={15}
-                logoBackgroundColor="#95a5a6"
-                logoSize={60}
-                />
-            <Button title="Descargar codigo QR"  onPress={downloadQrCode}/>
+            <View style={styles.QrContainer}>
+                <QRCode
+                    logo={require('../assets/logo-fin.png')}
+                    logoSize={40}
+                    getRef={(ref) => (myQRCode = ref)}
+                    value={props.data}
+                    size={250}
+                    color="black"
+                    backgroundColor="white"
+                    logoSize={30}
+                    logoMargin={6}
+                    logoBorderRadius={15}
+                    logoBackgroundColor="#95a5a6"
+                    logoSize={60}
+                    />
+            </View>
+            <View style={styles.ButtonsContainer}>
+            <Button title="Descargar codigo QR" buttonStyle={styles.ButtonStyle} onPress={downloadQrCode}/>
+            </View>
 
         </Overlay>
     </Fragment>
     );
 }
-
+const styles = StyleSheet.create({
+    ButtonStyle:{
+        marginTop:10,
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
+        backgroundColor:"#7b838c"
+    },
+    ButtonsContainer:
+    {
+        alignItems:"center",
+        textAlign:"center"
+    },
+    QrContainer:
+    {
+        borderColor:'#7b838c',
+        borderWidth:2
+    }
+  });
   
 export default QrOverlay;

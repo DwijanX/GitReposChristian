@@ -1,7 +1,7 @@
 import React,{Component,useEffect,useState} from 'react';
-import { View,StyleSheet,Button,TextInput, ScrollView,Text} from 'react-native';
+import { View,StyleSheet,TextInput, ScrollView,Text} from 'react-native';
 import firebase from '../DataBase/Firebase';
-import { ListItem ,SearchBar,Header,CheckBox} from 'react-native-elements';
+import { Button} from 'react-native-elements';
 import { setStatusBarBackgroundColor } from 'expo-status-bar';
 import { Input } from 'react-native-elements/dist/input/Input';
 
@@ -74,7 +74,9 @@ class AddContainerScreen extends Component
                 label={"Descripcion del contenedor"}
                 onChangeText={(value)=>this.HandleTextChange("Descripcion",value)}
                 ></Input> 
-                <Button title="Guardar" onPress={this.HandleContainerCreation}/>
+                <View style={styles.ButtonsContainer}>
+                    <Button title="Guardar" buttonStyle={styles.ButtonStyle} onPress={this.HandleContainerCreation}/>
+                </View>
             </View>
         );
     }
@@ -94,6 +96,20 @@ const styles = StyleSheet.create({
         fontSize:18,
         fontFamily: 'Futura',
         color:'black'
+    },
+    ButtonsContainer:
+    {
+        alignItems:"center",
+        textAlign:"center"
+    },
+    ButtonStyle:{
+        marginTop:10,
+        width:'70%',
+        marginVertical:2,
+        alignItems:'center',
+        alignContent:"center",
+        justifyContent:'space-evenly',
+        backgroundColor:"#7b838c"
     },
   });
 export default AddContainerScreen
