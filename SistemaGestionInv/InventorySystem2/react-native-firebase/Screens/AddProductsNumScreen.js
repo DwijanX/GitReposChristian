@@ -96,7 +96,24 @@ const AddProductsNumScreen=(props)=>
     {
         if(DDPValue!=0)
         {
-            if(newAttributeName!="" && newAttributeName in Object.keys(Cantidades))
+            let Keys=Object.keys(Cantidades)
+            let RepeatedKey=false
+            let BreakException = {};
+            try
+            {
+                Keys.forEach((key)=>
+                {
+                    if(key==newAttributeName)
+                    {
+                        RepeatedKey=true
+                        throw BreakException;
+                    }
+                })
+            }   
+            catch (e) {
+                if (e !== BreakException) throw e;
+            }
+            if(newAttributeName!="" && RepeatedKey==false)
             {
                 if(isNaN(parseInt(newAttributeValue))==false)
                 {
