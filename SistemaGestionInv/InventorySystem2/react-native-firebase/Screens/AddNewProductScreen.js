@@ -24,6 +24,7 @@ const AddNewProductScreen=(props)=>
   const [KeyboardTypeOverlay,setKeyboardTypeOverlay]=useState('default')
   const [visible, setVisible] = useState(false);
   const [Criticality, setCriticality] = useState({"baja":true,"moderada":false,"alta":false});
+  const [SaveButtonPressed,setSaveButtonPressed]=useState(false)
   
   
     const toggleOverlay = () => {
@@ -121,6 +122,7 @@ const AddNewProductScreen=(props)=>
  
     const HandleSave=()=>
     {
+        setSaveButtonPressed(true)
         let Atts=UpdatedAttributes;
         let CantidadesObj={};
         if(UpdatedAttributes["Nombre"]!="" && UpdatedAttributes["Tipo"]!="" )
@@ -177,6 +179,7 @@ const AddNewProductScreen=(props)=>
                 }
                 ,{merge:true})
             }).then(()=>{
+
                 alert("Se registro correctamente") 
                 props.navigation.navigate('HomeScreen');
             })
@@ -185,7 +188,7 @@ const AddNewProductScreen=(props)=>
         {
             alert("Llene los campos correctamente")
         }
-        
+        setSaveButtonPressed(false)
     }
 
         return(
@@ -207,7 +210,7 @@ const AddNewProductScreen=(props)=>
                 
                 <View style={styles.ButtonsContainer}>
                     <Button title={'Add Attribute'} buttonStyle={styles.ButtonStyle} onPress={toggleOverlay}></Button>
-                    <Button title={'Save'}  buttonStyle={styles.ButtonStyle} onPress={HandleSave}></Button>
+                    <Button title={'Save'} disabled={SaveButtonPressed}  buttonStyle={styles.ButtonStyle} onPress={HandleSave}></Button>
                 </View>
             </View>
         );

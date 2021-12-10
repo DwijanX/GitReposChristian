@@ -20,6 +20,7 @@ const AddProductsNumScreen=(props)=>
   const [newAttributeValue,setNewAttributeValue]=useState('')
   const [visible, setVisible] = useState(false);
   const [newQtys,setNewQtys]=useState([])
+  const [SaveButtonPressed,setSaveButtonPressed]=useState(false)
 
 
   useEffect(()=>
@@ -95,7 +96,7 @@ const AddProductsNumScreen=(props)=>
     {
         if(DDPValue!=0)
         {
-            if(newAttributeName!="")
+            if(newAttributeName!="" && newAttributeName in Object.keys(Cantidades))
             {
                 if(isNaN(parseInt(newAttributeValue))==false)
                 {
@@ -116,6 +117,7 @@ const AddProductsNumScreen=(props)=>
     }
     const HandleSave=()=>
     {
+        setSaveButtonPressed(true)
         if(DDPValue!=0)
         {
              let AuxCantidades=Object.assign({}, Cantidades);
@@ -176,13 +178,12 @@ const AddProductsNumScreen=(props)=>
                 alert("Guardado exitoso")
                 setDDPValue(0)
             })
-            
-
         }
         else
         {
             alert("seleccione un producto");
         }
+        setSaveButtonPressed(false)
     }
     
         return(
@@ -212,7 +213,7 @@ const AddProductsNumScreen=(props)=>
                 }}/>
               }
                 { DDPValue!=0 &&
-                <Button title={'Guardar'} buttonStyle={styles.ButtonStyle} onPress={HandleSave}/>
+                <Button title={'Guardar'} disabled={SaveButtonPressed} buttonStyle={styles.ButtonStyle} onPress={HandleSave}/>
                 }
                 </View>
 

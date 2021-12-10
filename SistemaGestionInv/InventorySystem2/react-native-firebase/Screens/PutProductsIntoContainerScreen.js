@@ -19,6 +19,7 @@ const PutProductsIntoContainerScreen =(props)=>
    const [StateOfCounters,setStateOfCounters]=useState();
    const [AllowEditionForEachCounter,setAllowEditionForEachCounter]=useState({});
    const [PrecioVenta,setPrecioVenta]=useState({});
+   const [SaveButtonPressed,setSaveButtonPressed]=useState(false)
 
     const setInitialStateOfCounters=(ContainedProducts,ProductQtys)=>  //ContainedProducts{DocId:{TypeQty:ContainedQty}} ProductQtys{TypeQty:TotalQty}
     {
@@ -189,6 +190,7 @@ const PutProductsIntoContainerScreen =(props)=>
     }
     const HandleSave=()=>
     {
+        setSaveButtonPressed(true)
         let EmptyModifiedQtys=true;
         let ModifiedQtys={};
         Object.entries(QtysInContainers).forEach((DocQty)=>
@@ -207,27 +209,56 @@ const PutProductsIntoContainerScreen =(props)=>
                 EmptyModifiedQtys=false;
             }
         })
+        
         if(EmptyModifiedQtys==false)
         {
             Object.entries(ModifiedQtys).forEach((Qty)=>  //QTY[{ContainerID,Qtys}]
             {
-                firebase.db.collection('ProductosContenidos').doc(Qty[0]).set
-                (
+                let QtysFullZERO=true
+                var BreakException = {};
+                try
+                {
+                    Object.entries(Qty[1]).forEach((SubQty)=>
                     {
-                        [ProductId]:
+                        if(SubQty[1]!=0)
                         {
-                            Nombre:ProductName,
-                            "Precio de venta":PrecioVenta,
-                            Cantidades:Qty[1]
+                            QtysFullZERO=false
+                            throw BreakException;
                         }
-                    },{merge:true}
-                )
+                    })
+                }
+                catch (e) {
+                    if (e !== BreakException) throw e;
+                }
+                if(QtysFullZERO==false)
+                {
+                    firebase.db.collection('ProductosContenidos').doc(Qty[0]).set
+                    (
+                        {
+                            [ProductId]:
+                            {
+                                Nombre:ProductName,
+                                "Precio de venta":PrecioVenta,
+                                Cantidades:Qty[1]
+                            }
+                        },{merge:true}
+                    )
+                }
+                else
+                {
+                    firebase.db.collection('ProductosContenidos').doc(Qty[0]).update
+                    ({
+                        [ProductId] : firebase.FieldValue.delete()
+                    })
+                }
             }
             )
+            
             firebase.db.collection('Productos/'+ProductId+'/ContenidoEn').doc(ProductId).set(ModifiedQtys,{merge:true}).then(()=>
             {
                 let QtysInContainersBackUpPointer=QtysInContainersBackUp
                 QtysInContainersBackUpPointer=Object.assign({}, QtysInContainers)
+                setSaveButtonPressed(false)
                 alert("Se registro correctamente") 
             })
         }
@@ -255,7 +286,7 @@ const PutProductsIntoContainerScreen =(props)=>
             <View style={styles.ButtonsContainer}>
             {
                 Containers.length>0 &&            
-                <Button title="Guardar" buttonStyle={styles.ButtonStyle} onPress={HandleSave}/>
+                <Button title="Guardar" disabled={SaveButtonPressed} buttonStyle={styles.ButtonStyle} onPress={HandleSave}/>
             }
             </View>
         </View>
