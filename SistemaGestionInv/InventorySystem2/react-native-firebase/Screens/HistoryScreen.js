@@ -36,7 +36,7 @@ const HistoryScreen =(props)=>
   //const [HistoryInfo,setHistoryInfo]=useState({})
   const [HistoryInfo,setHistoryInfo]=useState({})
   const [newValueDDP,setNewValueDDP]=useState(false)
-  const [Operations,setOperations]=useState({"Venta":true,"Agregacion":false,"Creacion":false})
+  const [Operations,setOperations]=useState({"Venta":true,"Adicion":false,"Creacion":false})
   const [OrderedKeysOfHistory,setOrderedKeysOfHistory]=useState([])
  
     useEffect(()=>
@@ -212,7 +212,6 @@ const HistoryScreen =(props)=>
             { 
             Operations &&
             OrderedKeysOfHistory.map((Duple)=>HandleCreationOfApropiateListItem(Duple[0]))  //Duple[0]=key
-            //Object.entries(HistoryInfo).map((Elem)=>HandleCreationOfApropiateListItem(Elem))
             }
             </ScrollView>
 

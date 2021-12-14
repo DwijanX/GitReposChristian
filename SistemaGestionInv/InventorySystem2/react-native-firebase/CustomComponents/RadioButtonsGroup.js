@@ -1,10 +1,25 @@
 import React,{Component,Fragment,useEffect,useState} from 'react';
-import { View,StyleSheet, ScrollView,Text} from 'react-native';
+import { View,StyleSheet, ScrollView,Text,Dimensions, Platform, PixelRatio} from 'react-native';
 import { Button,Overlay,CheckBox } from 'react-native-elements';
 
 
-//class ViewProductsScreen extends Component
-
+const {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+  } = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+function normalize(size) 
+{
+    const newSize = size * scale 
+    if (Platform.OS === 'ios') 
+    {
+      return Math.round(PixelRatio.roundToNearestPixel(newSize))
+    } 
+    else 
+    {
+      return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+    }
+}
 const RadioButtonsGroup = (props) => {
 
     const [SelectedKey,setSelectedKey]=useState("")
@@ -32,23 +47,22 @@ const RadioButtonsGroup = (props) => {
     return (
         <Fragment >
                     <Text  style={{color:props.TextColor}} style={styles.TextStyleBold}>{props.labelText} </Text>
-                    <View style={{flexDirection:'row'}}>
+                    <View style={{width:"100%",flexDirection:'row'}}>
                     {Object.entries(props.RadioButtonBoolsObjects).map((Key)=>
                     {
                         return(
                         <CheckBox key={Key[0]}title={Key[0]}
                          disabled={props.disabled} 
                          checkedColor={props.TextColor} 
-                         textStyle={styles.TextStyle} 
-                         textStyle={{color:props.TextColor}} 
-                         containerStyle={{backgroundColor: props.BgrColor, }} 
+                         textStyle={{...styles.TextStyle,["color"]:props.TextColor}} 
+                         containerStyle={{...styles.containerStyleCheckBox,["backgroundColor"]:props.BgrColor}} 
                          checked={Key[1]} onPress={()=>{
                             HandleCheckBoxClicked(Key[0])}}></CheckBox>
                         );
                         
                     })}
                     </View>
-                    </Fragment>
+            </Fragment>
     );
   };
   
@@ -56,7 +70,7 @@ const RadioButtonsGroup = (props) => {
   const styles = StyleSheet.create({
     TextStyle:
     {
-        fontSize:18,
+        fontSize:normalize(12),
         fontFamily: 'Futura',
     },
     TextStyleBold:
@@ -65,5 +79,10 @@ const RadioButtonsGroup = (props) => {
         fontWeight:'bold',
         fontFamily: 'Futura',
     },
+    containerStyleCheckBox:
+    {
+        width:"28%",
+        height:45,
+    }
   });
 export default RadioButtonsGroup;

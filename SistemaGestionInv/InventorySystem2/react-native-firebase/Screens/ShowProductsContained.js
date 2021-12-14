@@ -38,14 +38,6 @@ const ShowProductsContained=(props)=>
         })
         setContainerId(props.route.params.DocId)
     },[]);
-    const HandleCreationOfSubTitle=(Product)=>
-    {
-        let message=""
-        Object.entries(Product[1]["Cantidades"]).forEach(Cantidad => {
-            message+=Cantidad[0]+": "+Cantidad[1]+" ";
-        })
-        return message;
-    }
     const HandleChangeOfQty=(DocId)=>
     {
         setCounterOfProduct(0);
@@ -181,7 +173,6 @@ const ShowProductsContained=(props)=>
         {
             Object.entries(ProductsContained).map((Product)=>  
                 {
-                    let SubTitle=HandleCreationOfSubTitle(Product)
                     return(
                             <ListItem
                                 containerStyle={styles.GralView}
@@ -206,7 +197,10 @@ const ShowProductsContained=(props)=>
                                 <ListItem.Chevron/>
                                 <ListItem.Content>
                                     <ListItem.Title style={styles.TextStyle}>{Product[1].Nombre}</ListItem.Title>
-                                    <ListItem.Subtitle style={styles.SubTitleStyle}>Cantidades:{SubTitle}</ListItem.Subtitle>
+                                    {
+                                    Object.entries(Product[1]["Cantidades"]).map(Cantidad => {
+                                        return(<ListItem.Subtitle key={Cantidad[0]} style={styles.SubTitleStyle}>{Cantidad[0]}: {Cantidad[1]}</ListItem.Subtitle>);
+                                    })}
                                 </ListItem.Content>
                             </ListItem>
                     );

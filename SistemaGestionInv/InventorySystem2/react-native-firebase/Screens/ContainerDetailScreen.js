@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useRef  } from "react";
-import { View,Text, StyleSheet,Share} from "react-native";
+import { View,Text, StyleSheet,Share, ScrollView} from "react-native";
 import { Button,Overlay } from 'react-native-elements';
 import { Input } from "react-native-elements/dist/input/Input";
 import firebase from '../DataBase/Firebase'
@@ -62,6 +62,7 @@ const ProductDetailScreen=(props)=>
         setOverlayVisible(!overlayVisible);
     }
         return(
+            <ScrollView style={styles.GralView}>
             <View style={styles.MainViewContainer}>
                 <DetailScreen
                 setObject={HandleContainerUpdate}
@@ -83,10 +84,16 @@ const ProductDetailScreen=(props)=>
                 <Button title="View Products Contained" buttonStyle={styles.ButtonStyle} onPress={()=>{props.navigation.navigate('ShowProductsContained',{DocId:DocId})}}/>
                 </View>
             </View>
+            </ScrollView>
         );
     
 }
 const styles = StyleSheet.create({
+    GralView:
+    {
+        flex:1,
+        backgroundColor: 'white',
+    },
     MainViewContainer:
     {
         flex:1,
