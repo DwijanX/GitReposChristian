@@ -4,6 +4,8 @@ import firebase from '../DataBase/Firebase';
 import { ListItem ,SearchBar,Header,CheckBox} from 'react-native-elements';
 import { View,StyleSheet,TextInput,Image, ScrollView, Text,} from 'react-native';
 import { Button } from "react-native-elements/dist/buttons/Button";
+import RadioButtonsGroup from '../CustomComponents/RadioButtonsGroup'
+
 const theme={
     Button:{
         buttonStyle:{
@@ -34,6 +36,9 @@ const HistoryScreen =(props)=>
   //const [HistoryInfo,setHistoryInfo]=useState({})
   const [HistoryInfo,setHistoryInfo]=useState({})
   const [newValueDDP,setNewValueDDP]=useState(false)
+  const [Operations,setOperations]=useState({"Venta":true,"Agregacion":false,"Creacion":false})
+  const [OrderedKeysOfHistory,setOrderedKeysOfHistory]=useState([])
+ 
     useEffect(()=>
     {
       props.navigation.setOptions({headerShown: true});
@@ -58,6 +63,25 @@ const HistoryScreen =(props)=>
             firebase.db.collection('Historial').doc(aux).get().then((doc)=>{
                 if(doc.data()!=undefined)
                 {
+                    let OrderedArray=[]
+                    const DateComparison=(a,b)=>
+                    {
+                        let aDate=a[1]
+                        let bDate=b[1]
+                        if ( aDate.seconds * 1000 + aDate.nanoseconds / 1000000  < bDate.seconds * 1000 + bDate.nanoseconds / 1000000 ){
+                            return 1;
+                        }
+                        if (aDate.seconds * 1000 + aDate.nanoseconds / 1000000  > bDate.seconds * 1000 + bDate.nanoseconds / 1000000  ){
+                            return -1;
+                        }
+                        return 0;
+                    }
+                    Object.entries(doc.data()).forEach((obj)=>
+                    {
+                        OrderedArray.push([obj[0],obj[1]["Fecha"]])
+                    })
+                    OrderedArray.sort(DateComparison)
+                    setOrderedKeysOfHistory(OrderedArray)
                     setHistoryInfo(doc.data())
                 }
                 else
@@ -69,73 +93,82 @@ const HistoryScreen =(props)=>
         }
 
     }
-    const HandleCreationOfApropiateListItem=(Item)=>
+    const HandleCreationOfApropiateListItem=(Key)=>
     {
-        let time = Item[1]["Fecha"]
-        let date = new Date(
-            time.seconds * 1000 + time.nanoseconds / 1000000,
-          ).toDateString();
-        if(Item[1]["Operacion"]=="Venta")
+        let Item=HistoryInfo[Key]
+        if(Item!=undefined)
         {
-            return(
-                <ListItem containerStyle={styles.ListCont}
-                     key={Item[0]}
-                    bottomDivider 
-                >
-                    <ListItem.Chevron/>
-                    <ListItem.Content>
-                        <ListItem.Title style={styles.TextStyle}>{Item[1]["Nombre"]} </ListItem.Title>
-                        <ListItem.Subtitle style={styles.SubTitleStyle} >{Item[1]["Operacion"]}</ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.SubTitleStyle} >{Item[1]["Nombre cantidad"]}:{Item[1]["Cantidad"]} </ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.SubTitleStyle} >Ganancia: {Item[1]["Ganancia"]}</ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.SubTitleStyle} >Fecha: {date}</ListItem.Subtitle>
+            let time = Item["Fecha"]
+            let date = new Date(
+                time.seconds * 1000 + time.nanoseconds / 1000000,
+            ).toDateString();
+            let Operation=Item["Operacion"]
+            if(Operation=="Venta" && Operations[Operation])
+            {
+                return(
+                    <ListItem containerStyle={styles.ListCont}
+                        key={Key}
+                        bottomDivider 
+                    >
+                        <ListItem.Chevron/>
+                        <ListItem.Content>
+                            <ListItem.Title style={styles.TextStyle}>{Item["Nombre"]} </ListItem.Title>
+                            <ListItem.Subtitle style={styles.SubTitleStyle} >{Item["Operacion"]}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.SubTitleStyle} >{Item["Nombre cantidad"]}:{Item["Cantidad"]} </ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.SubTitleStyle} >Ganancia: {Item["Ganancia"]}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.SubTitleStyle} >Fecha: {date}</ListItem.Subtitle>
 
-                    </ListItem.Content>
-                </ListItem>
-            );
-        }
-        else if(Item[1]["Operacion"]=="Agregacion")
-        {
-            
-            return(
-                <ListItem containerStyle={styles.ListCont}
-                     key={Item[0]}
-                    bottomDivider 
-                >
-                    <ListItem.Chevron/>
-                    <ListItem.Content>
-                        <ListItem.Title style={styles.TextStyle}>{Item[1]["Nombre"]} </ListItem.Title>
-                        <ListItem.Subtitle style={styles.SubTitleStyle} >{Item[1]["Operacion"]}</ListItem.Subtitle>
-                        
-                        {
-                        Object.entries(Item[1]["Cantidades"]).map((Cantidad)=>
-                        {
-                            return(
-                             <ListItem.Subtitle key={Cantidad[0]} style={styles.SubTitleStyle} >{Cantidad[0]}:{Cantidad[1]} </ListItem.Subtitle>
-                            )
-                        })}
-                        <ListItem.Subtitle style={styles.SubTitleStyle} >Fecha: {date}</ListItem.Subtitle>
+                        </ListItem.Content>
+                    </ListItem>
+                );
+            }
+            else if(Operation=="Agregacion" && Operations[Operation])
+            {
+                
+                return(
+                    <ListItem containerStyle={styles.ListCont}
+                        key={Key}
+                        bottomDivider 
+                    >
+                        <ListItem.Chevron/>
+                        <ListItem.Content>
+                            <ListItem.Title style={styles.TextStyle}>{Item["Nombre"]} </ListItem.Title>
+                            <ListItem.Subtitle style={styles.SubTitleStyle} >{Item["Operacion"]}</ListItem.Subtitle>
+                            
+                            {
+                            Object.entries(Item["Cantidades"]).map((Cantidad)=>
+                            {
+                                return(
+                                <ListItem.Subtitle key={Cantidad[0]} style={styles.SubTitleStyle} >{Cantidad[0]}:{Cantidad[1]} </ListItem.Subtitle>
+                                )
+                            })}
+                            <ListItem.Subtitle style={styles.SubTitleStyle} >Fecha: {date}</ListItem.Subtitle>
 
-                    </ListItem.Content>
-                </ListItem>
-            );
+                        </ListItem.Content>
+                    </ListItem>
+                );
+            }
+            else if(Operation=="Creacion" && Operations[Operation])
+            {
+                return(
+                    <ListItem containerStyle={styles.ListCont}
+                        key={Key}
+                        bottomDivider 
+                    >
+                        <ListItem.Chevron/>
+                        <ListItem.Content>
+                            <ListItem.Title style={styles.TextStyle}>{Item["Nombre"]} </ListItem.Title>
+                            <ListItem.Subtitle style={styles.SubTitleStyle} >{Item["Operacion"]}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.SubTitleStyle} >Fecha: {date}</ListItem.Subtitle>
+                        </ListItem.Content>
+                    </ListItem>
+                );
+            }
         }
-        else if(Item[1]["Operacion"]=="Creacion")
-        {
-            return(
-                <ListItem containerStyle={styles.ListCont}
-                     key={Item[0]}
-                    bottomDivider 
-                >
-                    <ListItem.Chevron/>
-                    <ListItem.Content>
-                        <ListItem.Title style={styles.TextStyle}>{Item[1]["Nombre"]} </ListItem.Title>
-                        <ListItem.Subtitle style={styles.SubTitleStyle} >{Item[1]["Operacion"]}</ListItem.Subtitle>
-                        <ListItem.Subtitle style={styles.SubTitleStyle} >Fecha: {date}</ListItem.Subtitle>
-                    </ListItem.Content>
-                </ListItem>
-            );
-        }
+    }
+    const setOperationToRadioButtons=(value)=>
+    {
+        setOperations({...Operations,[value]:true})
     }
     return(
         <View style={styles.GralView}>
@@ -166,9 +199,21 @@ const HistoryScreen =(props)=>
 
                 />
             </View>
+            <RadioButtonsGroup 
+                RadioButtonBoolsObjects={Operations}
+                FuncToUpdateWithKey={setOperationToRadioButtons}
+                labelText={"Tipo"}
+                selectedKey={"Venta"}
+                BgrColor="white"
+                TextColor="black"
+                />
             <Button title="Get Info" buttonStyle={styles.ButtonStyle} onPress={RetrieveInfo}></Button>
             <ScrollView style={{width:"100%"}}>
-            {Object.entries(HistoryInfo).map((Elem)=>HandleCreationOfApropiateListItem(Elem))}
+            { 
+            Operations &&
+            OrderedKeysOfHistory.map((Duple)=>HandleCreationOfApropiateListItem(Duple[0]))  //Duple[0]=key
+            //Object.entries(HistoryInfo).map((Elem)=>HandleCreationOfApropiateListItem(Elem))
+            }
             </ScrollView>
 
         </View>
