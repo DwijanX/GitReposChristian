@@ -29,11 +29,17 @@ const PutProductsIntoContainerScreen =(props)=>
         {
         Object.entries(ProductQtys).forEach((Qty)=>
         {
+
             let CounterAux  =0;
             let AllowAddInCounter=true;
+            let aux;
             Object.entries(ContainedProducts).forEach((ContainedQty)=>
             {
-                CounterAux+=ContainedQty[1][Qty[0]];
+                aux=ContainedQty[1][Qty[0]]
+                if(!isNaN(aux))
+                {
+                    CounterAux+=aux;
+                }
             })
             if(CounterAux==Qty[1] || (isNaN(CounterAux) && Qty[1]==0))
             {
@@ -43,11 +49,13 @@ const PutProductsIntoContainerScreen =(props)=>
             {
                 CounterAux=0;
             }
+
             Counters={...Counters,[Qty[0]]:CounterAux};
             AllowEditionForEachCounterAux={...AllowEditionForEachCounterAux,[Qty[0]]:AllowAddInCounter}
         })
         }
         setStateOfCounters(Counters);
+        
         setAllowEditionForEachCounter(AllowEditionForEachCounterAux);
     }
     const getInfo=async(DocId)=>
