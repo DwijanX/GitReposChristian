@@ -28,22 +28,24 @@ const AddProductsNumScreen=(props)=>
       props.navigation.setOptions({headerShown: true});
       firebase.db.collection('Listas').doc('Productos').get().then((doc)=>
       {
-        let Products=[];
+        let ProductsDDP=[];
+        let Products=doc.data()
         Object.entries(doc.data()).forEach((Product)=>
         {
           let DataAux={
             label:Product[1]['Nombre'],
             value:Product[0]
           }
-          Products.push(DataAux);
+          ProductsDDP.push(DataAux);
+          Products[Product[0]]["Cantidades"]=Product[1]["Cantidades"].sort()
         })
-        setProducts(doc.data());
-        Products.sort(compare);
-        setItems(Products);
+        setProducts(Products);
+        ProductsDDP.sort(compareLabel);
+        setItems(ProductsDDP);
 
       })
     },[]);
-    const compare=( a, b )=> {
+    const compareLabel=( a, b )=> {
         if ( a["label"] < b["label"] ){
           return -1;
         }

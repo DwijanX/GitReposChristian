@@ -122,7 +122,7 @@ const HistoryScreen =(props)=>
                     </ListItem>
                 );
             }
-            else if(Operation=="Agregacion" && Operations[Operation])
+            else if(Operation=="Agregacion" && Operations["Adicion"])
             {
                 
                 return(
@@ -159,7 +159,17 @@ const HistoryScreen =(props)=>
                         <ListItem.Content>
                             <ListItem.Title style={styles.TextStyle}>{Item["Nombre"]} </ListItem.Title>
                             <ListItem.Subtitle style={styles.SubTitleStyle} >{Item["Operacion"]}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.SubTitleStyle} >Cantidades:</ListItem.Subtitle>
+                            {
+                                Item["Cantidades"]!=undefined &&
+                            Object.entries(Item["Cantidades"]).map((Cantidad)=>
+                            {
+                                return(
+                                <ListItem.Subtitle key={Cantidad[0]} style={styles.SubTitleStyle} >{Cantidad[0]}: {Cantidad[1]} </ListItem.Subtitle>
+                                )
+                            })}
                             <ListItem.Subtitle style={styles.SubTitleStyle} >Fecha: {date}</ListItem.Subtitle>
+
                         </ListItem.Content>
                     </ListItem>
                 );

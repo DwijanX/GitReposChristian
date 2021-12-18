@@ -174,7 +174,8 @@ const AddNewProductScreen=(props)=>
                     [key]:{
                         'Nombre':Atts.Nombre,
                         'Operacion':'Creacion',
-                        "Fecha": firebase.FieldValue.serverTimestamp()
+                        "Fecha": firebase.FieldValue.serverTimestamp(),
+                        'Cantidades':Atts["Cantidades"],
                     }
                 }
                 ,{merge:true})

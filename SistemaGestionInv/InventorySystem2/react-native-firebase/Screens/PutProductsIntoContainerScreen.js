@@ -5,6 +5,28 @@ import firebase from '../DataBase/Firebase'
 import CustomCounter  from '../CustomComponents/CustomCounterWButtons'
 import { Table, Row, Rows } from 'react-native-table-component';
 
+/*
+
+                }
+                {Object.entries(QtysInContainersBackUp[Container.DocId]).map((Qty)=> //[TypeOfQty,Qty]
+                {
+                    
+                    return(
+                    <CustomCounter 
+                        key={Qty[0]}
+                        numOfCounter={Qty[1]} 
+                        textStyle={styles.TextStyle} 
+                        buttonStyle={styles.CounterButtonsStyle}
+                        disabledPlus={!AllowEditionForEachCounter[Qty[0]]}
+                        containerStyle={styles.ContainerCounter}
+                        label={"Cantidad: "+Qty[0]}
+                        labelStyle={styles.TextStyle} 
+                        funcToDoWhenModifyVal={HandleCounters}
+                        NameOfStateToChange={[Container.DocId,Qty[0]]}
+                            >
+                    </CustomCounter>
+                    );
+                })} */
 
 const PutProductsIntoContainerScreen =(props)=>
 {
@@ -20,6 +42,8 @@ const PutProductsIntoContainerScreen =(props)=>
    const [AllowEditionForEachCounter,setAllowEditionForEachCounter]=useState({});
    const [PrecioVenta,setPrecioVenta]=useState({});
    const [SaveButtonPressed,setSaveButtonPressed]=useState(false)
+   const [ProductQtysOrderedArray,setProductQtysOrderedArray]=useState([])
+   const [ShowQtysOfEachContObj,setShowQtysOfEachContObj]=useState({})
 
     const setInitialStateOfCounters=(ContainedProducts,ProductQtys)=>  //ContainedProducts{DocId:{TypeQty:ContainedQty}} ProductQtys{TypeQty:TotalQty}
     {
@@ -60,11 +84,12 @@ const PutProductsIntoContainerScreen =(props)=>
     }
     const getInfo=async(DocId)=>
     {
-        const ContainersAux=[];
+        let ContainersAux=[];
         firebase.db.collection('Listas').doc('Contenedores').get().then((doc)=>
         {
             if(doc.data()!=undefined)
             {
+                let ShowContainersQtys=ShowQtysOfEachContObj
             Object.entries(doc.data()).forEach((Container)=>
             {
                 let Data={
@@ -73,9 +98,20 @@ const PutProductsIntoContainerScreen =(props)=>
                     Type:Container[1].Tipo,
                 }
               ContainersAux.push(Data);
+              ShowContainersQtys={...ShowContainersQtys,[Container[0]]:false}
             })
             }
             
+        const compareContainersName=( a, b )=> {
+            if ( a["Name"] < b["Name"] ){
+            return -1;
+            }
+            if ( a["Name"] > b["Name"] ){
+            return 1;
+            }
+            return 0;
+        }
+        ContainersAux.sort(compareContainersName)
           setContainers(ContainersAux);
         })
         await firebase.db.collection('Productos/'+DocId+'/ContenidoEn').doc(DocId).get().then(Doc=>
@@ -104,10 +140,13 @@ const PutProductsIntoContainerScreen =(props)=>
         setPrecioVenta(props.route.params.PrecioVenta);
         getInfo(props.route.params.DocId);
         let templateQtys={}
+        let ProductQtysOrderedArrayPointer=ProductQtysOrderedArray
         Object.entries(props.route.params.Cantidades).forEach((Qty)=>
         {
             templateQtys={...templateQtys,[Qty[0]]:0}
+            ProductQtysOrderedArrayPointer.push(Qty[0])
         })
+        ProductQtysOrderedArrayPointer.sort()
         setQtysIn0Template(templateQtys);
 
     },[])
@@ -127,6 +166,10 @@ const PutProductsIntoContainerScreen =(props)=>
             setAllowEditionForEachCounter({...AllowEditionForEachCounter,[Mod[1]]:true})
         }
     }
+    const MergeAndUnmergeQtysOfAContainer=(ContainerId)=>
+    {
+        setShowQtysOfEachContObj({...ShowQtysOfEachContObj,[ContainerId]:!ShowQtysOfEachContObj[ContainerId]})
+    }
     const HandleCreationOfCounters=(Container)=>  //{Description,DocId, Name,Type}
     {
         if(successfulLoad && (QtysInContainersBackUp[Container.DocId]==undefined || Object.keys(QtysInContainersBackUp[Container.DocId]).length!=Object.keys(QtysIn0Template).length))
@@ -143,26 +186,38 @@ const PutProductsIntoContainerScreen =(props)=>
         {
             return(
                 <Fragment key={Container.DocId}>
-                <Text style={styles.TitleStyle}>{Container.Name}</Text>
-                {Object.entries(QtysInContainersBackUp[Container.DocId]).map((Qty)=> //[TypeOfQty,Qty]
-                {
-                    return(
-                    <CustomCounter 
-                        key={Qty[0]}
-                        numOfCounter={Qty[1]} 
-                        textStyle={styles.TextStyle} 
-                        buttonStyle={styles.CounterButtonsStyle}
-                        disabledPlus={!AllowEditionForEachCounter[Qty[0]]}
-                        containerStyle={styles.ContainerCounter}
-                        label={"Cantidad: "+Qty[0]}
-                        labelStyle={styles.TextStyle} 
-                        funcToDoWhenModifyVal={HandleCounters}
-                        NameOfStateToChange={[Container.DocId,Qty[0]]}
-                            >
-                    </CustomCounter>
-                    );
-                })}
-                <Divider orientation="horizontal" />
+                    <View style={{marginVertical:10}}>
+                        <View style={{flexDirection:"row"}}>
+                            <View style={{width:"70%"}}>
+                                <Text style={styles.TitleStyle}>{Container.Name}</Text>
+                            </View>
+                            <View style={{width:"30%"}}>
+                                <Button title={"Mostrar Productos"} buttonStyle={styles.ContainersButtonStyle} onPress={()=>MergeAndUnmergeQtysOfAContainer(Container.DocId)}></Button>
+                            </View>
+                        </View>
+                        {
+                            ShowQtysOfEachContObj[Container.DocId] &&
+                            ProductQtysOrderedArray.map((TypeOfQty)=>
+                            {
+                                return(
+                                    <CustomCounter 
+                                        key={TypeOfQty}
+                                        numOfCounter={QtysInContainers[Container.DocId][TypeOfQty]} 
+                                        textStyle={styles.TextStyle} 
+                                        buttonStyle={styles.CounterButtonsStyle}
+                                        disabledPlus={!AllowEditionForEachCounter[TypeOfQty]}
+                                        containerStyle={styles.ContainerCounter}
+                                        label={"Cantidad: "+TypeOfQty}
+                                        labelStyle={styles.TextStyle} 
+                                        funcToDoWhenModifyVal={HandleCounters}
+                                        NameOfStateToChange={[Container.DocId,TypeOfQty]}
+                                            >
+                                    </CustomCounter>
+                                    );     
+                            })
+                        }
+                        <Divider orientation="horizontal" />
+                    </View>
                 </Fragment>
                 );
         }
@@ -350,6 +405,10 @@ const styles = StyleSheet.create({
         alignItems:'center',
         alignContent:"center",
         justifyContent:'space-evenly',
+        backgroundColor:"#7b838c"
+    },
+    ContainersButtonStyle:
+    {
         backgroundColor:"#7b838c"
     },
     TextStyleBold:
