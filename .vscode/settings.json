@@ -78,5 +78,7 @@
         "bit": "cpp",
         "clocale": "cpp",
         "iomanip": "cpp"
-    }
+    },
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": false
 }
