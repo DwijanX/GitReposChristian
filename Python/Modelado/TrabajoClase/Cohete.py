@@ -21,7 +21,6 @@ def dep_pres(t, ci,mc,g,Ve,k,r,P,mp0,dmpdt):  #ci[v0,y0]
     return numpy.array([dvdt,dydt])
 
 
-
 ci=numpy.array([0,0])
 mc,g,Ve,k,r,P=50,9.81,97.2222,12,0.5,1.98
 mp0=100
@@ -33,3 +32,5 @@ pl.plot(tiempo,Y[:,0],label="Velocidad m/s")
 pl.plot(tiempo,Y[:,1],label="Altura",color="red")
 pl.legend()
 pl.grid()
+print(max(Y[:,1]))
+print(max(Y[:,0]))
