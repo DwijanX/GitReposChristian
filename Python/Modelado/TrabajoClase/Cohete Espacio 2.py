@@ -1,6 +1,6 @@
+#%%
 from cmath import sqrt
 
-from zmq import HEARTBEAT_IVL
 from Libs.EulerHeuz import heuz,euler,RungeKuta
 import numpy
 import matplotlib.pyplot as pl
@@ -8,6 +8,14 @@ import matplotlib.pyplot as pl
 
 def dvdtComponent(MObj1,Pos1To2):
     return G*MObj1*Pos1To2/numpy.linalg.norm(Pos1To2)**3
+
+#ci[pos,vel]
+def get_dvdt(t,ci,G,MT):
+    vectorTierra=-ci[0]
+    dist_Tierra=numpy.sqrt(vectorTierra[0]**2+vectorTierra[1]**2)
+    dvdt=G*MT*vectorTierra/dist_Tierra**3
+    dydt=ci[1]
+    return numpy.array([dydt,dvdt])
 
 
 #ci=>[Velocidad,[Posicion]]

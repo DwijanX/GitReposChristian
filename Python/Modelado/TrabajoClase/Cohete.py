@@ -10,6 +10,9 @@ def Mp(t,mp0,dmpdt):
         ans=0
     return ans
 
+
+
+
 def dep_pres(t, ci,mc,g,Ve,k,r,P,dmpdt):  #ci[v0,y0]
     masaProp=ci[2]#Mp(t,mp0,dmpdt)
     if(ci[2]<=0):
