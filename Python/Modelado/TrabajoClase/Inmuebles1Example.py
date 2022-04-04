@@ -70,6 +70,7 @@ r=Regression()
 r.fit(x,y)
 theta=numpy.array([0,0.005])
 r.theta=theta
-historial=r.descenso_gradiente(0.01)
-r.Graph(True)
+saltos=1000
+historial=r.descenso_gradiente2(0.01,saltos)
+pl.plot(range(saltos),historial)
 #r.Graph(True)
