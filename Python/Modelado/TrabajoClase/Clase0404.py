@@ -55,7 +55,9 @@ historial=r.descenso_gradiente2(0.01,1000)
 pl.plot(range(historial.size),historial)
 print(r.get_parametros())
 
-
+transpuesta=numpy.matrix.transpose(indep)
+thetaForm=numpy.matmul(numpy.linalg.inv(numpy.matmul(transpuesta,indep)),numpy.matmul(transpuesta,y))
+print(thetaForm)
 #data.describe().head(6)
 #variables=correlation.sort_values(ascending=False).head(6)
 #print(data)
