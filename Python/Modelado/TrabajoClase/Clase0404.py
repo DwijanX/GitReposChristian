@@ -1,12 +1,7 @@
 #%%
-from modulefinder import IMPORT_NAME
-from sqlite3 import DataError
-from statistics import correlation
-from tkinter import Variable
 import numpy
 import matplotlib.pyplot as pl
 import pandas
-from scipy import rand
 import seaborn
 from Libs.ClaseRegresion import Regression 
 
