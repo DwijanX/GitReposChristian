@@ -31,7 +31,7 @@ class Logistica:
         pos_Index=numpy.where(self.__y==1)
         neg_Index=numpy.where(self.__y==0)
         if(Model):
-            pl.plot([0,-self.__Theta[0]/self.__Theta[1]],[self.__Theta[1]/self.__Theta[2],0])
+            pl.plot([0,-self.__Theta[0]/self.__Theta[1]],[-self.__Theta[0]/self.__Theta[2],0])
         pl.scatter(self.__X[pos_Index,1],self.__X[pos_Index,2],color='red')
         pl.scatter(self.__X[neg_Index,1],self.__X[neg_Index,2],color='blue')
         pl.grid()
@@ -42,15 +42,15 @@ class Logistica:
         m,n=self.__X.shape
         theta=theta.reshape(-1,1)
         h=self.getSignoide(self.__X.dot(theta))
-        j=1/m*(-self.__y.T.dot(numpy.log(h))-(1-self.__y).T.dot(numpy.log(1-h)))
+        j=(1/m)*(-self.__y.T.dot(numpy.log(h))-(1-self.__y).T.dot(numpy.log(1-h)))
         return j.sum()
     def get_gradiente(self, theta):
         m,n = self.__X.shape
+        theta=theta.reshape(-1,1)
         h = self.getSignoide(self.__X.dot(theta))
-        print(h.shape)
-        print(self.__y.shape)
         error = h - self.__y
         djdt = 1 / m * error.T.dot(self.__X)
+
         return djdt.ravel()
 
     def descenso_gradiente(self, alpha, epsilon=1.0e-6):
@@ -77,5 +77,7 @@ class Logistica:
 l=Logistica()
 l.fit(X,y)
 l.InicializarParametros()
-l.descenso_gradiente2(0.01,1000)
+historial=l.descenso_gradiente2(0.01,1000000)
+#l.descenso_gradiente(0.01)
+#pl.plot(range(historial.size),historial)
 l.graficarConjunto(True)
