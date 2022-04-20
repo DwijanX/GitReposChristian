@@ -94,7 +94,7 @@ class Logistica:
         self.__Theta=Matrix
     def EvaluateX(self,X):
         ans=self.__Theta.dot(X)
-        return self.getSignoide(ans)
+        return numpy.argmax(self.getSignoide(ans))
     def cambiar_kernel(self, grado):
         self.__X = self.getphi(self.__X, grado)
         self.__Theta = numpy.ones(self.__X.shape[1])
