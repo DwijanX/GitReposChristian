@@ -86,13 +86,21 @@ class Logistica:
         return numpy.array(js)
     def setLambda(self,Lambda):
         self.__lamb_param = Lambda
+    def cargar_Parametros(self,data):
+        t=h5py.File(data,"r")
+        self.__Theta=t["Theta"][:]
+    def GuardarParams(self,data):
+        t=h5py.File(data,'w')
+        t.create_dataset('Theta',data=self.__Theta)
+        t.close()
+
 
     def entrenar(self,et):
         Matrix=numpy.ones((et,401))
         for i in range(et):
             Matrix[i,:]=scipy.optimize.fmin_bfgs(self.getCrossEntropy, self.__Theta, fprime=self.get_gradiente,args=(i,))
         self.__Theta=Matrix
-    def EvaluateX(self,X):
+    def Reconocer(self,X):
         ans=self.__Theta.dot(X)
         return numpy.argmax(self.getSignoide(ans))
     def cambiar_kernel(self, grado):
@@ -104,7 +112,7 @@ l=Logistica()
 l.fit(X,y)
 l.InicializarParametros()
 l.entrenar(10)
-print(l.EvaluateX(digito))
+print(l.Reconocer(digito))
 #historial=l.descenso_gradiente2(0.01,1000000)
 #l.descenso_gradiente(0.01)
 #pl.plot(range(historial.size),historial)
@@ -112,3 +120,13 @@ print(l.EvaluateX(digito))
 
 #l.graficarConjunto(True)
 
+
+"""
+explicacion and
+ -30 20 20
+
+explicacion or 
+ -30 40 40
+
+
+"""
