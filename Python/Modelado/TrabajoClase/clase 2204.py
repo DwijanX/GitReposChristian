@@ -6,19 +6,22 @@ import matplotlib.pyplot as pl
 import numpy
 import h5py
 import cv2
+from Red_Neuronal import *
 
 
 def sigmoide(z):
         g=1/(1+numpy.exp(-z))
         return g
 
-def IdentifyNumber(number):
-      a0=numpy.append(numpy.ones(1),number)
-      a0=a0.reshape(-1,1)
-      a1=sigmoide(t1.dot(a0))
-      a1=numpy.append(numpy.ones((1,1)),a1,axis=0)
-      a2=sigmoide(t2.dot(a1))
-      return(numpy.argmax(a2)),a2 
+def IdentifyNumber(number20x20):
+        number20x20=number20x20.T
+        number20x20=number20x20.reshape(-1,1)
+        a0=numpy.append(numpy.ones(1),number20x20)
+        a0=a0.reshape(-1,1)
+        a1=sigmoide(t1.dot(a0))
+        a1=numpy.append(numpy.ones((1,1)),a1,axis=0)
+        a2=sigmoide(t2.dot(a1))
+        return(numpy.argmax(a2)),a2 
 
 param=h5py.File('../Files/theta_digitos.h5','r')
 param.keys()
@@ -69,8 +72,9 @@ for v in ventanas:
 for number in a:
         height,width=number.shape
         rescaled = cv2.resize(number, (0, 0), fx=20/width, fy=20/height)
-        rescaled=rescaled.reshape(-1,1)
         identified,percentages=IdentifyNumber(rescaled)
         print(identified)
         #print(percentages)
-pl.imshow(a[0])
+pl.imshow(a[7])
+
+#a [2,5,0,1,2,5,9,8]
