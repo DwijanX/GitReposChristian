@@ -1,6 +1,6 @@
 import h5py
 import numpy
-import scipy
+import scipy.optimize
 
 
 class RedNeuronal:
@@ -29,6 +29,13 @@ class RedNeuronal:
         param = h5py.File(archivo, 'r')
         self.theta1 = param['Theta1'][:]
         self.theta2 = param['Theta2'][:]
+        print(self.theta1.shape)
+        print(self.theta2.shape)
+    def GuardarParams(self,data):
+        t=h5py.File(data,'w')
+        t.create_dataset('Theta1',data=self.theta1)
+        t.create_dataset('Theta2',data=self.theta2)
+        t.close()
 
     def predecir(self, imagen):
         a1 = numpy.concatenate([numpy.ones((1, 1)), imagen], axis=1)
@@ -41,7 +48,7 @@ class RedNeuronal:
     def getCrossedEntropy(self,t):
         t1=numpy.reshape(t[0:(self.capa1+1)*self.capa2],(self.capa2,self.capa1+1))
         t2=numpy.reshape(t[(self.capa1+1)*self.capa2:],(self.capa3,self.capa2+1))
-        m,n=self.X
+        m,n=self.X.shape
         a1=numpy.concatenate([numpy.ones((m,1)),self.X],axis=1)
         a2=self.sigmoide(a1.dot(t1.T))
         a2=numpy.concatenate([numpy.ones((m,1)),a2],axis=1)
@@ -50,11 +57,10 @@ class RedNeuronal:
         #para reg
         param_reg=self.lambda_/(2*m)*(numpy.sum(numpy.square(t1[:,1:]))+numpy.sum(numpy.square(t2[:,1:])))
         #entropua cruzada
-        j=1 / m * yVec.dot(numpy.log(h)+(yVec-1).dot(numpy.log(1-h)))+param_reg
-
+        j=(-1 / m * (yVec.T.dot(numpy.log(h)) + (yVec - 1).T.dot(numpy.log(1 - h)))).sum() + param_reg
         #computo gradiente :Alg Back Propagation
         delta3=h-yVec
-        delta2=delta3.dot(t2)[:,1:]*self.derivadaSigmoide(a2.dot(t1.T))
+        delta2 = delta3.dot(t2)[:, 1:] * self.derivadaSigmoide(a1.dot(t1.T))
 
         deltaAcum=delta2.T.dot(a1)
         deltaAcum2=delta3.T.dot(a2)
@@ -72,18 +78,13 @@ class RedNeuronal:
         j_grad=lambda p:self.getCrossedEntropy(p)
         theta_Inicial=numpy.concatenate([self.theta1.flatten(),self.theta2.flatten()])
         opciones={'maxiter':100}
-        res=scipy.minimize(j_grad,theta_Inicial,jac=True,method="TNC",options=opciones)
+        res=scipy.optimize.minimize(j_grad,theta_Inicial,jac=True,method="TNC",options=opciones)
         thetaOptimos=res.x
+        self.theta1=thetaOptimos[0:(self.capa1+1)*self.capa2].reshape(self.capa2,self.capa1+1)
+        self.theta2=thetaOptimos[(self.capa1+1)*self.capa2:].reshape(self.capa3,self.capa2+1)
+
         
 
 
 
 
-
-
-
-r=RedNeuronal()
-r.capa1=400
-r.capa2=25
-r.capa3=10
-r.getCrossedEntropy(numpy.ones(10285))

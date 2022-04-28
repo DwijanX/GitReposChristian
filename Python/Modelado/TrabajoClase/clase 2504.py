@@ -9,7 +9,8 @@ import cv2
 from Red_Neuronal import *
 
 r=RedNeuronal()
-r.cargar_parametros('../Files/theta_digitos.h5')
+#r.cargar_parametros('../Files/theta_digitos.h5')
+r.cargar_parametros('../Files/miguardada.h5')
 test=cv2.imread('../Files/test/testgrande.jpg')
 
 #test=test[:,:,:]
@@ -40,8 +41,9 @@ def ProcessImg(Img):
                 pl.imshow(Img)
         return Img
 
-#test=ProcessImg(test)
-#pl.imshow(test)
+test=ProcessImg(test)
+pl.imshow(test)
+"""
 camara=cv2.VideoCapture(0)
 while True:
     success,img=camara.read()
@@ -49,5 +51,6 @@ while True:
     cv2.imshow('Video',img)
     if cv2.waitKey(1) & 0xFF==ord('q'):
         break
+"""
 #a [2,5,0,1,2,5,9,8]
 
