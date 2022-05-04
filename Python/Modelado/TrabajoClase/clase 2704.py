@@ -40,14 +40,15 @@ def ProcessImg(Img):
                 pl.imshow(Img)
         return Img
 
-#test=ProcessImg(test)
-#pl.imshow(test)
+test=ProcessImg(test)
+pl.imshow(test)
+"""
 camara=cv2.VideoCapture(0)
 while True:
     success,img=camara.read()
     img=ProcessImg(img)
     cv2.imshow('Video',img)
     if cv2.waitKey(1) & 0xFF==ord('q'):
-        break
+        """
 #a [2,5,0,1,2,5,9,8]
 
