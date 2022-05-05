@@ -29,8 +29,8 @@ class RedNeuronal:
         param = h5py.File(archivo, 'r')
         self.theta1 = param['Theta1'][:]
         self.theta2 = param['Theta2'][:]
-        print(self.theta1.shape)
-        print(self.theta2.shape)
+        #print(self.theta1.shape)
+        #print(self.theta2.shape)
     def GuardarParams(self,data):
         t=h5py.File(data,'w')
         t.create_dataset('Theta1',data=self.theta1)
@@ -73,7 +73,7 @@ class RedNeuronal:
         # error en la ultima capa
         delta3 = h - y_vec
         # error en la penultima capa
-        delta2 = delta3.dot(t2)[:, 1:] * self.derivadaSigmoide6(a1.dot(t1.T))
+        delta2 = delta3.dot(t2)[:, 1:] * self.derivadaSigmoide(a1.dot(t1.T))
 
         # computo errores en las capas acumulado
         delta_acum_1 = delta2.T.dot(a1)

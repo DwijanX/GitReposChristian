@@ -10,7 +10,7 @@ from Red_Neuronal import *
 
 r=RedNeuronal()
 #r.cargar_parametros('../Files/theta_digitos.h5')
-r.cargar_parametros('../Files/miguardada2.h5')
+r.cargar_parametros('../Files/miguardada3.h5')
 test=cv2.imread('../Files/test/testgrande.jpg')
 
 #test=test[:,:,:]
