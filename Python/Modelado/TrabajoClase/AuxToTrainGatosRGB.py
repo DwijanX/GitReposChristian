@@ -17,21 +17,28 @@ def processImgRGB(Img):
     return Img.reshape(1,-1)
 
 XProcessed=numpy.vstack(numpy.array([processImgRGB(x) for x in X]))
-
-#print(XProcessed.shape)
+epoca=1
 
 r=RedNeuronal()
 r.lambda_=1
 r.capa1=64*64*3
 r.capa2=128
 r.capa3=2
-r.inicializar()
+#r.inicializar()
+r.cargar_parametros("Python\Modelado\Files\GatoRGB\ParamsGatos_"+str(epoca)+".h5")
 r.fit(XProcessed,y)
 r.setProcessImg(processImgRGB)
-r.entrenar()
-Suc,Err=r.ProbarLambda("Python\Modelado\Files\gatillos_test.h5","test_set_x","test_set_y")
-print("suc",Suc)
-print("Err",Err)
+for i in range(1,10):
+    print("\nEpoca=",i+1)
+    r.entrenar()
+    Suc,Err=r.ProbarLambda("Python\Modelado\Files\gatillos_test.h5","test_set_x","test_set_y")
+    print("suc",Suc)
+    print("Err",Err)
+    r.GuardarParams("Python\Modelado\Files\GatoRGB\ParamsGatos_"+str(i+1)+".h5")
+
+#epoca 9 70% godin
+
+
 #r.GuardarParams("Python\Modelado\Files\miguardada.h5")
 #r.GuardarParams("Python\Modelado\Files\trainGatosColor.h5")
 

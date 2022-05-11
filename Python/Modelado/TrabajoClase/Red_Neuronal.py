@@ -97,7 +97,7 @@ class RedNeuronal:
     def entrenar(self):
         j_grad=lambda p:self.getCrossedEntropy(p)
         theta_Inicial=numpy.concatenate([self.theta1.flatten(),self.theta2.flatten()])
-        opciones={'maxiter':2000}
+        opciones={'maxiter':500}
         
         res=scipy.optimize.minimize(j_grad,theta_Inicial,jac=True,method="TNC",options=opciones)
         thetaOptimos=res.x
@@ -130,8 +130,13 @@ class RedNeuronal:
         Precision=ConfusionMatrix[1][1]/(ConfusionMatrix[1][1]+ConfusionMatrix[1][0])
         Recall=ConfusionMatrix[1][1]/(ConfusionMatrix[1][1]+ConfusionMatrix[0][0])
         F1=2*((Precision*Recall)/(Precision+Recall))
-        Acuracy=(ConfusionMatrix[1][1]+ConfusionMatrix[0][1])/(ConfusionMatrix[1][1]+ConfusionMatrix[1][0]+ConfusionMatrix[0][1]+ConfusionMatrix[0][0])
+        Accuracy=(ConfusionMatrix[1][1]+ConfusionMatrix[0][1])/(ConfusionMatrix[1][1]+ConfusionMatrix[1][0]+ConfusionMatrix[0][1]+ConfusionMatrix[0][0])
         print(ConfusionMatrix)
+        print("Precision",Precision*100)
+        print("Recall",Recall*100)
+        print("F1",F1*100)
+        print("Accuracy",Accuracy*100)
+        
         return SuccessCount/(ErrorCount+SuccessCount),ErrorCount/(ErrorCount+SuccessCount)
             
 
