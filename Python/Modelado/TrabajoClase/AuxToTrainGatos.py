@@ -30,11 +30,14 @@ XProcessed=numpy.vstack([processImg(x) for x in X])
 r=RedNeuronal()
 r.lambda_=1
 r.capa1=64*64
-r.capa2=25
+r.capa2=110
 r.capa3=2
 r.inicializar()
 r.fit(XProcessed,y)
 r.entrenar()
+Suc,Err=r.ProbarLambda2("../Files/gatillos_test.h5","test_set_x","test_set_y")
+print("suc",Suc)
+print("Err",Err)
 #r.GuardarParams("Python\Modelado\Files\miguardada.h5")
 r.GuardarParams("../Files/trainGatosParams.h5")
 
