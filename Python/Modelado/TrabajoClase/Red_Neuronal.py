@@ -16,6 +16,7 @@ class RedNeuronal:
         self.capa1 = None
         self.capa2 = None
         self.capa3 = None
+        self.ProcessImg=None
 
     def fit(self, x, y):
         self.X = x
@@ -96,31 +97,22 @@ class RedNeuronal:
     def entrenar(self):
         j_grad=lambda p:self.getCrossedEntropy(p)
         theta_Inicial=numpy.concatenate([self.theta1.flatten(),self.theta2.flatten()])
-        opciones={'maxiter':100}
+        opciones={'maxiter':2000}
         
         res=scipy.optimize.minimize(j_grad,theta_Inicial,jac=True,method="TNC",options=opciones)
         thetaOptimos=res.x
         self.theta1=thetaOptimos[0:(self.capa1+1)*self.capa2].reshape(self.capa2,self.capa1+1)
         self.theta2=thetaOptimos[(self.capa1+1)*self.capa2:].reshape(self.capa3,self.capa2+1)
+    def setProcessImg(self,Method):
+        self.ProcessImg=Method
+    """
     def ProcessImg(self,Img):
         GrayImage=cv2.cvtColor(Img,cv2.COLOR_BGR2GRAY)
         GaussianFilter=cv2.GaussianBlur(GrayImage,(5,5),0)
         ret,imagen_bn=cv2.threshold(GaussianFilter,90,255,cv2.THRESH_BINARY_INV)
         return imagen_bn.reshape(1,-1)
+        """
     def ProbarLambda(self,FileDirection,XName,YNAME):
-        ErrorCount=0
-        SuccessCount=0
-        DataFile=h5py.File(FileDirection,'r')
-        X=DataFile[XName][:]
-        Y=DataFile[YNAME][:]
-        for x in X:
-            ans=self.predecir(self.ProcessImg(x))
-            if(ans!=Y[(ErrorCount+SuccessCount)]):
-                ErrorCount+=1
-            else:
-                SuccessCount+=1
-        return SuccessCount/(ErrorCount+SuccessCount),ErrorCount/(ErrorCount+SuccessCount)
-    def ProbarLambda2(self,FileDirection,XName,YNAME):
         ConfusionMatrix=numpy.array([[0,0],[0,0]])
         ErrorCount=0
         SuccessCount=0
