@@ -138,7 +138,35 @@ class RedNeuronal:
         print("Accuracy",Accuracy*100)
         
         return SuccessCount/(ErrorCount+SuccessCount),ErrorCount/(ErrorCount+SuccessCount)
-            
+    def ProbarLambda2(self,FileDirection,XName,YNAME):
+        ConfusionMatrix=numpy.array([[0,0],[0,0]])
+        ErrorCount=0
+        SuccessCount=0
+        DataFile=h5py.File(FileDirection,'r')
+        X=DataFile[XName][:]
+        Y=DataFile[YNAME][:]
+        for x in X:
+            ans=self.predecir(self.ProcessImg(x))
+            if(ans!=Y[(ErrorCount+SuccessCount)] ):
+                ConfusionMatrix[Y[(ErrorCount+SuccessCount)]][0]+=1
+                ErrorCount+=1
+            else:
+                ConfusionMatrix[Y[(ErrorCount+SuccessCount)]][1]+=1
+                SuccessCount+=1
+        Precision=ConfusionMatrix[1][1]/(ConfusionMatrix[1][1]+ConfusionMatrix[1][0])
+        Recall=ConfusionMatrix[1][1]/(ConfusionMatrix[1][1]+ConfusionMatrix[0][0])
+        F1=2*((Precision*Recall)/(Precision+Recall))
+        Accuracy=(ConfusionMatrix[1][1]+ConfusionMatrix[0][1])/(ConfusionMatrix[1][1]+ConfusionMatrix[1][0]+ConfusionMatrix[0][1]+ConfusionMatrix[0][0])
+        if Precision<0.65:
+            self.lambda_+=15
+        print(ConfusionMatrix)
+        print("Precision",Precision*100)
+        print("Recall",Recall*100)
+        print("F1",F1*100)
+        print("Accuracy",Accuracy*100)
+        
+        return SuccessCount/(ErrorCount+SuccessCount),ErrorCount/(ErrorCount+SuccessCount)
+                
 
         
 
