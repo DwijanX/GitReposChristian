@@ -7,7 +7,10 @@ import torch.nn.functional as F
 
 transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
 model_ft = torch.load("../Files/mi_modelo_digitos.pt")
+#model_ft = torch.load("Python\Modelado\Files\mi_modelo_digitos.pt")
 
+
+#imagen = cv2.imread("Python\Modelado\Files\test\testgrande.jpg")
 imagen = cv2.imread("../Files/test/testgrande.jpg")
 imagenGris = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
 imagenGris = cv2.GaussianBlur(imagenGris, (5, 5), 0)
@@ -38,5 +41,6 @@ for g in ventanas:
     cv2.putText(imagen, str(predict.argmax().item()), (g[0], g[1]-50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0))
 
 
-cv2.imshow("Digitos", imagen)
+a=cv2.imshow("Digitos", imagen)
 cv2.waitKey()
+cv2.destroyAllWindows()
