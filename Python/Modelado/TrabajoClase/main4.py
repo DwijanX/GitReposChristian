@@ -39,7 +39,7 @@ def processImg(Img):
     return Img.reshape(1,-1)
 
 XImagReshaped=numpy.vstack(numpy.array([processImg(x) for x in XImag]))
-clasificador = SVC(kernel="rbf", gamma=10,C=100)
+clasificador = SVC(kernel="rbf", gamma=10,C=1)
 clasificador.fit(XImagReshaped,YImag)
 
 
@@ -59,7 +59,6 @@ while True:
         p2=int((x+w//2))-espacio//2
         JustFace=gris[p1:p1+espacio,p2:p2+espacio]
         
-        #JustFace = JustFace.resize((64, 64), Image.ANTIALIAS)
         JustFace=numpy.resize(JustFace,(64,64))
         if w > 100:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
