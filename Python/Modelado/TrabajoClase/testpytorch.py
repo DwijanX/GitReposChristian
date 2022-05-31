@@ -44,3 +44,4 @@ for g in ventanas:
 a=cv2.imshow("Digitos", imagen)
 cv2.waitKey()
 cv2.destroyAllWindows()
+

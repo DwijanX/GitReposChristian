@@ -46,8 +46,10 @@ while True:
     success,img=camara.read()
     img=ProcessImg(img)
     cv2.imshow('Video',img)
-    if cv2.waitKey() & 0xFF==ord('q'):
+    if cv2.waitKey(1) & 0xFF==ord('q'):
         break
 cv2.destroyAllWindows()
 #a [2,5,0,1,2,5,9,8]
+
+
 

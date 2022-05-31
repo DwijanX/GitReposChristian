@@ -90,3 +90,5 @@ def text2vector(text):
 word_vectors=numpy.zeros((len(text),len(vocab)),dtype=numpy.int_)
 for i,(_,text) in enumerate(text.interow()):
     word_vectors[i]=text2vector(text[0])
+
+print(word_vectors)

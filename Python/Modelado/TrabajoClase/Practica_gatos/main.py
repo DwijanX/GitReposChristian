@@ -1,3 +1,4 @@
+#%%
 from Logistica import *
 import h5py
 import matplotlib.pyplot as pl
