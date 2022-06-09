@@ -22,6 +22,9 @@ def ProbarLambda(FileDirection,XName,YNAME):
             else:
                 ConfusionMatrix[Y[(ErrorCount+SuccessCount)]][1]+=1
                 SuccessCount+=1
+            print(ans)
+            pl.imshow(x)
+            pl.show()
         Precision=ConfusionMatrix[1][1]/(ConfusionMatrix[1][1]+ConfusionMatrix[1][0])
         Recall=ConfusionMatrix[1][1]/(ConfusionMatrix[1][1]+ConfusionMatrix[0][0])
         F1=2*((Precision*Recall)/(Precision+Recall))
